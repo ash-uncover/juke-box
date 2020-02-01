@@ -22,9 +22,9 @@ $icon-size: 2em;
       }
 
       &:hover {
-        background: $color-active;
+        background: $color-active-background;
         svg {
-          color: white;
+          color: $color-active-foreground;
         }
       }
     }

@@ -19,7 +19,7 @@
       .TrackTableHeaderCellTitle {
         flex-grow: 1;
         &.TrackTableHeaderCellTitle-active {
-          color: $color-active;
+          color: $color-active-background;
         }
       }
       .TrackTableHeaderCellSort {
@@ -40,7 +40,7 @@
           }
           &.TrackTableHeaderCellSortButton-active {
             svg {
-              color: $color-active;
+              color: $color-active-background;
             }
           }
         }
@@ -64,8 +64,8 @@
 
     height: 2rem;
     &:hover {
-      background: $color-active;
-      color: white;
+      background: $color-active-background;
+      color: $color-active-foreground;
     }
   }
 }
