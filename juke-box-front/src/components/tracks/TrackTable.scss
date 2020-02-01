@@ -1,0 +1,71 @@
+@import '../../variables';
+
+.TrackTable {
+  margin: 1rem;
+
+  .TrackTableHeader {
+    background: grey;
+    color: white;
+
+    display: flex;
+    align-items: center;
+
+    height: 2rem;
+
+    .TrackTableHeaderCell {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      .TrackTableHeaderCellTitle {
+        flex-grow: 1;
+        &.TrackTableHeaderCellTitle-active {
+          color: $color-active;
+        }
+      }
+      .TrackTableHeaderCellSort {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        margin: 0 0.25rem;
+        .TrackTableHeaderCellSortButton {
+          background: none;
+          border: 0;
+          padding: 0;
+          overflow: hidden;
+          svg {
+            width: 0.85rem;
+            height: 0.85rem;
+            font-size: 0.85rem;
+            color: white;
+          }
+          &.TrackTableHeaderCellSortButton-active {
+            svg {
+              color: $color-active;
+            }
+          }
+        }
+        .TrackTableHeaderCellSortButton:first-child {
+          svg {
+            transform: translateY(0.4rem);
+          }
+        }
+        .TrackTableHeaderCellSortButton:last-child {
+          svg {
+            transform: translateY(-0.4rem);
+          }
+        }
+      }
+    }
+  }
+
+  .TrackTableRow {
+    display: flex;
+    align-items: center;
+
+    height: 2rem;
+    &:hover {
+      background: $color-active;
+      color: white;
+    }
+  }
+}
