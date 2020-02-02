@@ -1,67 +1,35 @@
 import React, { Suspense } from 'react'
+import { useSelector } from "react-redux"
+import { authStateSelector } from '../store/auth/selectors'
+import { dataTracksSelector } from '../store/data/selectors'
 
 import {
   HashRouter as Router
 } from 'react-router-dom'
 
+import Auth from './auth/Auth'
 import Tracks from './tracks/Tracks'
 
 import './App.scss'
 
-const tracks = [
-  {
-    id: 'be-svendsen-getula',
-    name: 'Getula',
-    artist: 'Be Svendsen',
-    album: 'Sol Sahara 2019',
-    label: 'Sol Selectas',
-    year: '2019',
-    tags: ['Techno', 'Melodic House']
-  },
-  {
-    id: 'synapson-mona-ki-ngi-xica',
-    name: 'Mona Ki Ngi Xica',
-    artist: 'Synapson',
-    album: '',
-    label: '',
-    year: '2013',
-    tags: []
-  },
-  {
-    id: 'kurup-joiera',
-    name: 'Joeira',
-    artist: 'Kurup',
-    album: '',
-    label: '',
-    year: '',
-    tags: []
-  },
-  {
-    id: 'nu-man-o-to',
-    name: 'Man O To',
-    artist: 'Nu',
-    album: '',
-    label: '',
-    year: '',
-    tags: []
-  },
-  {
-    id: 'alf-sol',
-    name: 'Sol',
-    artist: 'Alef',
-    album: '',
-    label: '',
-    year: '',
-    tags: []
-  }
-]
-
-
 interface AppProps {}
 
 const App = (props: AppProps) => {
+  const tracks = useSelector(dataTracksSelector)
+  const authState = useSelector(authStateSelector)
+
+  if (authState !== 'AUTH_OK') {
+    return (
+      <Suspense fallback='loading'>
+        <Router>
+          <Auth />
+        </Router>
+      </Suspense>
+    )
+  }
+
   return (
-    <Suspense fallback="loading">
+    <Suspense fallback='loading'>
       <Router>
         <div className='App'>
           <Tracks tracks={tracks} />

@@ -26,11 +26,10 @@ const TrackTiles = (props: TrackTilesProps) => {
     <div className='TrackTiles'>
       { trackRows.map((trackRow: Array<Track>, rowIndex: number) => {
         return (
-          <div key={rowIndex}>
+          <div key={rowIndex} className='TrackTilesRow'>
             { trackRow.map((track: Track, colIndex: number) => (
               <TrackTile
                 key={track.id}
-
                 colIndex={colIndex}
                 rowIndex={rowIndex}
                 {...track}
