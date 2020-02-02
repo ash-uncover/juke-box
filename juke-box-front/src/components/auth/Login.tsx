@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { authStateSelector, authErrorSelector } from '../../store/auth/selectors'
 
 import RestService from '../../services/RestService'
+import { Link } from 'react-router-dom'
 
 import './Login.scss'
 
@@ -52,21 +53,19 @@ const Login = (props: LoginProps) => {
           login
         </button>
 
-        <button
+        <Link
           className='Login-button-link'
-          type='button'
-          onClick={() => {}}
+          to='/recover'
         >
           lost password
-        </button>
+        </Link>
 
-        <button
+        <Link
           className='Login-button-link'
-          type='button'
-          onClick={() => {}}
+          to='/register'
         >
           create account
-        </button>
+        </Link>
       </div>
 
       { authState === 'AUTH_CHECKING' &&
