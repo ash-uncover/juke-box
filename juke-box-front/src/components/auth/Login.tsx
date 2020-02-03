@@ -4,7 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { authStateSelector, authErrorSelector } from '../../store/auth/selectors'
 
 import RestService from '../../services/RestService'
+
 import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSignInAlt } from '@fortawesome/free-solid-svg-icons'
 
 import './Login.scss'
 
@@ -50,7 +53,11 @@ const Login = (props: LoginProps) => {
           disabled={!loginButtonEnabled}
           onClick={() => RestService.auth.get(dispatch, username, password)}
         >
-          login
+          <FontAwesomeIcon
+            icon={faSignInAlt}
+            color={'white'}
+            size='4x'
+          />
         </button>
 
         <Link

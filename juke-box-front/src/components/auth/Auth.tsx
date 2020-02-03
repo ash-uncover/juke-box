@@ -12,7 +12,7 @@ import Recover from './Recover'
 
 import './Auth.scss'
 
-/* TRACKS */
+/* AUTH */
 
 interface AuthProps {
 }

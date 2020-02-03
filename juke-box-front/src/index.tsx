@@ -20,11 +20,10 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || com
 const store = createStore(reducer, composeEnhancers())
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('root')
-
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
 )
 
 serviceWorker.unregister()
