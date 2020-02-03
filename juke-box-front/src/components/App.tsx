@@ -11,6 +11,9 @@ import {
   Link
 } from 'react-router-dom'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
+
 import Auth from './auth/Auth'
 import Tracks from './tracks/Tracks'
 
@@ -49,7 +52,11 @@ const renderAuth = (tracks: any) => (
               className='Login-button-link'
               to='/auth/logout'
             >
-              logout
+              <FontAwesomeIcon
+                icon={faPowerOff}
+                color='red'
+                size='2x'
+              />
             </Link>
             <Tracks tracks={tracks} />
           </div>
