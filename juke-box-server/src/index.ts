@@ -1,13 +1,13 @@
 import * as express from 'express'
 
-const app = express()
+const server = express()
 
-app.get('/', (req, res) => {
+server.get('/', (req, res) => {
   res.send('Hello World')
 })
 
 const PORT = process.env.PORT || 3090;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running in http://localhost:${PORT}`)
 })

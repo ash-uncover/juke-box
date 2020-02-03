@@ -10,7 +10,14 @@ const RestService = {
         } else {
           dispatch(AuthActions.authGetFailure('errorAuth'))
         }
-      }, 1500)
+      }, 1000)
+    },
+
+    delete: (dispatch: any, token: string) => {
+      dispatch(AuthActions.authDeleteFetch(token))
+      setTimeout(() => {
+        dispatch(AuthActions.authDeleteSuccess())
+      }, 1000)
     }
   }
 }

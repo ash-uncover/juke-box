@@ -4,7 +4,11 @@ import { authStateSelector } from '../store/auth/selectors'
 import { dataTracksSelector } from '../store/data/selectors'
 
 import {
-  HashRouter as Router
+  HashRouter as Router,
+  Redirect,
+  Switch,
+  Route,
+  Link
 } from 'react-router-dom'
 
 import Auth from './auth/Auth'
@@ -14,29 +18,58 @@ import './App.scss'
 
 interface AppProps {}
 
+const renderNoAuth = () => (
+  <Suspense fallback='loading'>
+    <Router>
+      <Switch>
+        <Route path='/auth'>
+          <Auth />
+        </Route>
+        <Route path='*'>
+          <Redirect to='/auth' />
+        </Route>
+      </Switch>
+    </Router>
+  </Suspense>
+)
+
+const renderAuth = (tracks: any) => (
+  <Suspense fallback='loading'>
+    <Router>
+      <Switch>
+        <Route path='/auth/logout'>
+          <Auth />
+        </Route>
+        <Route path='/auth'>
+          <Redirect to='/' />
+        </Route>
+        <Route path='*'>
+          <div className='App'>
+            <Link
+              className='Login-button-link'
+              to='/auth/logout'
+            >
+              logout
+            </Link>
+            <Tracks tracks={tracks} />
+          </div>
+        </Route>
+      </Switch>
+    </Router>
+  </Suspense>
+)
+
 const App = (props: AppProps) => {
   const tracks = useSelector(dataTracksSelector)
   const authState = useSelector(authStateSelector)
 
-  if (authState !== 'AUTH_OK') {
-    return (
-      <Suspense fallback='loading'>
-        <Router>
-          <Auth />
-        </Router>
-      </Suspense>
-    )
+  const isLogged = authState === 'AUTH_OK'
+
+  if (!isLogged) {
+    return renderNoAuth()
   }
 
-  return (
-    <Suspense fallback='loading'>
-      <Router>
-        <div className='App'>
-          <Tracks tracks={tracks} />
-        </div>
-      </Router>
-    </Suspense>
-  )
+  return renderAuth(tracks)
 }
 
 export default App

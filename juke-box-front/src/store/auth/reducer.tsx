@@ -41,6 +41,30 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
         authError: error
       }
     }
+
+    case ActionsTypes.AUTH_DELETE_FETCH: {
+      return {
+        ...state,
+        authState: 'AUTH_DELETE'
+      }
+    }
+    case ActionsTypes.AUTH_DELETE_SUCCESS: {
+      return {
+        ...state,
+        authState: 'AUTH_NONE',
+        authToken: null,
+        authUsername: null
+      }
+    }
+    case ActionsTypes.AUTH_DELETE_FAILURE: {
+      const { error } = action.payload
+      return {
+        ...state,
+        authState: 'AUTH_ERROR',
+        authError: error
+      }
+    }
+
     default: {
       return state
     }

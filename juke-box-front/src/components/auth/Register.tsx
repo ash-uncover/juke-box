@@ -1,20 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { Link } from 'react-router-dom'
 
 import './Recover.scss'
 
-/* RECOVER */
+/* REGISTER */
 
-interface RecoverProps {
+interface RegisterProps {
 }
 
-const Recover = (props: RecoverProps) => {
+const Register = (props: RegisterProps) => {
 
   return (
-    <div className='Recover'>
+    <div className='Register'>
       <div>
-        Recover
+        Register
       </div>
       <Link
         className=''
@@ -26,4 +26,4 @@ const Recover = (props: RecoverProps) => {
   )
 }
 
-export default Recover
+export default Register

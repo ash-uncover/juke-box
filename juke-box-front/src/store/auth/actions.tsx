@@ -9,6 +9,10 @@ export const ActionsTypes = {
   AUTH_POST_SUCCESS: '@@AUTH/POST_SUCCESS',
   AUTH_POST_FAILURE: '@@AUTH/POST_FAILURE',
 
+  AUTH_DELETE_FETCH: '@@AUTH/DELETE_FETCH',
+  AUTH_DELETE_SUCCESS: '@@AUTH/DELETE_SUCCESS',
+  AUTH_DELETE_FAILURE: '@@AUTH/DELETE_FAILURE',
+
   AUTH_PASSWORD_PUT_FETCH:'@@AUTH/PASSWORD/PUT_FETCH',
 
   AUTH_REGISTER_POST_FETCH: '@@AUTH/REGISTER/POST_FETCH',
@@ -36,6 +40,10 @@ export const Actions = {
   authPostFetch: () => action(ActionsTypes.AUTH_POST_FETCH),
   authPostSuccess: () => action(ActionsTypes.AUTH_POST_SUCCESS),
   authPostFailure: () => action(ActionsTypes.AUTH_POST_FAILURE),
+
+  authDeleteFetch: (token: string) => action(ActionsTypes.AUTH_DELETE_FETCH, { token }),
+  authDeleteSuccess: () => action(ActionsTypes.AUTH_DELETE_SUCCESS),
+  authDeleteFailure: (error: string) => action(ActionsTypes.AUTH_DELETE_FAILURE, { error }),
 
   authPasswordPut: () => action(ActionsTypes.AUTH_PASSWORD_PUT_FETCH),
   authRegisterPost: () => action(ActionsTypes.AUTH_REGISTER_POST_FETCH),

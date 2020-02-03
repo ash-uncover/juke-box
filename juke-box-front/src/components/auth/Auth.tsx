@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useSelector } from "react-redux"
+import { authStateSelector } from '../../store/auth/selectors'
 
 import {
   Redirect,
@@ -9,6 +11,7 @@ import {
 import Login from './Login'
 import Logout from './Logout'
 import Recover from './Recover'
+import Register from './Register'
 
 import './Auth.scss'
 
@@ -18,20 +21,28 @@ interface AuthProps {
 }
 
 const Auth = (props: AuthProps) => {
-
+  const authState = useSelector(authStateSelector)
+  const isLogout = authState === 'AUTH_DELETE'
   return (
     <div className='Auth'>
       <Switch>
-        <Route path='/login'>
+        <Route path='/auth/login'>
           <Login />
         </Route>
-        <Route path='/logout'>
+        <Route path='/auth/logout'>
           <Logout />
         </Route>
-        <Route path='/recover'>
+        <Route path='/auth/recover'>
           <Recover />
         </Route>
-        <Redirect from='/' to='/login' />
+        <Route path='/auth/register'>
+          <Register />
+        </Route>
+        { isLogout ?
+          <Redirect from='*' to='/auth/logout' />
+        :
+          <Redirect from='*' to='/auth/login' />
+        }
       </Switch>
     </div>
   )

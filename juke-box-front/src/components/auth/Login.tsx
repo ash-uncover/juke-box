@@ -62,14 +62,14 @@ const Login = (props: LoginProps) => {
 
         <Link
           className='Login-button-link'
-          to='/recover'
+          to='/auth/recover'
         >
           lost password
         </Link>
 
         <Link
           className='Login-button-link'
-          to='/register'
+          to='/auth/register'
         >
           create account
         </Link>
