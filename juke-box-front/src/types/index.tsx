@@ -10,22 +10,25 @@ export interface Track {
 export interface Tribe {
   id: string,
   name: string,
-  image: string,
-  users: Array<User>
+  image: string
 }
 
 export interface TribeData {
   id: string,
   name: string,
-  image: string,
-  users: Array<string>
+  image: string
+}
+
+export interface MembershipData {
+  id: string,
+  userId: string,
+  tribeId: string
 }
 
 export interface User {
   id: string,
   name: string,
-  image: string,
-  tribes: Array<Tribe>
+  image: string
 }
 
 export interface UserData {

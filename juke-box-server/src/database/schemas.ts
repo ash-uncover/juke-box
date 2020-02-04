@@ -30,31 +30,30 @@ let preSave = function (next) {
 }
 
 // Users collection
-let usersSchema = mongoose.Schema(
-  Object.assign(
-    {
-      name: { type: String, required: true },
-      password: { type: String, required: true },
-      image: { type: String },
-      tribes: { type: [String] }
-    },
-    defaultSchema
-  )
-)
+let usersSchema = mongoose.Schema(Object.assign({
+  name: { type: String, required: true },
+  password: { type: String, required: true },
+  image: { type: String },
+  tribes: { type: [String] }
+}, defaultSchema))
 usersSchema.pre('save', preSave)
 export const users = mongoose.model('users', usersSchema)
 
 // Tribes collection
-export const tribesSchema = mongoose.Schema(
-  Object.assign(
-    {
-      name: String
-    },
-    defaultSchema
-  )
-)
+export const tribesSchema = mongoose.Schema(Object.assign({
+  name: String
+}, defaultSchema))
 tribesSchema.pre('save', preSave)
 export const tribes = mongoose.model('tribes', tribesSchema)
+
+// Memberships collection
+export const membershipsSchema = mongoose.Schema(Object.assign({
+  tribeId: String,
+  userId: String,
+  roles: [String]
+}, defaultSchema))
+membershipsSchema.pre('save', preSave)
+export const memberships = mongoose.model('memberships', membershipsSchema)
 
 const SCHEMAS = {
   USERS: {
@@ -66,6 +65,11 @@ const SCHEMAS = {
     model: tribes,
     name: 'tribe',
     collection: 'tribes'
+  },
+  MEMBERSHIPS: {
+    model: memberships,
+    name: 'membership',
+    collection: 'memberships'
   }
 }
 export default SCHEMAS
