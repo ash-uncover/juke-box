@@ -15,6 +15,13 @@
     flex-direction: column;
     align-items: center;
 
+    .Login-title {
+      color: red;
+      margin-bottom: 1rem;
+      font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      font-weight: bold;
+    }
+
     .Login-input {
       margin-bottom: 1rem;
       &.Login-input-username {
@@ -31,8 +38,8 @@
       border: 0;
       border-radius: 50%;
 
-      width: 5rem;
-      height: 5rem;
+      width: 4rem;
+      height: 4rem;
 
       &:disabled {
         cursor: not-allowed;

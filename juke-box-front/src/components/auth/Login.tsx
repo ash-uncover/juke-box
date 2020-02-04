@@ -29,7 +29,13 @@ const Login = (props: LoginProps) => {
 
   return (
     <div className='Login'>
-      <div className='Login-box'>
+      <form className='Login-box'>
+
+        <div
+          className='Login-title'
+        >
+          Connection
+        </div>
 
         <input
           className='Login-input Login-input-username'
@@ -49,14 +55,14 @@ const Login = (props: LoginProps) => {
 
         <button
           className='Login-button'
-          type='button'
+          type='submit'
           disabled={!loginButtonEnabled}
           onClick={() => RestService.auth.get(dispatch, username, password)}
         >
           <FontAwesomeIcon
             icon={faSignInAlt}
             color={'white'}
-            size='4x'
+            size='3x'
           />
         </button>
 
@@ -73,7 +79,7 @@ const Login = (props: LoginProps) => {
         >
           create account
         </Link>
-      </div>
+      </form>
 
       { authState === 'AUTH_CHECKING' &&
         <div className='Login-loading'>
