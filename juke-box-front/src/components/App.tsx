@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import { useSelector } from "react-redux"
 import { authStateSelector } from '../store/auth/selectors'
-import { dataTracksSelector } from '../store/data/selectors'
+import { dataTracksSelector } from '../store/rest/selectors'
 
 import {
   HashRouter as Router,

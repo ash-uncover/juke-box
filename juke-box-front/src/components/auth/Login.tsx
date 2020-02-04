@@ -11,7 +11,7 @@ import { faSignInAlt } from '@fortawesome/free-solid-svg-icons'
 
 import './Login.scss'
 
-/* TRACKS */
+/* LOGIN */
 
 interface LoginProps {
 }
