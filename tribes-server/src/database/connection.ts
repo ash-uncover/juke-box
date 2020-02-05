@@ -1,9 +1,9 @@
-import mongoose from 'mongoose'
+import * as mongoose from 'mongoose'
 
 const {
   DB_HOST = '127.0.0.1',
   DB_PORT = 4242,
-  DB_NAME = 'amsap'
+  DB_NAME = 'tribes'
 } = process.env
 
 const urlmongo = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`
