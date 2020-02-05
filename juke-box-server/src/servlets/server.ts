@@ -33,10 +33,14 @@ server.del('/rest/memberships/:membershipId', deleteMembership)
 
 const PORT = process.env.PORT || 3090;
 
-server.listen(PORT, () => {
-  LOGGER.debug(`Server is running in http://localhost:${PORT}`)
-})
+const startup = () => {
+  const app = server.listen(PORT, () => {
+    console.log(`Server is running in http://localhost:${PORT}`)
+  })
+  app.on('close', () => {
+    LOGGER.debug('Server Shutting down')
+  })
+  return app
+}
 
-server.on('close', () => {
-  LOGGER.debug('Server Shutting down')
-})
+export default startup

@@ -1,37 +1,18 @@
-import * as express from 'express'
 
-const server = express()
+// MONGO DB
+// Connects to the mongo database
+// -----------------------
+import connection from './database/connection'
 
-server.get('/', (req, res) => {
-  res.send('Hello World')
-})
+// REST SERVER
+// Creates the rest server and start it
+// -----------------------
+import startup from './servlets/server'
 
-// Tribes endpoint
-server.get('/rest/tribes', (req, res) => {
-  res.send('Get All Tribes')
-})
-server.get('/rest/tribes/:id', (req, res) => {
-  res.send('Get Tribe ' + req.params.id)
-})
-server.post('/rest/tribes/:id', (req, res) => {
-  res.send('Post Tribes')
-})
-server.put('/rest/tribes/:id', (req, res) => {
-  res.send('Put Tribes')
-})
-server.patch('/rest/tribes/:id', (req, res) => {
-  res.send('Patch Tribe')
-})
-server.delete('/rest/tribes/:id', (req, res) => {
-  res.send('Delete Tribe')
-})
+// LOGS
+// Sets up the global log level for the server
+// -----------------------
+import { LOG_CONFIG } from 'ap-utils-logger'
+LOG_CONFIG.debug()
 
-server.get('/rest/tribes/:id/users', (req, res) => {
-  res.send('Get Tribe users')
-})
-
-const PORT = process.env.PORT || 3090;
-
-server.listen(PORT, () => {
-  console.log(`Server is running in http://localhost:${PORT}`)
-})
+connection.open(startup)
