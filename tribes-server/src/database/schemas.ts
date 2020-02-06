@@ -21,7 +21,7 @@ export const removeReserved = function (data) {
   return data
 }
 
-let preSave = function (next) {
+const preSave = function (next) {
   let now = new Date()
   this.id || (this.id = UUID.next())
   this._creationDate || (this._creationDate = now)
@@ -30,11 +30,10 @@ let preSave = function (next) {
 }
 
 // Users collection
-let usersSchema = new mongoose.Schema(Object.assign({
+export const usersSchema = new mongoose.Schema(Object.assign({
   username: { type: String, required: true },
   password: { type: String, required: true },
-  image: { type: String },
-  tribes: { type: [String] }
+  image: { type: String }
 }, defaultSchema))
 usersSchema.pre('save', preSave)
 export const users = mongoose.model('users', usersSchema)
@@ -49,8 +48,7 @@ export const tribes = mongoose.model('tribes', tribesSchema)
 // Memberships collection
 export const membershipsSchema = new mongoose.Schema(Object.assign({
   tribeId: String,
-  userId: String,
-  roles: [String]
+  userId: String
 }, defaultSchema))
 membershipsSchema.pre('save', preSave)
 export const memberships = mongoose.model('memberships', membershipsSchema)

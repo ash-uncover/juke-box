@@ -71,6 +71,31 @@ export const putUser = function(req, res, next) {
   }
 }
 
+export const patchUser = function(req, res, next) {
+  LOGGER.debug('PATCH ' + req.url)
+  LOGGER.debug(JSON.stringify(req.body))
+  try {
+    defaultPut(SCHEMAS.USERS, req, res, next, (error) => {
+      if (error && error.code === 11000) {
+        if (error.message.indexOf('username') !== -1) {
+          sendError(LOGGER, res, ERRORS.USER_USERNAME_INUSE)
+        } else if (error.message.indexOf('email') !== -1) {
+          sendError(LOGGER, res, ERRORS.USER_EMAIL_INUSE)
+        }
+      } else if (error && error.name === 'ValidationError') {
+        sendError(LOGGER, res, {
+          status: 400,
+          error: error.message
+        })
+      } else {
+        res.send(500, error)
+      }
+    })
+  } catch (error) {
+    res.send(500, error)
+  }
+}
+
 export const deleteUser = function(req, res, next) {
   LOGGER.debug('DELETE ' + req.url)
   try {

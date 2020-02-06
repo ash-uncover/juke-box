@@ -20,17 +20,20 @@ db.participations.createIndex({"id": 1}, {"unique": true})
 db.users.insert({
     "id":"userantoine",
     "username":"antoine",
-    "password":"antoine"
+    "password":"antoine",
+    "image":""
 })
 db.users.insert({
     "id":"userkarima",
     "username":"karima",
-    "password":"karima"
+    "password":"karima",
+    "image":""
 })
 db.users.insert({
     "id":"useralberto",
     "username":"alberto",
-    "password":"alberto"
+    "password":"alberto",
+    "image":""
 })
 
 // Sections
