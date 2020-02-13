@@ -1,13 +1,10 @@
 import React, { useEffect } from 'react'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { restTribesDataSelector, restTribesStatusSelector } from '../../store/rest/tribes/selectors'
 
-import { Tribe, User } from '../../types'
 import { RequestState } from '../../utils/constants'
 import RestService from '../../services/RestService'
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThList, faTh, faThLarge } from '@fortawesome/free-solid-svg-icons'
 
 import './Tribes.scss'
 
