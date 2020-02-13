@@ -10,7 +10,7 @@ const urlmongo = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`
 
 const connection = {
   open: (callback) => {
-    mongoose.connect(urlmongo, {})
+    mongoose.connect(urlmongo, { useNewUrlParser: true })
 
     const db = mongoose.connection
 

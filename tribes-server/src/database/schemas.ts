@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose'
 import { UUID } from '../utils'
 
 // Common stuf
-let defaultSchema = {
+const defaultSchema = {
   id: { type: String },
   _creationDate: { type: Date },
   _lastUpdateDate: { type: Date }

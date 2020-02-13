@@ -2,13 +2,11 @@ import { Reducer } from 'redux'
 import { TribeData } from '../../../types'
 
 export interface TribesState {
-  tracks: Array<TribeData>
+  tribes: Array<TribeData>
 }
 
 export const initialState: TribesState = {
-  tribes: [
-    {}
-  ]
+  tribes: []
 }
 
 const reducer: Reducer<TribesState> = (state = initialState, action) => {

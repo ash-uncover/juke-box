@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react'
 import { useSelector } from "react-redux"
 import { authStateSelector } from '../store/auth/selectors'
-import { dataTracksSelector } from '../store/rest/selectors'
 
 import {
   HashRouter as Router,
@@ -15,7 +14,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
 
 import Auth from './auth/Auth'
-import Tracks from './tracks/Tracks'
 
 import './App.scss'
 
@@ -36,7 +34,7 @@ const renderNoAuth = () => (
   </Suspense>
 )
 
-const renderAuth = (tracks: any) => (
+const renderAuth = () => (
   <Suspense fallback='loading'>
     <Router>
       <Switch>
@@ -58,7 +56,6 @@ const renderAuth = (tracks: any) => (
                 size='2x'
               />
             </Link>
-            <Tracks tracks={tracks} />
           </div>
         </Route>
       </Switch>
@@ -67,7 +64,6 @@ const renderAuth = (tracks: any) => (
 )
 
 const App = (props: AppProps) => {
-  const tracks = useSelector(dataTracksSelector)
   const authState = useSelector(authStateSelector)
 
   const isLogged = authState === 'AUTH_OK'
@@ -76,7 +72,7 @@ const App = (props: AppProps) => {
     return renderNoAuth()
   }
 
-  return renderAuth(tracks)
+  return renderAuth()
 }
 
 export default App

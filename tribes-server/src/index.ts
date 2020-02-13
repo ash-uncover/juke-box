@@ -12,7 +12,7 @@ import startup from './servlets/server'
 // LOGS
 // Sets up the global log level for the server
 // -----------------------
-import { LOG_CONFIG } from 'ap-utils-logger'
-LOG_CONFIG.debug()
+import { LogConfig } from 'ap-utils-logger'
+LogConfig.debug()
 
 connection.open(startup)
