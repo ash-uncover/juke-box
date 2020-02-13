@@ -45,7 +45,11 @@ const RestService = {
       getAll: (dispatch: any, token: string) => {
         dispatch(RestTribesActions.restTribesGetAllFetch(token))
         setTimeout(() => {
-          dispatch(RestTribesActions.restTribesGetAllSuccess([]))
+          dispatch(RestTribesActions.restTribesGetAllSuccess([
+            { id: '0', name: 'Tribu 1', image: 'image 1' },
+            { id: '1', name: 'Tribu 2', image: 'image 2' },
+            { id: '2', name: 'Tribu 3', image: 'image 3' }
+          ]))
         }, 1000)
       },
       get: (dispatch: any, token: string, id: string) => {},

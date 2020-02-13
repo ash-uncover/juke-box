@@ -1,12 +1,3 @@
-export interface Track {
-  id: string,
-  name: string,
-  artist: string,
-  album: string,
-  label: string,
-  year: string
-}
-
 // TRIBE
 
 export interface Tribe {
@@ -34,6 +25,7 @@ export interface TribePatchData {
 }
 
 // MEMBERSHIP
+
 export interface MembershipData {
   id: string,
   userId: string,

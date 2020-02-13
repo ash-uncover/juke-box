@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { useSelector } from "react-redux"
+import { useSelector } from 'react-redux'
 import { authStateSelector } from '../store/auth/selectors'
 
 import {
@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
 
 import Auth from './auth/Auth'
+import Tribes from './tribes/Tribes'
 
 import './App.scss'
 
@@ -56,6 +57,7 @@ const renderAuth = () => (
                 size='2x'
               />
             </Link>
+            <Tribes />
           </div>
         </Route>
       </Switch>
