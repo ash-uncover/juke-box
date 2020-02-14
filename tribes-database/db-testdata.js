@@ -15,8 +15,8 @@ db.events.createIndex({"id": 1}, {"unique": true})
 db.participations.drop()
 db.participations.createIndex({"id": 1}, {"unique": true})
 
-// Users
-// ---------------------------------------
+// USERS //
+
 db.users.insert({
     "id":"userantoine",
     "username":"antoine",
@@ -36,23 +36,39 @@ db.users.insert({
     "image":""
 })
 
-// Sections
-// ---------------------------------------
+// TRIBES //
+
 db.tribes.insert({
     "id":"tribebanana",
     "name":"Banana Kidz",
     "image":""
 })
+db.tribes.insert({
+    "id":"tribeavalon",
+    "name":"Avalon",
+    "image":""
+})
 
-// Membership
-// ---------------------------------------
+// MEMBERSHIPS //
+
 db.memberships.insert({
     "id":"antoinebanana",
-    "userId":"antoine",
+    "userId":"userantoine",
     "tribeId":"tribebanana"
 })
 db.memberships.insert({
     "id":"karimabanana",
-    "userId":"karima",
+    "userId":"userkarima",
     "tribeId":"tribebanana"
+})
+
+db.memberships.insert({
+    "id":"antoineavalon",
+    "userId":"userantoine",
+    "tribeId":"tribeavalon"
+})
+db.memberships.insert({
+    "id":"albertoavalon",
+    "userId":"useralberto",
+    "tribeId":"tribeavalon"
 })

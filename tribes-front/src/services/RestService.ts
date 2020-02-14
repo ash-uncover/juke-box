@@ -1,5 +1,5 @@
 import { Actions as AuthActions } from '../store/auth/actions'
-import { Actions as RestTribesActions } from '../store/rest/tribes/actions'
+import { Actions as RestTribesActions } from '../store/rest/users/actions'
 
 import {
   MembershipData,
@@ -14,6 +14,7 @@ import {
 } from '../types'
 
 import request from 'request'
+import { delayedPromise } from '../utils/PromiseUtils'
 
 import Logger from 'ap-utils-logger'
 const LOGGER = new Logger('RestService')
@@ -44,13 +45,19 @@ const RestService = {
     tribes: {
       getAll: (dispatch: any, token: string) => {
         dispatch(RestTribesActions.restTribesGetAllFetch(token))
-        setTimeout(() => {
-          dispatch(RestTribesActions.restTribesGetAllSuccess([
-            { id: '0', name: 'Tribu 1', image: 'image 1' },
-            { id: '1', name: 'Tribu 2', image: 'image 2' },
-            { id: '2', name: 'Tribu 3', image: 'image 3' }
-          ]))
-        }, 1000)
+        delayedPromise(_request({ url: `/tribes` }))
+          .then((result: any) => {
+            //console.log(result)
+            dispatch(RestTribesActions.restTribesGetAllSuccess([
+              { id: '0', name: 'Tribu 1', image: 'image 1' },
+              { id: '1', name: 'Tribu 2', image: 'image 2' },
+              { id: '2', name: 'Tribu 3', image: 'image 3' }
+            ]))
+          })
+          .catch((error: any) => {
+            LOGGER.error(error)
+            RestTribesActions.restTribesGetAllFailure(error)
+          })
       },
       get: (dispatch: any, token: string, id: string) => {},
       post: (dispatch: any, token: string, tribe: TribePostData) => {},
@@ -86,41 +93,41 @@ const RestService = {
   }
 }
 
-const URL_BASE = 'http://localhost:3090/'
+const URL_BASE = 'http://localhost:3090/rest'
 
 const _request = (reqParam: any) => {
   return new Promise((resolve, reject) => {
 
-  const params = Object.assign(
-    { method: 'GET' },
-    reqParam,
-    { url: `${URL_BASE}${reqParam.url}` }
-  )
+    const params = Object.assign(
+      { method: 'GET' },
+      reqParam,
+      { url: `${URL_BASE}${reqParam.url}` }
+    )
 
-  /*
-  if (this.user.username && this.user.password) {
-    params.auth = {
-      'user': this.user.username,
-      'pass': this.user.password,
-      'sendImmediately': true
-    }
-  }
-  */
-
-  LOGGER.debug('request')
-  LOGGER.debug(JSON.stringify(params))
-
-  request(params, (error: any, response: any, body: any) => {
-    if (!error && response.statusCode >= 200 && response.statusCode < 300) {
-      try {
-        resolve(JSON.parse(body))
-      } catch (err) {
-        resolve(body)
+    /*
+    if (this.user.username && this.user.password) {
+      params.auth = {
+        'user': this.user.username,
+        'pass': this.user.password,
+        'sendImmediately': true
       }
-    } else {
-      if (error) {
-        reject(error)
+    }
+    */
+
+    LOGGER.debug('request')
+    LOGGER.debug(JSON.stringify(params))
+
+    request(params, (error: any, response: any, body: any) => {
+      if (!error && response.statusCode >= 200 && response.statusCode < 300) {
+        try {
+          resolve(JSON.parse(body))
+        } catch (err) {
+          resolve(body)
+        }
       } else {
+        if (error) {
+          reject(error)
+        } else {
           try {
             reject(JSON.parse(body))
           } catch (err) {

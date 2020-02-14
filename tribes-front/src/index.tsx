@@ -9,6 +9,12 @@ import * as serviceWorker from './serviceWorker'
 
 import './index.scss'
 
+// LOGS
+// Sets up the global log level for the server
+// -----------------------
+import { LogConfig } from 'ap-utils-logger'
+LogConfig.debug()
+
 ReactDOM.render(
   <Provider store={store}>
     <App />

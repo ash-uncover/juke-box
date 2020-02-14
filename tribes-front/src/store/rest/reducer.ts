@@ -1,9 +1,13 @@
-import { Reducer, combineReducers } from 'redux'
+import { combineReducers } from 'redux'
 
+import MembershipsReducer from './memberships/reducer'
 import TribesReducer from './tribes/reducer'
+import UsersReducer from './users/reducer'
 
 const reducer = combineReducers({
-  tribes: TribesReducer
+  memberships: MembershipsReducer,
+  tribes: TribesReducer,
+  useres: UsersReducer
 })
 
 export default reducer
