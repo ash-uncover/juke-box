@@ -1,5 +1,6 @@
 import { Reducer } from 'redux'
 import { ActionsTypes } from './actions'
+import { ActionsTypes as AuthActionsTypes } from '../../auth/actions'
 import { TribeData } from '../../../types'
 
 import { RequestState } from '../../../utils/constants'
@@ -36,6 +37,10 @@ const reducer: Reducer<TribesState> = (state = initialState, action) => {
         data: [],
         status: RequestState.FAILURE
       }
+    }
+
+    case AuthActionsTypes.AUTH_DELETE_SUCCESS: {
+      return initialState
     }
 
     default: {

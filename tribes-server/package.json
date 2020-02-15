@@ -3,17 +3,17 @@
   "version": "1.0.0",
   "main": "index.ts",
   "dependencies": {
-    "ap-utils-logger": "0.1.2",
-    "express": "^4.17.1",
-    "mongoose": "^5.8.11"
+    "ap-utils-logger": "latest",
+    "express": "latest",
+    "mongoose": "latest"
   },
   "devDependencies": {
-    "@types/node": "^13.7.0",
-    "eslint": "^6.8.0",
-    "eslint-plugin-import": "^2.20.1",
-    "nodemon": "^2.0.2",
-    "ts-node": "^8.6.2",
-    "typescript": "^3.7.5"
+    "@types/node": "latest",
+    "eslint": "latest",
+    "eslint-plugin-import": "latest",
+    "nodemon": "latest",
+    "ts-node": "latest",
+    "typescript": "latest"
   },
   "scripts": {
     "start": "node --inspect=5858 -r ts-node/register ./src/index.ts",
