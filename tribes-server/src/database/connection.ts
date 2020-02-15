@@ -1,4 +1,7 @@
 import * as mongoose from 'mongoose'
+import Logger from 'ap-utils-logger'
+
+const LOGGER = new Logger('Mongo Connection')
 
 const {
   DB_HOST = '127.0.0.1',
@@ -10,16 +13,19 @@ const urlmongo = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`
 
 const connection = {
   open: (callback) => {
-    mongoose.connect(urlmongo, { useNewUrlParser: true })
+    mongoose.connect(urlmongo, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    })
 
     const db = mongoose.connection
 
     db.on('error', () => {
-      console.error(`Failed to connect to database "${urlmongo}"`)
+      LOGGER.error(`Failed to connect to database "${urlmongo}"`)
     })
 
     db.once('open', () => {
-      console.log(`Connected to database "${urlmongo}"`)
+      LOGGER.info(`Connected to database "${urlmongo}"`)
       callback && callback()
     })
 

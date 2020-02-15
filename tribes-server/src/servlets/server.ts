@@ -40,7 +40,7 @@ import {
   deleteMembership
 } from './rest/memberships'
 
-const LOGGER = new Logger('server')
+const LOGGER = new Logger('REST Server')
 
 export const useHeaders = (req: any, res: any, next: any) => {
   LOGGER.debug('useHeaders')
