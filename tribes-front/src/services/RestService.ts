@@ -38,7 +38,7 @@ const RestService = {
       dispatch(AuthActions.authDeleteFetch(token))
       setTimeout(() => {
         dispatch(AuthActions.authDeleteSuccess())
-      }, 1000)
+      }, 500)
     }
   },
 

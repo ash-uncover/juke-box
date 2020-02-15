@@ -50,7 +50,16 @@ export const useHeaders = (req: any, res: any, next: any) => {
   )
   res.setHeader(
     HttpHeader.ACCESS_CONTROL_ALLOW_HEADERS,
-    'Origin, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Authorization'
+    [
+      'Origin',
+      'Accept',
+      'Accept-Version',
+      'Content-Length',
+      'Content-MD5',
+      'Content-Type',
+      'Date',
+      'Authorization'
+    ].join(',')
   )
   res.setHeader(
     HttpHeader.ACCESS_CONTROL_ALLOW_METHODS,
@@ -131,7 +140,7 @@ const PORT = process.env.PORT || 3090;
 
 const startup = () => {
   const app = server.listen(PORT, () => {
-    console.log(`Server is running in http://localhost:${PORT}`)
+    LOGGER.info(`Server is running in http://localhost:${PORT}`)
   })
   app.on('close', () => {
     LOGGER.debug('Server Shutting down')

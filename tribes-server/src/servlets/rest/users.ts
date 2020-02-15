@@ -1,8 +1,18 @@
 import SCHEMAS from '../../database/schemas'
-import { users } from '../../database/schemas'
-import ERRORS from '../servlet-error'
-import { sendError } from '../servlet-error'
-import { defaultGetAll, defaultPost, defaultGet, defaultPut, defaultDelete, defaultGetDeep } from '../servlet-base'
+
+import ERRORS, {
+  sendError
+} from '../servlet-error'
+
+import {
+  defaultGetAll,
+  defaultPost,
+  defaultGet,
+  defaultPut,
+  defaultPatch,
+  defaultDelete,
+  defaultGetDeep
+} from '../servlet-base'
 
 import Logger from 'ap-utils-logger'
 const LOGGER = new Logger('rest-users')
@@ -75,7 +85,7 @@ export const patchUser = function(req, res, next) {
   LOGGER.debug('PATCH ' + req.url)
   LOGGER.debug(JSON.stringify(req.body))
   try {
-    defaultPut(SCHEMAS.USERS, req, res, next, (error) => {
+    defaultPatch(SCHEMAS.USERS, req, res, next, (error) => {
       if (error && error.code === 11000) {
         if (error.message.indexOf('username') !== -1) {
           sendError(LOGGER, res, ERRORS.USER_USERNAME_INUSE)
