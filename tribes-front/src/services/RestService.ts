@@ -1,3 +1,4 @@
+import store from '../store'
 import { Actions as AuthActions } from '../store/auth/actions'
 import { Actions as RestTribesActions } from '../store/rest/users/actions'
 
@@ -24,13 +25,13 @@ const RestService = {
   auth: {
     get: (dispatch: any, username: string, password: string) => {
       dispatch(AuthActions.authGetFetch(username, password))
-      setTimeout(() => {
-        if (username === 'a' && password === 'a') {
-          dispatch(AuthActions.authGetSuccess('tokenOk'))
-        } else {
+      delayedPromise(_request({ url: `/auth` }))
+        .then((result: any) => {
+          dispatch(AuthActions.authGetSuccess('Basic'))
+        })
+        .catch((error: any) => {
           dispatch(AuthActions.authGetFailure('errorAuth'))
-        }
-      }, 1000)
+        })
     },
 
     delete: (dispatch: any, token: string) => {
@@ -45,7 +46,7 @@ const RestService = {
     tribes: {
       getAll: (dispatch: any, token: string) => {
         dispatch(RestTribesActions.restTribesGetAllFetch(token))
-        delayedPromise(_request({ url: `/tribes` }))
+        delayedPromise(_request({ url: `/rest/tribes` }))
           .then((result: any) => {
             dispatch(RestTribesActions.restTribesGetAllSuccess(result))
           })
@@ -87,7 +88,7 @@ const RestService = {
   }
 }
 
-const URL_BASE = 'http://localhost:3090/rest'
+const URL_BASE = 'http://localhost:3090'
 
 const _request = (reqParam: any) => {
   return new Promise((resolve, reject) => {
@@ -98,15 +99,13 @@ const _request = (reqParam: any) => {
       { url: `${URL_BASE}${reqParam.url}` }
     )
 
-    /*
-    if (this.user.username && this.user.password) {
-      params.auth = {
-        'user': this.user.username,
-        'pass': this.user.password,
-        'sendImmediately': true
-      }
+    const auth = store.getState().auth
+    console.log(auth)
+    params.auth = {
+      'user': auth.authUsername,
+      'pass': auth.authPassword,
+      'sendImmediately': true
     }
-    */
 
     LOGGER.debug('request')
     LOGGER.debug(JSON.stringify(params))
