@@ -1,36 +1,117 @@
 import * as express from 'express'
 import Logger from 'ap-utils-logger'
 
-import { getUsers, postUser, getUser, putUser, patchUser, deleteUser, getUserMemberships } from './rest/users'
-import { getTribes, postTribe, getTribe, putTribe, patchTribe, deleteTribe, getTribeMemberships } from './rest/tribes'
-import { postMembership, getMembership, putMembership, patchMembership, deleteMembership } from './rest/memberships'
+import {
+  users
+} from '../database/schemas'
 
-const LOGGER = new Logger('server')
+import {
+  decodeBasicHeader,
+  HttpHeader,
+  HttpMethod,
+  HttpStatus
+} from '../utils'
 
-const corsHandler = (req: any, res: any, next: any) => {
-  LOGGER.debug('corsHandler')
-  console.log('corsHandler')
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Authorization')
-  res.setHeader('Access-Control-Allow-Methods', '*')
+import {
+  getUsers,
+  postUser,
+  getUser,
+  putUser,
+  patchUser,
+  deleteUser,
+  getUserMemberships
+} from './rest/users'
+
+import {
+  getTribes,
+  postTribe,
+  getTribe,
+  putTribe,
+  patchTribe,
+  deleteTribe,
+  getTribeMemberships
+} from './rest/tribes'
+
+import {
+  postMembership,
+  getMembership,
+  putMembership,
+  patchMembership,
+  deleteMembership
+} from './rest/memberships'
+
+const LOGGER = new Logger('REST Server')
+
+export const useHeaders = (req: any, res: any, next: any) => {
+  LOGGER.debug('useHeaders')
+  res.setHeader(
+    HttpHeader.ACCESS_CONTROL_ALLOW_ORIGIN,
+    '*'
+  )
+  res.setHeader(
+    HttpHeader.ACCESS_CONTROL_ALLOW_HEADERS,
+    [
+      'Origin',
+      'Accept',
+      'Accept-Version',
+      'Content-Length',
+      'Content-MD5',
+      'Content-Type',
+      'Date',
+      'Authorization'
+    ].join(',')
+  )
+  res.setHeader(
+    HttpHeader.ACCESS_CONTROL_ALLOW_METHODS,
+    [
+      HttpMethod.GET,
+      HttpMethod.POST,
+      HttpMethod.PUT,
+      HttpMethod.PATCH,
+      HttpMethod.DELETE,
+      HttpMethod.OPTIONS
+    ].join(',')
+  )
   return next()
 }
-const optionsRoute = (req: any, res: any, next: any) => {
+
+export const useAuth = function(req: any, res: any, next: any) {
+  LOGGER.debug('useAuth')
+  const user = decodeBasicHeader(req.headers.authorization)
+  users.findOne(user).select('-_id -__v').exec((err, data) => {
+    if (err) {
+      res.status(HttpStatus.ERROR).send(err)
+    } else if (data) {
+      req.__context = data
+      next()
+    } else {
+      res.status(HttpStatus.FORBIDDEN).send({ error: 'FORBIDDEN' })
+    }
+  })
+}
+
+export const getAuth = (req: any, res: any, next: any) => {
+  LOGGER.debug('getAuth')
+  res.sendStatus(HttpStatus.OK)
+}
+
+export const optionsRoute = (req: any, res: any, next: any) => {
   LOGGER.debug('optionsRoute')
-  res.send(200)
-  return next()
+  res.sendStatus(HttpStatus.OK)
 }
 
 const server = express()
 
-server.options('*', corsHandler, optionsRoute)
-server.get('*', corsHandler)
-server.post('*', corsHandler)
-server.put('*', corsHandler)
-server.patch('*', corsHandler)
-server.delete('*', corsHandler)
+server.use(useHeaders)
 
-// Users
+server.options('*', optionsRoute)
+
+server.use(useAuth)
+
+// Auth end point
+server.get('/auth', getAuth)
+
+// Users end point
 server.get('/rest/users', getUsers)
 server.post('/rest/users', postUser)
 server.get('/rest/users/:userId', getUser)
@@ -59,7 +140,7 @@ const PORT = process.env.PORT || 3090;
 
 const startup = () => {
   const app = server.listen(PORT, () => {
-    console.log(`Server is running in http://localhost:${PORT}`)
+    LOGGER.info(`Server is running in http://localhost:${PORT}`)
   })
   app.on('close', () => {
     LOGGER.debug('Server Shutting down')
