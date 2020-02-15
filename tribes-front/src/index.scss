@@ -1,0 +1,67 @@
+@import './variables.scss';
+
+body {
+  user-select: none;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  position: fixed;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* VISIBILITY CLASSES */
+
+@media screen and (max-width: $screen-size-small - 1) {
+  .visible-s:not(.visible-xs),
+  .visible-m:not(.visible-xs),
+  .visible-l:not(.visible-xs),
+  .visible-xl:not(.visible-xs) {
+    display: none;
+  }
+}
+
+@media screen and (min-width: $screen-size-small) and (max-width: $screen-size-medium - 1) {
+  .visible-xs:not(.visible-s),
+  .visible-m:not(.visible-s),
+  .visible-l:not(.visible-s),
+  .visible-xl:not(.visible-s) {
+    display: none;
+  }
+}
+
+@media screen and (min-width: $screen-size-medium) and (max-width: $screen-size-large - 1) {
+  .visible-xs:not(.visible-m),
+  .visible-s:not(.visible-m),
+  .visible-l:not(.visible-m),
+  .visible-xl:not(.visible-m) {
+    display: none;
+  }
+}
+
+@media screen and (min-width: $screen-size-large) and (max-width: $screen-size-xlarge - 1) {
+  .visible-xs:not(.visible-l),
+  .visible-s:not(.visible-l),
+  .visible-m:not(.visible-l),
+  .visible-xl:not(.visible-l) {
+    display: none;
+  }
+}
+
+@media screen and (min-width: $screen-size-xlarge) {
+  .visible-xs:not(.visible-xl),
+  .visible-s:not(.visible-xl),
+  .visible-m:not(.visible-xl),
+  .visible-l:not(.visible-xl) {
+    display: none;
+  }
+}
