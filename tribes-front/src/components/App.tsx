@@ -6,15 +6,13 @@ import {
   HashRouter as Router,
   Redirect,
   Switch,
-  Route,
-  Link
+  Route
 } from 'react-router-dom'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
+import AppToolbar from './AppToolbar'
+import AppContent from './AppContent'
 
 import Auth from './auth/Auth'
-import Tribes from './tribes/Tribes'
 
 import './App.scss'
 
@@ -47,17 +45,8 @@ const renderAuth = () => (
         </Route>
         <Route path='*'>
           <div className='App'>
-            <Link
-              className='Login-button-link'
-              to='/auth/logout'
-            >
-              <FontAwesomeIcon
-                icon={faPowerOff}
-                color='red'
-                size='2x'
-              />
-            </Link>
-            <Tribes />
+            <AppToolbar />
+            <AppContent />
           </div>
         </Route>
       </Switch>

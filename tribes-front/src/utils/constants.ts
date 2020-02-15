@@ -1,7 +1,7 @@
 export enum SortDirections {
-  NONE,
-  ASCENDING,
-  DESCENDING
+  NONE = 'NONE',
+  ASCENDING = 'ASCENDING',
+  DESCENDING = 'DESCENDING'
 }
 
 export enum RequestState {

@@ -47,15 +47,9 @@ const RestService = {
         dispatch(RestTribesActions.restTribesGetAllFetch(token))
         delayedPromise(_request({ url: `/tribes` }))
           .then((result: any) => {
-            //console.log(result)
-            dispatch(RestTribesActions.restTribesGetAllSuccess([
-              { id: '0', name: 'Tribu 1', image: 'image 1' },
-              { id: '1', name: 'Tribu 2', image: 'image 2' },
-              { id: '2', name: 'Tribu 3', image: 'image 3' }
-            ]))
+            dispatch(RestTribesActions.restTribesGetAllSuccess(result))
           })
           .catch((error: any) => {
-            LOGGER.error(error)
             RestTribesActions.restTribesGetAllFailure(error)
           })
       },
