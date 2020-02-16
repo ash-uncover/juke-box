@@ -1,4 +1,7 @@
 import * as express from 'express'
+import * as http from 'http'
+import * as WebSocket from 'ws'
+
 import Logger from 'ap-utils-logger'
 
 import {
@@ -100,54 +103,54 @@ export const optionsRoute = (req: any, res: any, next: any) => {
   res.sendStatus(HttpStatus.OK)
 }
 
-const server = express()
+const app = express()
 
-server.use(express.static('public'))
+app.use(express.static('public'))
 
-server.use(useHeaders)
+app.use(useHeaders)
 
-server.options('*', optionsRoute)
+app.options('*', optionsRoute)
 
-server.use(useAuth)
+app.use(useAuth)
 
 // Auth end point
-server.get('/auth', getAuth)
+app.get('/auth', getAuth)
 
 // Users end point
-server.get('/rest/users', getUsers)
-server.post('/rest/users', postUser)
-server.get('/rest/users/:userId', getUser)
-server.put('/rest/users/:userId', putUser)
-server.patch('/rest/users/:userId', patchUser)
-server.delete('/rest/users/:userId', deleteUser)
-server.get('/rest/users/:userId/memberships', getUserMemberships)
+app.get('/rest/users', getUsers)
+app.post('/rest/users', postUser)
+app.get('/rest/users/:userId', getUser)
+app.put('/rest/users/:userId', putUser)
+app.patch('/rest/users/:userId', patchUser)
+app.delete('/rest/users/:userId', deleteUser)
+app.get('/rest/users/:userId/memberships', getUserMemberships)
 
 // Tribes end point
-server.get('/rest/tribes', getTribes)
-server.post('/rest/tribes', postTribe)
-server.get('/rest/tribes/:tribeId', getTribe)
-server.put('/rest/tribes/:tribeId', putTribe)
-server.patch('/rest/tribes/:tribeId', patchTribe)
-server.delete('/rest/tribes/:tribeId', deleteTribe)
-server.get('/rest/tribes/:tribeId/memberships', getTribeMemberships)
+app.get('/rest/tribes', getTribes)
+app.post('/rest/tribes', postTribe)
+app.get('/rest/tribes/:tribeId', getTribe)
+app.put('/rest/tribes/:tribeId', putTribe)
+app.patch('/rest/tribes/:tribeId', patchTribe)
+app.delete('/rest/tribes/:tribeId', deleteTribe)
+app.get('/rest/tribes/:tribeId/memberships', getTribeMemberships)
 
 // Memberships end point
-server.post('/rest/memberships/', postMembership)
-server.get('/rest/memberships/:membershipId', getMembership)
-server.put('/rest/memberships/:membershipId', putMembership)
-server.patch('/rest/memberships/:membershipId', patchMembership)
-server.delete('/rest/memberships/:membershipId', deleteMembership)
+app.post('/rest/memberships/', postMembership)
+app.get('/rest/memberships/:membershipId', getMembership)
+app.put('/rest/memberships/:membershipId', putMembership)
+app.patch('/rest/memberships/:membershipId', patchMembership)
+app.delete('/rest/memberships/:membershipId', deleteMembership)
 
 const PORT = process.env.PORT || 3090;
 
 const startup = () => {
-  const app = server.listen(PORT, () => {
+  const myApp = app.listen(PORT, () => {
     LOGGER.info(`Server is running in http://localhost:${PORT}`)
   })
-  app.on('close', () => {
+  myApp.on('close', () => {
     LOGGER.debug('Server Shutting down')
   })
-  return app
+  return myApp
 }
 
 export default startup

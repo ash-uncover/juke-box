@@ -5,9 +5,12 @@
   "dependencies": {
     "ap-utils-logger": "latest",
     "express": "latest",
-    "mongoose": "latest"
+    "mongoose": "latest",
+    "ws": "latest"
   },
   "devDependencies": {
+    "@types/ws": "latest",
+    "@types/express": "latest",
     "@types/node": "latest",
     "eslint": "latest",
     "eslint-plugin-import": "latest",
