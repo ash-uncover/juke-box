@@ -43,9 +43,19 @@ import {
   Route
 } from 'react-router-dom'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
+import {
+  FontAwesomeIcon
+} from '@fortawesome/react-fontawesome'
 
+import {
+  faHiking,
+  faMountain,
+  faPowerOff,
+  faPlusCircle
+} from '@fortawesome/free-solid-svg-icons'
+
+import Profile from './profile/Profile'
+import Tribe from './tribe/Tribe'
 import Image from '../commons/Image'
 
 import './Main.scss'
@@ -104,10 +114,16 @@ export interface MainMenuProps {}
 export const MainMenu = (props: MainMenuProps) => {
   return (
     <div className='MainMenu'>
-      <MainMenuItem
-        name='Profile'
+      <Link
+        className='MainMenuItem'
         to='/profile'
-      />
+      >
+        <FontAwesomeIcon
+          icon={faHiking}
+          color='white'
+          size='2x'
+        />
+      </Link>
       <div
         className='MainMenu-separator'
       />
@@ -115,9 +131,15 @@ export const MainMenu = (props: MainMenuProps) => {
       <div
         className='MainMenu-separator'
       />
-      <MainMenuItem
-        name='Add'
-      />
+      <div
+        className='MainMenuItem'
+      >
+        <FontAwesomeIcon
+          icon={faPlusCircle}
+          color='white'
+          size='3x'
+        />
+      </div>
     </div>
   )
 }
@@ -302,10 +324,10 @@ export const MainContent = (props: MainMenuProps) => {
     <div className='MainContent'>
       <Switch>
         <Route path='/profile'>
-          <div>Profile</div>
+          <Profile />
         </Route>
-        <Route path='/tribes'>
-          <div>tribe</div>
+        <Route path='/tribes/:tribeId'>
+          <Tribe />
         </Route>
         <Route path='*'>
           <Redirect to='/profile' />

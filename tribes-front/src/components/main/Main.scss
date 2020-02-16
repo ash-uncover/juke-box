@@ -1,8 +1,7 @@
+@import '../../variables.scss';
+
 $main-toolbar-height: 2rem;
 $main-menu-width: 4rem;
-
-$color1: red;
-$color2: green;
 
 .Main {
   position: absolute;
@@ -10,7 +9,7 @@ $color2: green;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: $color1;
+  background-color: $color-main-background;
 
   .MainToolbar {
     position: absolute;
@@ -23,7 +22,7 @@ $color2: green;
     display: flex;
     align-items: center;
 
-    color: white;
+    color: $color-main-foreground;
 
     .MainToolbar-title {
       flex-grow: 1;
@@ -47,27 +46,41 @@ $color2: green;
     flex-direction: column;
     align-items: center;
 
+    color: $color-main-foreground;
+
     .MainMenu-separator {
-      width: 3rem;
-      border-bottom: 1px solid white;
+      width: 2.5rem;
+      border-bottom: 1px solid $color-third-background;
       margin: 1rem 0;
     }
 
     .MainMenuItem {
-      +.MainMenuItem {
-        margin-top: 1rem;
-      }
-      background: yellow;
       height: 3rem;
       width: 3rem;
       line-height: 3rem;
       overflow: hidden;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      text-decoration: none;
+
+      background-color: $color-main-highlight-background;
+      color: $color-main-highlight-foreground;
+
       border-radius: 50%;
-      transition: border-radius 0.15s ease-in-out;
       cursor: pointer;
+      transition: border-radius 0.15s ease-in-out, background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+
+      +.MainMenuItem {
+        margin-top: 1rem;
+      }
 
       &:hover {
         border-radius: 0.5rem;
+        background-color: $color-main-active-background;
+        color: $color-main-active-foreground;
       }
 
       .Image {
@@ -85,8 +98,9 @@ $color2: green;
     left: $main-menu-width;
     right: 0;
 
-    border-top-left-radius: 1rem;
+    border-top-left-radius: 0.75rem;
 
-    background-color: $color2;
+    background-color: $color-secondary-background;
+    color: $color-secondary-foreground;
   }
 }

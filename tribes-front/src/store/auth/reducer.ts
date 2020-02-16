@@ -32,7 +32,6 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
       }
     }
     case ActionsTypes.AUTH_GET_SUCCESS: {
-      console.log(action.payload)
       const { user } = action.payload
       return {
         ...state,

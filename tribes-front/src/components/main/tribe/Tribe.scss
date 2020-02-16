@@ -1,0 +1,18 @@
+@import '../../../variables.scss';
+
+.Tribe {
+  border-right: 2px solid $color-main-background;
+  height: 100%;
+  width: 14rem;
+
+  .Tribe-header {
+    height: 2.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    border-bottom: 1px solid $color-main-background;
+
+
+  }
+}
