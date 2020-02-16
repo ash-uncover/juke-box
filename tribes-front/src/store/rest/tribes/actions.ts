@@ -1,11 +1,12 @@
 import { action } from 'typesafe-actions'
-import { TribeData, UserData } from '../../../types'
+
+import {
+  ErrorData,
+  TribeData,
+  UserData
+} from '../../../types'
 
 export const ActionsTypes = {
-  REST_TRIBES_GETALL_FETCH: '@@REST/TRIBES/GETALL_FETCH',
-  REST_TRIBES_GETALL_SUCCESS: '@@REST/TRIBES/GETALL_SUCCESS',
-  REST_TRIBES_GETALL_FAILURE: '@@REST/TRIBES/GETALL_FAILURE',
-
   REST_TRIBES_GET_FETCH: '@@REST/TRIBES/GET_FETCH',
   REST_TRIBES_GET_SUCCESS: '@@REST/TRIBES/GET_SUCCESS',
   REST_TRIBES_GET_FAILURE: '@@REST/TRIBES/GET_FAILURE',
@@ -32,31 +33,27 @@ export const ActionsTypes = {
 }
 
 export const Actions = {
-  restTribesGetAllFetch: (token: string) => action(ActionsTypes.REST_TRIBES_GETALL_FETCH, { token }),
-  restTribesGetAllSuccess: (tribes: Array<TribeData>) => action(ActionsTypes.REST_TRIBES_GETALL_SUCCESS, { tribes }),
-  restTribesGetAllFailure: (error: string) => action(ActionsTypes.REST_TRIBES_GETALL_FAILURE, { error }),
+  restTribesGetFetch: (id: string) => action(ActionsTypes.REST_TRIBES_GET_FETCH, { id }),
+  restTribesGetSuccess: (id: string, tribe: TribeData) => action(ActionsTypes.REST_TRIBES_GET_SUCCESS, { id, tribe }),
+  restTribesGetFailure: (id: string, error: ErrorData) => action(ActionsTypes.REST_TRIBES_GET_FAILURE, { id, error }),
 
-  restTribesGetFetch: (token: string, id: string) => action(ActionsTypes.REST_TRIBES_GET_FETCH, { token, id }),
-  restTribesGetSuccess: (tribe: TribeData) => action(ActionsTypes.REST_TRIBES_GET_SUCCESS, { tribe }),
-  restTribesGetFailure: (error: string) => action(ActionsTypes.REST_TRIBES_GET_FAILURE, { error }),
-
-  restTribesPostFetch: (token: string, tribe: TribeData) => action(ActionsTypes.REST_TRIBES_POST_FETCH, { token, tribe }),
+  restTribesPostFetch: (tribe: TribeData) => action(ActionsTypes.REST_TRIBES_POST_FETCH, { tribe }),
   restTribesPostSuccess: (tribe: TribeData) => action(ActionsTypes.REST_TRIBES_POST_SUCCESS, { tribe }),
-  restTribesPostFailure: (error: string) => action(ActionsTypes.REST_TRIBES_POST_FAILURE, { error }),
+  restTribesPostFailure: (error: ErrorData) => action(ActionsTypes.REST_TRIBES_POST_FAILURE, { error }),
 
-  restTribesPutFetch: (token: string, tribe: TribeData) => action(ActionsTypes.REST_TRIBES_PUT_FETCH, { token, tribe }),
+  restTribesPutFetch: (tribe: TribeData) => action(ActionsTypes.REST_TRIBES_PUT_FETCH, { tribe }),
   restTribesPutSuccess: (tribe: string) => action(ActionsTypes.REST_TRIBES_PUT_SUCCESS, { tribe }),
-  restTribesPutFailure: (error: string) => action(ActionsTypes.REST_TRIBES_PUT_FAILURE, { error }),
+  restTribesPutFailure: (error: ErrorData) => action(ActionsTypes.REST_TRIBES_PUT_FAILURE, { error }),
 
-  restTribesPatchFetch: (token: string, tribe: TribeData) => action(ActionsTypes.REST_TRIBES_PATCH_FETCH, { token, tribe }),
+  restTribesPatchFetch: (tribe: TribeData) => action(ActionsTypes.REST_TRIBES_PATCH_FETCH, { tribe }),
   restTribesPatchSuccess: (tribe: string) => action(ActionsTypes.REST_TRIBES_PATCH_SUCCESS, { tribe }),
-  restTribesPatchFailure: (error: string) => action(ActionsTypes.REST_TRIBES_PATCH_FAILURE, { error }),
+  restTribesPatchFailure: (error: ErrorData) => action(ActionsTypes.REST_TRIBES_PATCH_FAILURE, { error }),
 
-  restTribesDeleteFetch: (token: string, id: string) => action(ActionsTypes.REST_TRIBES_DELETE_FETCH, { token, id }),
+  restTribesDeleteFetch: (id: string) => action(ActionsTypes.REST_TRIBES_DELETE_FETCH, { id }),
   restTribesDeleteSuccess: () => action(ActionsTypes.REST_TRIBES_DELETE_SUCCESS, {}),
-  restTribesDeleteFailure: (error: string) => action(ActionsTypes.REST_TRIBES_DELETE_FAILURE, { error }),
+  restTribesDeleteFailure: (error: ErrorData) => action(ActionsTypes.REST_TRIBES_DELETE_FAILURE, { error }),
 
-  restTribesUsersGetAllFetch: (token: string, id: string) => action(ActionsTypes.REST_TRIBES_USERS_GETALL_FETCH, { token, id }),
+  restTribesUsersGetAllFetch: (id: string) => action(ActionsTypes.REST_TRIBES_USERS_GETALL_FETCH, { id }),
   restTribesUsersGetAllSuccess: (users: Array<UserData>) => action(ActionsTypes.REST_TRIBES_USERS_GETALL_SUCCESS, { users }),
-  restTribesUsersGetAllFailure: (error: string) => action(ActionsTypes.REST_TRIBES_USERS_GETALL_FAILURE, { error })
+  restTribesUsersGetAllFailure: (error: ErrorData) => action(ActionsTypes.REST_TRIBES_USERS_GETALL_FAILURE, { error })
 }

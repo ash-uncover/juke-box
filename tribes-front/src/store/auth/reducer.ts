@@ -37,7 +37,7 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
       return {
         ...state,
         authState: 'AUTH_OK',
-        authUser: user
+        authUser: user.id
       }
     }
     case ActionsTypes.AUTH_GET_FAILURE: {
@@ -58,13 +58,7 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
       }
     }
     case ActionsTypes.AUTH_DELETE_SUCCESS: {
-      return {
-        ...state,
-        authState: 'AUTH_NONE',
-        authToken: null,
-        authUsername: null,
-        authPassword: null
-      }
+      return initialState
     }
     case ActionsTypes.AUTH_DELETE_FAILURE: {
       const { error } = action.payload

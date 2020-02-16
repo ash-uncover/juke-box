@@ -1,7 +1,16 @@
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, {
+  useState
+} from 'react'
 
-import { authStateSelector, authErrorSelector } from '../../store/auth/selectors'
+import {
+  useDispatch,
+  useSelector
+} from 'react-redux'
+
+import {
+  authStateSelector,
+  authErrorSelector
+} from '../../store/auth/selectors'
 
 import RestService from '../../services/RestService'
 

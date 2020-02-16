@@ -1,7 +1,16 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, {
+  useEffect
+} from 'react'
 
-import { authTokenSelector, authStateSelector } from '../../store/auth/selectors'
+import {
+  useDispatch,
+  useSelector
+} from 'react-redux'
+
+import {
+  authTokenSelector,
+  authStateSelector
+} from '../../store/auth/selectors'
 
 import {
   Redirect
@@ -18,14 +27,12 @@ interface LogoutProps {
 
 const Logout = (props: LogoutProps) => {
   const dispatch = useDispatch()
-  const authToken = useSelector(authTokenSelector)
-
   const authState = useSelector(authStateSelector)
   const isNone = authState === 'AUTH_NONE'
 
   useEffect(() => {
     if (!isNone) {
-      RestService.auth.delete(dispatch, authToken)
+      RestService.auth.delete(dispatch)
     }
   })
 

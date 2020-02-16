@@ -1,3 +1,11 @@
+// ERROR
+
+export interface ErrorData {
+  status: string,
+  message: string,
+  trace: string
+}
+
 // TRIBE
 
 export interface Tribe {

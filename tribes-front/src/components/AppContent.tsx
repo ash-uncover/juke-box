@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import Tribes from './tribes/Tribes'
+import Tribes from './tribes/Memberships'
 
 import './AppContent.scss'
 

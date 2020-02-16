@@ -1,5 +1,5 @@
 import { action } from 'typesafe-actions'
-import { UserData } from '../../types'
+import { ErrorData, UserData } from '../../types'
 
 export const ActionsTypes = {
   AUTH_GET_FETCH: '@@AUTH/GET_FETCH',
@@ -36,15 +36,15 @@ export const ActionsTypes = {
 export const Actions = {
   authGetFetch: (username: string, password: string) => action(ActionsTypes.AUTH_GET_FETCH, { username, password }),
   authGetSuccess: (user: UserData) => action(ActionsTypes.AUTH_GET_SUCCESS, { user }),
-  authGetFailure: (error: string) => action(ActionsTypes.AUTH_GET_FAILURE, { error }),
+  authGetFailure: (error: ErrorData) => action(ActionsTypes.AUTH_GET_FAILURE, { error }),
 
   authPostFetch: () => action(ActionsTypes.AUTH_POST_FETCH),
   authPostSuccess: () => action(ActionsTypes.AUTH_POST_SUCCESS),
   authPostFailure: () => action(ActionsTypes.AUTH_POST_FAILURE),
 
-  authDeleteFetch: (token: string) => action(ActionsTypes.AUTH_DELETE_FETCH, { token }),
+  authDeleteFetch: () => action(ActionsTypes.AUTH_DELETE_FETCH),
   authDeleteSuccess: () => action(ActionsTypes.AUTH_DELETE_SUCCESS),
-  authDeleteFailure: (error: string) => action(ActionsTypes.AUTH_DELETE_FAILURE, { error }),
+  authDeleteFailure: (error: ErrorData) => action(ActionsTypes.AUTH_DELETE_FAILURE, { error }),
 
   authPasswordPut: () => action(ActionsTypes.AUTH_PASSWORD_PUT_FETCH),
   authRegisterPost: () => action(ActionsTypes.AUTH_REGISTER_POST_FETCH),

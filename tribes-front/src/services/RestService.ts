@@ -1,8 +1,10 @@
 import store from '../store'
 import { Actions as AuthActions } from '../store/auth/actions'
-import { Actions as RestTribesActions } from '../store/rest/users/actions'
+import { Actions as RestTribesActions } from '../store/rest/tribes/actions'
+import { Actions as RestUsersActions } from '../store/rest/users/actions'
 
 import {
+  ErrorData,
   MembershipData,
   MembershipPostData,
   MembershipPatchData,
@@ -26,16 +28,16 @@ const RestService = {
     get: (dispatch: any, username: string, password: string) => {
       dispatch(AuthActions.authGetFetch(username, password))
       delayedPromise(_request({ url: `/auth` }))
-        .then((result: any) => {
+        .then((result: UserData) => {
           dispatch(AuthActions.authGetSuccess(result))
         })
-        .catch((error: any) => {
-          dispatch(AuthActions.authGetFailure('errorAuth'))
+        .catch((error: ErrorData) => {
+          dispatch(AuthActions.authGetFailure(error))
         })
     },
 
-    delete: (dispatch: any, token: string) => {
-      dispatch(AuthActions.authDeleteFetch(token))
+    delete: (dispatch: any) => {
+      dispatch(AuthActions.authDeleteFetch())
       setTimeout(() => {
         dispatch(AuthActions.authDeleteSuccess())
       }, 500)
@@ -44,21 +46,20 @@ const RestService = {
 
   rest: {
     tribes: {
-      getAll: (dispatch: any, token: string) => {
-        dispatch(RestTribesActions.restTribesGetAllFetch(token))
-        delayedPromise(_request({ url: `/rest/tribes` }))
-          .then((result: any) => {
-            dispatch(RestTribesActions.restTribesGetAllSuccess(result))
+      get: (dispatch: any, id: string) => {
+        dispatch(RestTribesActions.restTribesGetFetch(id))
+        delayedPromise(_request({ url: `/rest/tribes/${id}` }))
+          .then((result: TribeData) => {
+            dispatch(RestTribesActions.restTribesGetSuccess(id, result))
           })
-          .catch((error: any) => {
-            RestTribesActions.restTribesGetAllFailure(error)
+          .catch((error: ErrorData) => {
+            RestTribesActions.restTribesGetFailure(id, error)
           })
       },
-      get: (dispatch: any, token: string, id: string) => {},
-      post: (dispatch: any, token: string, tribe: TribePostData) => {},
-      put: (dispatch: any, token: string, tribe: TribeData) => {},
-      patch: (dispatch: any, token: string, tribe: TribePatchData) => {},
-      delete: (dispatch: any, token: string, id: string) => {},
+      post: (dispatch: any, tribe: TribePostData) => {},
+      put: (dispatch: any, tribe: TribeData) => {},
+      patch: (dispatch: any, tribe: TribePatchData) => {},
+      delete: (dispatch: any, id: string) => {},
 
       memberships: {
         getAll: (dispatch: any, token: string, id: string) => {}
@@ -66,24 +67,30 @@ const RestService = {
     },
 
     users: {
-      getAll: (dispatch: any, token: string) => {},
-      get: (dispatch: any, token: string, id: string) => {},
-      post: (dispatch: any, token: string, user: UserPostData) => {},
-      put: (dispatch: any, token: string, user: UserData) => {},
-      patch: (dispatch: any, token: string, user: UserPatchData) => {},
-      delete: (dispatch: any, token: string, id: string) => {},
+      get: (dispatch: any, id: string) => {},
+      put: (dispatch: any, user: UserData) => {},
+      patch: (dispatch: any, user: UserPatchData) => {},
 
       memberships: {
-        getAll: (dispatch: any, token: string, id: string) => {}
+        getAll: (dispatch: any, id: string) => {
+          dispatch(RestUsersActions.restUsersMembershipsGetAllFetch(id))
+          delayedPromise(_request({ url: `/rest/users/${id}/memberships` }))
+            .then((result: Array<string>) => {
+              dispatch(RestUsersActions.restUsersMembershipsGetAllSuccess(id, result))
+            })
+            .catch((error: ErrorData) => {
+              RestUsersActions.restUsersMembershipsGetAllFailure(id, error)
+            })
+        }
       }
     },
 
     memberships: {
-      get: (dispatch: any, token: string, id: string) => {},
-      post: (dispatch: any, token: string, membership: MembershipPostData) => {},
-      put: (dispatch: any, token: string, membership: MembershipData) => {},
-      patch: (dispatch: any, token: string, membership: MembershipPatchData) => {},
-      delete: (dispatch: any, token: string, id: string) => {}
+      get: (dispatch: any, id: string) => {},
+      post: (dispatch: any, membership: MembershipPostData) => {},
+      put: (dispatch: any, membership: MembershipData) => {},
+      patch: (dispatch: any, membership: MembershipPatchData) => {},
+      delete: (dispatch: any, id: string) => {}
     }
   }
 }
@@ -100,7 +107,7 @@ const _request = (reqParam: any) => {
     )
 
     const auth = store.getState().auth
-    console.log(auth)
+
     params.auth = {
       'user': auth.authUsername,
       'pass': auth.authPassword,
