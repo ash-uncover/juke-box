@@ -46,6 +46,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
 
+import Image from '../commons/Image'
+
 import './Main.scss'
 
 /* Main */
@@ -237,7 +239,9 @@ export const MainMenuTribe = (props: MainMenuTribeProps) => {
     case RequestState.SUCCESS: {
       return (
         <MainMenuItem
+          to={`/tribes/${tribeData.id}`}
           name={tribeData.name}
+          image={tribeData.image}
         />
       )
     }
@@ -267,7 +271,15 @@ export const MainMenuItem = (props: MainMenuItemProps) => {
         className='MainMenuItem'
         to={props.to}
       >
-        {props.name}
+        {props.image
+        ?
+          <Image
+            src={props.image}
+            title={props.name}
+          />
+        :
+          props.name
+        }
       </Link>
     )
   }
@@ -292,7 +304,7 @@ export const MainContent = (props: MainMenuProps) => {
         <Route path='/profile'>
           <div>Profile</div>
         </Route>
-        <Route path='/tribe'>
+        <Route path='/tribes'>
           <div>tribe</div>
         </Route>
         <Route path='*'>

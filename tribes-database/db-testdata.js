@@ -41,12 +41,12 @@ db.users.insert({
 db.tribes.insert({
   "id":"tribebanana",
   "name":"Banana Kidz",
-  "image":""
+  "image":"images/tribebanana.jpg"
 })
 db.tribes.insert({
   "id":"tribeavalon",
   "name":"Avalon",
-  "image":""
+  "image":"images/tribeavalon.jpg"
 })
 
 // MEMBERSHIPS //

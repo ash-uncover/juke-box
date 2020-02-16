@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { authStateSelector } from '../store/auth/selectors'
 
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   Redirect,
   Switch,
   Route

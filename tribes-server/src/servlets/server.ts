@@ -102,6 +102,8 @@ export const optionsRoute = (req: any, res: any, next: any) => {
 
 const server = express()
 
+server.use(express.static('public'))
+
 server.use(useHeaders)
 
 server.options('*', optionsRoute)

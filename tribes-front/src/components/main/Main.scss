@@ -69,6 +69,12 @@ $color2: green;
       &:hover {
         border-radius: 0.5rem;
       }
+
+      .Image {
+        height: 3rem;
+        width: 3rem;
+        object-fit: cover;
+      }
     }
   }
 
