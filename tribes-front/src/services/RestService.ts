@@ -27,7 +27,7 @@ const RestService = {
       dispatch(AuthActions.authGetFetch(username, password))
       delayedPromise(_request({ url: `/auth` }))
         .then((result: any) => {
-          dispatch(AuthActions.authGetSuccess('Basic'))
+          dispatch(AuthActions.authGetSuccess(result))
         })
         .catch((error: any) => {
           dispatch(AuthActions.authGetFailure('errorAuth'))

@@ -1,12 +1,14 @@
 import { Reducer } from 'redux'
 import { ActionsTypes } from './actions'
+import { UserData } from '../../types'
 
 export interface AuthState {
   authState: string,
   authToken: string | null,
   authError: string | null,
   authUsername: string | null,
-  authPassword: string | null
+  authPassword: string | null,
+  authUser: UserData | null
 }
 
 export const initialState: AuthState = {
@@ -14,7 +16,8 @@ export const initialState: AuthState = {
   authToken: null,
   authError: null,
   authUsername: null,
-  authPassword: null
+  authPassword: null,
+  authUser: null
 }
 
 const reducer: Reducer<AuthState> = (state = initialState, action) => {
@@ -29,11 +32,12 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
       }
     }
     case ActionsTypes.AUTH_GET_SUCCESS: {
-      const { token } = action.payload
+      console.log(action.payload)
+      const { user } = action.payload
       return {
         ...state,
         authState: 'AUTH_OK',
-        authToken: token
+        authUser: user
       }
     }
     case ActionsTypes.AUTH_GET_FAILURE: {

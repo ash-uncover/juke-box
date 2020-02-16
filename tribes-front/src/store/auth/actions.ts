@@ -1,4 +1,5 @@
 import { action } from 'typesafe-actions'
+import { UserData } from '../../types'
 
 export const ActionsTypes = {
   AUTH_GET_FETCH: '@@AUTH/GET_FETCH',
@@ -34,7 +35,7 @@ export const ActionsTypes = {
 
 export const Actions = {
   authGetFetch: (username: string, password: string) => action(ActionsTypes.AUTH_GET_FETCH, { username, password }),
-  authGetSuccess: (token: string) => action(ActionsTypes.AUTH_GET_SUCCESS, { token }),
+  authGetSuccess: (user: UserData) => action(ActionsTypes.AUTH_GET_SUCCESS, { user }),
   authGetFailure: (error: string) => action(ActionsTypes.AUTH_GET_FAILURE, { error }),
 
   authPostFetch: () => action(ActionsTypes.AUTH_POST_FETCH),

@@ -92,7 +92,7 @@ export const useAuth = function(req: any, res: any, next: any) {
 
 export const getAuth = (req: any, res: any, next: any) => {
   LOGGER.debug('getAuth')
-  res.sendStatus(HttpStatus.OK)
+  res.status(HttpStatus.OK).send(req.__context)
 }
 
 export const optionsRoute = (req: any, res: any, next: any) => {
