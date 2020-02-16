@@ -1,39 +1,7 @@
-$app-toolbar-height: 2rem;
-
-$app-mainmenu-width: 4rem;
-$app-secondarymenu-width: 8rem;
-$app-thirdmenu-width: 6rem;
-
 .App {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-
-  .AppToolbar {
-    position: absolute;
-    top: 0;
-    height: $app-toolbar-height;
-    left: 0;
-    right: 0;
-  }
-
-  .AppContent {
-    position: absolute;
-    top: $app-toolbar-height;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: red;
-
-    .AppContent-main-menu {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      width: $app-mainmenu-width;
-      background-color: green;
-    }
-  }
 }

@@ -9,14 +9,10 @@ import {
   Route
 } from 'react-router-dom'
 
-import AppToolbar from './AppToolbar'
-import AppContent from './AppContent'
-
 import Auth from './auth/Auth'
+import Main from './main/Main'
 
 import './App.scss'
-
-interface AppProps {}
 
 const renderNoAuth = () => (
   <Suspense fallback='loading'>
@@ -44,15 +40,14 @@ const renderAuth = () => (
           <Redirect to='/' />
         </Route>
         <Route path='*'>
-          <div className='App'>
-            <AppToolbar />
-            <AppContent />
-          </div>
+          <Main />
         </Route>
       </Switch>
     </Router>
   </Suspense>
 )
+
+interface AppProps {}
 
 const App = (props: AppProps) => {
   const authState = useSelector(authStateSelector)
