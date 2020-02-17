@@ -1,18 +1,52 @@
 @import '../../../variables.scss';
 
 .Tribe {
-  border-right: 2px solid $color-main-background;
   height: 100%;
-  width: 14rem;
+  display: flex;
+  >* {
+    height: 100%;
+  }
 
-  .Tribe-header {
-    height: 2.5rem;
-    font-weight: bold;
+
+  .TribeMenu {
+    border-right: 2px solid $color-main-background;
+    width: 14rem;
+
+    .TribeMenu-header {
+      height: 2.5rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      border-bottom: 1px solid $color-main-background;
+    }
+  }
+
+  .TribeContent {
+    flex-grow: 1;
+    background: $color-third-background;
     display: flex;
-    align-items: center;
-    padding: 0 1rem;
-    border-bottom: 1px solid $color-main-background;
+    flex-direction: column;
 
+    .TribeContent-header {
+      height: 2.5rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      border-bottom: 1px solid $color-main-background;
+    }
 
+    .TribeContent-main {
+      flex-grow: 1;
+      display: flex;
+      .TribeContent-content {
+        flex-grow: 1;
+      }
+      .TribeContent-users {
+        background: $color-secondary-background;
+        width: 10rem;
+      }
+    }
   }
 }

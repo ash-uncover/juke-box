@@ -1,6 +1,9 @@
 import { Reducer } from 'redux'
-import { ActionsTypes } from './actions'
+
+import { ActionsTypes as UsersActionsTypes } from './actions'
 import { ActionsTypes as AuthActionsTypes } from '../../auth/actions'
+import { ActionsTypes as TribesActionsTypes} from '../tribes/actions'
+
 import { RequestState } from '../../../utils/constants'
 import {
   ErrorData,
@@ -62,7 +65,7 @@ const reducer: Reducer<UsersState> = (state = initialState, action) => {
 
     // GET /users/{userId}
 
-    case ActionsTypes.REST_USERS_GET_FETCH: {
+    case UsersActionsTypes.REST_USERS_GET_FETCH: {
       const { id } = action.payload
 
       const userState = getUserState(state, id)
@@ -71,7 +74,7 @@ const reducer: Reducer<UsersState> = (state = initialState, action) => {
 
       return { ...state }
     }
-    case ActionsTypes.REST_USERS_GET_SUCCESS: {
+    case UsersActionsTypes.REST_USERS_GET_SUCCESS: {
       const { id, user } = action.payload
 
       const userState = getUserState(state, id)
@@ -81,7 +84,7 @@ const reducer: Reducer<UsersState> = (state = initialState, action) => {
 
       return { ...state }
     }
-    case ActionsTypes.REST_USERS_GET_FAILURE: {
+    case UsersActionsTypes.REST_USERS_GET_FAILURE: {
       const { id, error } = action.payload
 
       const userState = getUserState(state, id)
@@ -94,7 +97,7 @@ const reducer: Reducer<UsersState> = (state = initialState, action) => {
 
     // GET /users/{userId}/memberships
 
-    case ActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_FETCH: {
+    case UsersActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_FETCH: {
       const { id } = action.payload
 
       const userState = getUserState(state, id)
@@ -103,7 +106,7 @@ const reducer: Reducer<UsersState> = (state = initialState, action) => {
 
       return { ...state }
     }
-    case ActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_SUCCESS: {
+    case UsersActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_SUCCESS: {
       const { id, memberships } = action.payload
 
       const userState = getUserState(state, id)
@@ -113,13 +116,25 @@ const reducer: Reducer<UsersState> = (state = initialState, action) => {
 
       return { ...state }
     }
-    case ActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_FAILURE: {
+    case UsersActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_FAILURE: {
       const { id, error } = action.payload
 
       const userState = getUserState(state, id)
       userState.membershipsData = null
       userState.membershipsError = error
       userState.membershipsStatus = RequestState.FAILURE
+
+      return { ...state }
+    }
+
+    // GET /tribes/{tribeId}/memberships
+
+    case TribesActionsTypes.REST_TRIBES_MEMBERSHIPS_GETALL_SUCCESS: {
+      const { memberships } = action.payload
+
+      memberships.forEach((membership: MembershipData) => {
+        getUserState(state, membership.userId)
+      })
 
       return { ...state }
     }

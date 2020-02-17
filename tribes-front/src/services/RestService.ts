@@ -62,7 +62,16 @@ const RestService = {
       delete: (dispatch: any, id: string) => {},
 
       memberships: {
-        getAll: (dispatch: any, token: string, id: string) => {}
+        getAll: (dispatch: any, id: string) => {
+          dispatch(RestTribesActions.restTribesMembershipsGetAllFetch(id))
+          delayedPromise(_request({ url: `/rest/tribes/${id}/memberships` }))
+            .then((result: Array<MembershipData>) => {
+              dispatch(RestTribesActions.restTribesMembershipsGetAllSuccess(id, result))
+            })
+            .catch((error: ErrorData) => {
+              RestTribesActions.restTribesMembershipsGetAllFailure(id, error)
+            })
+        }
       }
     },
 
@@ -75,7 +84,7 @@ const RestService = {
         getAll: (dispatch: any, id: string) => {
           dispatch(RestUsersActions.restUsersMembershipsGetAllFetch(id))
           delayedPromise(_request({ url: `/rest/users/${id}/memberships` }))
-            .then((result: Array<string>) => {
+            .then((result: Array<MembershipData>) => {
               dispatch(RestUsersActions.restUsersMembershipsGetAllSuccess(id, result))
             })
             .catch((error: ErrorData) => {

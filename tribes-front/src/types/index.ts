@@ -8,13 +8,6 @@ export interface ErrorData {
 
 // TRIBE
 
-export interface Tribe {
-  id: string,
-  name: string,
-  image: string,
-  users: Array<User>
-}
-
 export interface TribeData {
   id: string,
   name: string,
@@ -53,26 +46,22 @@ export interface MembershipPatchData {
 
 // USER
 
-export interface User {
-  id: string,
-  name: string,
-  image: string,
-  tribes: Array<Tribe>
-}
-
 export interface UserData {
   id: string,
+  username: string,
   name: string,
   image: string
 }
 
 export interface UserPostData {
+  username: string,
   name: string,
   image: string
 }
 
 export interface UserPatchData {
   id: string,
+  username?: string,
   name?: string,
   image?: string
 }

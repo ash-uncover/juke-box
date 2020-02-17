@@ -1,5 +1,10 @@
 import { action } from 'typesafe-actions'
-import { ErrorData, UserData } from '../../../types'
+
+import {
+  ErrorData,
+  MembershipData,
+  UserData
+} from '../../../types'
 
 export const ActionsTypes = {
   REST_USERS_GET_FETCH: '@@REST/USERS/GET_FETCH',
@@ -17,6 +22,6 @@ export const Actions = {
   restUsersGetFailure: (id: string, error: ErrorData) => action(ActionsTypes.REST_USERS_GET_FAILURE, { id, error }),
 
   restUsersMembershipsGetAllFetch: (id: string) => action(ActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_FETCH, { id }),
-  restUsersMembershipsGetAllSuccess: (id: string, memberships: Array<string>) => action(ActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_SUCCESS, { id, memberships }),
+  restUsersMembershipsGetAllSuccess: (id: string, memberships: Array<MembershipData>) => action(ActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_SUCCESS, { id, memberships }),
   restUsersMembershipsGetAllFailure: (id: string, error: ErrorData) => action(ActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_FAILURE, { id, error })
 }

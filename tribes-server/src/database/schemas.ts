@@ -33,6 +33,7 @@ const preSave = function (next) {
 export const usersSchema = new mongoose.Schema(Object.assign({
   username: { type: String, required: true },
   password: { type: String, required: true },
+  name: { type: String, required: true },
   image: { type: String }
 }, defaultSchema))
 usersSchema.pre('save', preSave)

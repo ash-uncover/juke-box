@@ -2,6 +2,7 @@ import { Reducer } from 'redux'
 
 import { ActionsTypes } from './actions'
 import { ActionsTypes as AuthActionsTypes } from '../../auth/actions'
+import { ActionsTypes as TribesActionsTypes } from '../tribes/actions'
 import { ActionsTypes as UsersActionsTypes } from '../users/actions'
 
 import {
@@ -45,12 +46,9 @@ const getMembershipState = (state: MembershipsState, id: string) => {
 const reducer: Reducer<MembershipsState> = (state = initialState, action) => {
   switch (action.type) {
 
-    // GET /users/{userId}/memberships
+    // GET /tribes/{tribeId}/memberships
 
-    case UsersActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_FETCH: {
-      return { ...state }
-    }
-    case UsersActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_SUCCESS: {
+    case TribesActionsTypes.REST_TRIBES_MEMBERSHIPS_GETALL_SUCCESS: {
       const { memberships } = action.payload
 
       memberships.forEach((membership: MembershipData) => {
@@ -62,7 +60,19 @@ const reducer: Reducer<MembershipsState> = (state = initialState, action) => {
 
       return { ...state }
     }
-    case UsersActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_FAILURE: {
+
+    // GET /users/{userId}/memberships
+
+    case UsersActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_SUCCESS: {
+      const { memberships } = action.payload
+
+      memberships.forEach((membership: MembershipData) => {
+        const membershipState = getMembershipState(state, membership.id)
+        membershipState.data = membership
+        membershipState.error = null
+        membershipState.status = RequestState.SUCCESS
+      })
+
       return { ...state }
     }
 

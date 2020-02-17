@@ -27,13 +27,19 @@ export const initialState: TribesState = {
 export interface TribeState {
   data: TribeData | null,
   status: RequestState,
-  error: ErrorData | null
+  error: ErrorData | null,
+  membershipsData: Array<string> | null,
+  membershipsStatus: RequestState,
+  membershipsError: ErrorData | null
 }
 
 export const initialTribeState = () => ({
   data: null,
   status: RequestState.NEVER,
-  error: null
+  error: null,
+  membershipsData: null,
+  membershipsStatus: RequestState.NEVER,
+  membershipsError: null
 })
 
 const getTribeState = (state: TribesState, id: string) => {
@@ -74,6 +80,38 @@ const reducer: Reducer<TribesState> = (state = initialState, action) => {
       tribeState.data = null
       tribeState.error = error
       tribeState.status = RequestState.FAILURE
+
+      return { ...state }
+    }
+
+    // GET /tribes/{tribeId}/memberships
+
+    case TribesActionsTypes.REST_TRIBES_MEMBERSHIPS_GETALL_FETCH: {
+      const { id } = action.payload
+
+      const tribeState = getTribeState(state, id)
+      tribeState.membershipsError = null
+      tribeState.membershipsStatus = RequestState.FETCHING
+
+      return { ...state }
+    }
+    case TribesActionsTypes.REST_TRIBES_MEMBERSHIPS_GETALL_SUCCESS: {
+      const { id, memberships } = action.payload
+
+      const tribeState = getTribeState(state, id)
+      tribeState.membershipsData = memberships.map((membership: MembershipData) => membership.id)
+      tribeState.membershipsError = null
+      tribeState.membershipsStatus = RequestState.SUCCESS
+
+      return { ...state }
+    }
+    case TribesActionsTypes.REST_TRIBES_MEMBERSHIPS_GETALL_FAILURE: {
+      const { id, error } = action.payload
+
+      const tribeState = getTribeState(state, id)
+      tribeState.membershipsData = null
+      tribeState.membershipsError = error
+      tribeState.membershipsStatus = RequestState.FAILURE
 
       return { ...state }
     }
