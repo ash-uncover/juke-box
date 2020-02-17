@@ -23,6 +23,7 @@ db.users.insert({
   "password":"a",
   "name":"Antoine",
   "image":"images/userantoine.png"
+})
 db.users.insert({
   "id":"userbulle",
   "username":"bulle",
