@@ -1,7 +1,19 @@
 {
-  "app": {
-    "header": {
-      "title": "We Tribes"
+  "auth": {
+    "login": {
+      "title": "Sign In",
+      "username": "username",
+      "password": "password",
+      "link": {
+        "register": "Create account",
+        "recover": "Lost password ?"
+      }
+    },
+    "logout": {
+      "message": "Log out..."
     }
+  },
+  "main": {
+
   }
 }

@@ -91,7 +91,7 @@ const MainToolbar = (props: MainToolbarProps) => {
       </span>
       <span
         className='MainToolbar-welcome'>
-        logged as {userData.username}
+        logged as {userData.name}
       </span>
       <Link
         className='MainToolbar-logoff'

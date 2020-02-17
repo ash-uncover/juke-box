@@ -8,6 +8,10 @@ import {
 } from 'react-redux'
 
 import {
+  useTranslation
+} from 'react-i18next'
+
+import {
   authTokenSelector,
   authStateSelector
 } from '../../store/auth/selectors'
@@ -27,6 +31,9 @@ interface LogoutProps {
 
 const Logout = (props: LogoutProps) => {
   const dispatch = useDispatch()
+
+  const { t } = useTranslation()
+
   const authState = useSelector(authStateSelector)
   const isNone = authState === 'AUTH_NONE'
 
@@ -41,7 +48,7 @@ const Logout = (props: LogoutProps) => {
   }
   return (
     <div className='Logout'>
-      Logout...
+      {t('auth.logout.message')}
     </div>
   )
 }

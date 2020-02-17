@@ -1,5 +1,9 @@
 import React from 'react'
 
+import {
+  useTranslation
+} from 'react-i18next'
+
 import { Link } from 'react-router-dom'
 
 import './Recover.scss'
@@ -11,16 +15,18 @@ interface RegisterProps {
 
 const Register = (props: RegisterProps) => {
 
+  const { t } = useTranslation()
+
   return (
     <div className='Register'>
       <div>
-        Register
+      {t('auth.register.title')}
       </div>
       <Link
         className=''
         to='/'
       >
-        Back
+        {t('auth.register.link.back')}
       </Link>
     </div>
   )

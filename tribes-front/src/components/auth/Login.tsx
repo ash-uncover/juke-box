@@ -8,6 +8,10 @@ import {
 } from 'react-redux'
 
 import {
+  useTranslation
+} from 'react-i18next'
+
+import {
   authStateSelector,
   authErrorSelector
 } from '../../store/auth/selectors'
@@ -28,6 +32,8 @@ interface LoginProps {
 const Login = (props: LoginProps) => {
   const dispatch = useDispatch()
 
+  const { t } = useTranslation()
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -43,12 +49,12 @@ const Login = (props: LoginProps) => {
         <div
           className='Login-title'
         >
-          Connection
+          {t('auth.login.title')}
         </div>
 
         <input
           className='Login-input Login-input-username'
-          placeholder='username'
+          placeholder={t('auth.login.username')}
           type='text'
           value={username}
           onChange={(event) => setUsername(event.target.value)}
@@ -56,7 +62,7 @@ const Login = (props: LoginProps) => {
 
         <input
           className='Login-input Login-input-password'
-          placeholder='password'
+          placeholder={t('auth.login.password')}
           type='password'
           value={password}
           onChange={(event) => setPassword(event.target.value)}
@@ -79,14 +85,14 @@ const Login = (props: LoginProps) => {
           className='Login-button-link'
           to='/auth/recover'
         >
-          lost password
+          {t('auth.login.link.recover')}
         </Link>
 
         <Link
           className='Login-button-link'
           to='/auth/register'
         >
-          create account
+          {t('auth.login.link.register')}
         </Link>
       </form>
 

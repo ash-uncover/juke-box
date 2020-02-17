@@ -1,4 +1,10 @@
-import React, { useState } from 'react'
+import React, {
+  useState
+} from 'react'
+
+import {
+  useTranslation
+} from 'react-i18next'
 
 import { Link } from 'react-router-dom'
 
@@ -11,16 +17,18 @@ interface RecoverProps {
 
 const Recover = (props: RecoverProps) => {
 
+  const { t } = useTranslation()
+
   return (
     <div className='Recover'>
       <div>
-        Recover
+        {t('auth.recover.title')}
       </div>
       <Link
         className=''
         to='/'
       >
-        Back
+        {t('auth.recover.link.back')}
       </Link>
     </div>
   )
