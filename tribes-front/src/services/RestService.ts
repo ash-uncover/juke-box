@@ -76,7 +76,16 @@ const RestService = {
     },
 
     users: {
-      get: (dispatch: any, id: string) => {},
+      get: (dispatch: any, id: string) => {
+        dispatch(RestUsersActions.restUsersGetFetch(id))
+        delayedPromise(_request({ url: `/rest/users/${id}` }))
+          .then((result: UserData) => {
+            dispatch(RestUsersActions.restUsersGetSuccess(id, result))
+          })
+          .catch((error: ErrorData) => {
+            RestUsersActions.restUsersGetFailure(id, error)
+          })
+      },
       put: (dispatch: any, user: UserData) => {},
       patch: (dispatch: any, user: UserPatchData) => {},
 

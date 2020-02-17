@@ -45,8 +45,28 @@
       }
       .TribeContent-users {
         background: $color-secondary-background;
-        width: 10rem;
+        width: 12rem;
       }
+    }
+  }
+
+  .TribeUser {
+    display: flex;
+    align-items: center;
+
+    margin: 0.25rem 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+
+    .Image {
+      width: 1.5rem;
+      height: 1.5rem;
+      object-fit: cover;
+      margin-right: 0.5rem;
+    }
+    &:hover {
+      background: $color-third-background;
     }
   }
 }
