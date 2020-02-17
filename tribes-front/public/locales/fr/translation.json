@@ -1,19 +1,33 @@
 {
   "auth": {
     "login": {
-      "title": "Sign In",
-      "username": "username",
-      "password": "password",
+      "title": "Connexion",
+      "username": "nom d'utilisateur",
+      "password": "mot de passe",
       "link": {
-        "register": "Create account",
-        "recover": "Lost password ?"
+        "register": "Créer un compte",
+        "recover": "Mot de passe oublié ?"
+      }
+    },
+    "recover": {
+      "title": "Récupération du mot de passe",
+      "link": {
+        "back": "Retour"
+      }
+    },
+    "register": {
+      "title": "Créer un nouveau compte",
+      "link": {
+        "back": "Retour"
       }
     },
     "logout": {
-      "message": "Log out..."
+      "message": "Déconnexion..."
     }
   },
   "main": {
+    "title": "TRIBES",
+    "welcome": "Bonjour, {{name}}"
 
   }
 }

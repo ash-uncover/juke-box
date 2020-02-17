@@ -1,6 +1,14 @@
-import React, { useState } from 'react'
-import { useSelector } from "react-redux"
-import { authStateSelector } from '../../store/auth/selectors'
+import React, {
+  useState
+} from 'react'
+
+import {
+  useSelector
+} from "react-redux"
+
+import {
+  authStateSelector
+} from '../../store/auth/selectors'
 
 import {
   Redirect,

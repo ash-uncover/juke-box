@@ -8,6 +8,10 @@ import {
 } from 'react-redux'
 
 import {
+  useTranslation
+} from 'react-i18next'
+
+import {
   authUserSelector
 } from '../../store/auth/selectors'
 
@@ -80,6 +84,8 @@ const Main = (props: MainProps) => {
 interface MainToolbarProps {}
 
 const MainToolbar = (props: MainToolbarProps) => {
+  const { t } = useTranslation()
+
   const userId = useSelector(authUserSelector)
   const userData = useSelector(restUserDataSelector(userId))
 
@@ -87,11 +93,11 @@ const MainToolbar = (props: MainToolbarProps) => {
     <div className='MainToolbar'>
       <span
         className='MainToolbar-title'>
-        TRIBES
+        {t('main.title')}
       </span>
       <span
         className='MainToolbar-welcome'>
-        logged as {userData.name}
+        {t('main.welcome', { name: userData.name })}
       </span>
       <Link
         className='MainToolbar-logoff'
