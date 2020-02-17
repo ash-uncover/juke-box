@@ -1,3 +1,18 @@
 .Auth {
-  min-height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background-image: url('/auth-background.jpg');
+  background-size: cover;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  * {
+    font-family: sans-serif !important;
+  }
 }
