@@ -10,3 +10,9 @@ export enum RequestState {
   SUCCESS = 'SUCCESS',
   FAILURE = 'FAILURE'
 }
+
+export enum UserStatus {
+  AWAY = 'AWAY',
+  ONLINE = 'ONLINE',
+  OFFLINE = 'OFFLINE'
+}

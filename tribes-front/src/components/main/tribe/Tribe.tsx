@@ -32,6 +32,7 @@ import {
   restUserErrorSelector
 } from '../../../store/rest/users/selectors'
 
+import FriendListItem from '../../commons/FriendListItem'
 import Image from '../../commons/Image'
 
 import {
@@ -270,12 +271,10 @@ const TribeUser = (props: TribeUserProps) => {
     }
     case RequestState.SUCCESS: {
       return (
-        <div className='TribeUser'>
-          <Image
-            src={ userData.image }
-          />
-          { userData.name }
-        </div>
+        <FriendListItem
+          name={userData.name}
+          image={userData.image}
+        />
       )
     }
     case RequestState.FAILURE:
