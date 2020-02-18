@@ -27,7 +27,15 @@
   },
   "main": {
     "title": "TRIBES",
-    "welcome": "Bonjour, {{name}}"
-
+    "welcome": "Bonjour, {{name}}",
+    "profile": {
+      "menu": {
+        "title": "Mon Profil",
+        "section": {
+          "friends": "Mes Amis",
+          "conversations": "Mes Dials"
+        }
+      }
+    }
   }
 }

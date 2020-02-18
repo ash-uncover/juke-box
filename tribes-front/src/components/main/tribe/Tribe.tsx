@@ -81,7 +81,7 @@ const Tribe = (props: TribeProps) => {
     }
     case RequestState.SUCCESS: {
       return (
-        <div className='Tribe'>
+        <div className='Tribe MainContent-area'>
           <TribeMenu />
           <TribeContent />
         </div>
@@ -108,8 +108,8 @@ const TribeMenu = (props: TribeMenuProps) => {
   const tribeData = useSelector(restTribeDataSelector(tribeId))
 
   return (
-    <div className='TribeMenu'>
-      <div className='TribeMenu-header'>
+    <div className='TribeMenu MainContent-menu'>
+      <div className='TribeMenu-header MainContent-menu-header'>
         {tribeData.name}
       </div>
     </div>

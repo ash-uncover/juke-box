@@ -234,3 +234,11 @@ db.memberships.insert({
   "userId":"userjin",
   "tribeId":"tribemapo"
 })
+
+// FRIENDS //
+
+db.friends.insert({
+  "id":"antoinebanana",
+  "userId":"userantoine",
+  "tribeId":"tribebanana"
+})
