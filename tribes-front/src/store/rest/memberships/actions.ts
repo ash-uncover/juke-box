@@ -1,7 +1,7 @@
 import { action } from 'typesafe-actions'
 import {
   TribeData,
-  UserData
+  UserData,
 } from '../../../types'
 
 export const ActionsTypes = {

@@ -3,7 +3,7 @@
 export interface ErrorData {
   status: string,
   message: string,
-  trace: string
+  trace: string,
 }
 
 // TRIBE
@@ -11,18 +11,18 @@ export interface ErrorData {
 export interface TribeData {
   id: string,
   name: string,
-  image: string
+  image: string,
 }
 
 export interface TribePostData {
   name: string,
-  image: string
+  image: string,
 }
 
 export interface TribePatchData {
   id: string,
   name?: string,
-  image?: string
+  image?: string,
 }
 
 // MEMBERSHIP
@@ -30,18 +30,18 @@ export interface TribePatchData {
 export interface MembershipData {
   id: string,
   userId: string,
-  tribeId: string
+  tribeId: string,
 }
 
 export interface MembershipPostData {
   userId: string,
-  tribeId: string
+  tribeId: string,
 }
 
 export interface MembershipPatchData {
   id: string,
   userId?: string,
-  tribeId?: string
+  tribeId?: string,
 }
 
 // USER
@@ -50,18 +50,18 @@ export interface UserData {
   id: string,
   username: string,
   name: string,
-  image: string
+  image: string,
 }
 
 export interface UserPostData {
   username: string,
   name: string,
-  image: string
+  image: string,
 }
 
 export interface UserPatchData {
   id: string,
   username?: string,
   name?: string,
-  image?: string
+  image?: string,
 }

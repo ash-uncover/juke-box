@@ -13,7 +13,7 @@ import {
   TribePatchData,
   UserData,
   UserPostData,
-  UserPatchData
+  UserPatchData,
 } from '../types'
 
 import request from 'request'
@@ -41,7 +41,7 @@ const RestService = {
       setTimeout(() => {
         dispatch(AuthActions.authDeleteSuccess())
       }, 500)
-    }
+    },
   },
 
   rest: {
@@ -71,8 +71,8 @@ const RestService = {
             .catch((error: ErrorData) => {
               RestTribesActions.restTribesMembershipsGetAllFailure(id, error)
             })
-        }
-      }
+        },
+      },
     },
 
     users: {
@@ -99,8 +99,8 @@ const RestService = {
             .catch((error: ErrorData) => {
               RestUsersActions.restUsersMembershipsGetAllFailure(id, error)
             })
-        }
-      }
+        },
+      },
     },
 
     memberships: {
@@ -108,7 +108,7 @@ const RestService = {
       post: (dispatch: any, membership: MembershipPostData) => {},
       put: (dispatch: any, membership: MembershipData) => {},
       patch: (dispatch: any, membership: MembershipPatchData) => {},
-      delete: (dispatch: any, id: string) => {}
+      delete: (dispatch: any, id: string) => {},
     }
   }
 }

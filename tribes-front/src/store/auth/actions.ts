@@ -30,7 +30,7 @@ export const ActionsTypes = {
 
   AUTH_CHANGEMAIL_PUT_FETCH: '@@AUTH/CHANGEMAIL/PUT_FETCH',
 
-  AUTH_CHANGEMAIL_CONFIRM_POST_FETCH: '@@AUTH/CHANGEMAIL/CONFIRM/POST_FETCH'
+  AUTH_CHANGEMAIL_CONFIRM_POST_FETCH: '@@AUTH/CHANGEMAIL/CONFIRM/POST_FETCH',
 }
 
 export const Actions = {
@@ -54,5 +54,5 @@ export const Actions = {
   authChangemailPost: () => action(ActionsTypes.AUTH_CHANGEMAIL_POST_FETCH),
   authChangemailCheckPost: () => action(ActionsTypes.AUTH_CHANGEMAIL_CHECK_POST_FETCH),
   authChangemailPut: () => action(ActionsTypes.AUTH_CHANGEMAIL_PUT_FETCH),
-  authChangemailConfirmPost: () => action(ActionsTypes.AUTH_CHANGEMAIL_CONFIRM_POST_FETCH)
+  authChangemailConfirmPost: () => action(ActionsTypes.AUTH_CHANGEMAIL_CONFIRM_POST_FETCH),
 }

@@ -7,7 +7,7 @@ import SocketReducer from './socket/reducer'
 const reducer = combineReducers({
   auth: AuthReducer,
   rest: RestReducer,
-  socket: SocketReducer
+  socket: SocketReducer,
 })
 
 export default reducer

@@ -9,7 +9,7 @@ export interface AuthState {
   authError: string | null,
   authUsername: string | null,
   authPassword: string | null,
-  authUser: UserData | null
+  authUser: UserData | null,
 }
 
 export const initialState: AuthState = {
@@ -18,7 +18,7 @@ export const initialState: AuthState = {
   authError: null,
   authUsername: null,
   authPassword: null,
-  authUser: null
+  authUser: null,
 }
 
 const reducer: Reducer<AuthState> = (state = initialState, action) => {
@@ -29,7 +29,7 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
         ...state,
         authState: AuthStatus.AUTHENTICATING,
         authUsername: username,
-        authPassword: password
+        authPassword: password,
       }
     }
     case ActionsTypes.AUTH_GET_SUCCESS: {
@@ -37,7 +37,7 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
       return {
         ...state,
         authState: AuthStatus.AUTHENTICATED,
-        authUser: user.id
+        authUser: user.id,
       }
     }
     case ActionsTypes.AUTH_GET_FAILURE: {
@@ -47,14 +47,14 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
         authState: AuthStatus.AUTHENTICATION_ERROR,
         authError: error,
         authUsername: null,
-        authPassword: null
+        authPassword: null,
       }
     }
 
     case ActionsTypes.AUTH_DELETE_FETCH: {
       return {
         ...state,
-        authState: AuthStatus.DISCONNECTING
+        authState: AuthStatus.DISCONNECTING,
       }
     }
     case ActionsTypes.AUTH_DELETE_SUCCESS: {
@@ -65,7 +65,7 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
       return {
         ...state,
         authState: AuthStatus.DISCONNECTED,
-        authError: error
+        authError: error,
       }
     }
 

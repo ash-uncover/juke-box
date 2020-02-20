@@ -7,7 +7,7 @@ import UsersReducer from './users/reducer'
 const reducer = combineReducers({
   memberships: MembershipsReducer,
   tribes: TribesReducer,
-  users: UsersReducer
+  users: UsersReducer,
 })
 
 export default reducer

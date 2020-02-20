@@ -7,7 +7,7 @@ import { ActionsTypes as UsersActionsTypes } from '../users/actions'
 
 import {
   ErrorData,
-  MembershipData
+  MembershipData,
 } from '../../../types'
 
 import { RequestState } from '../../../utils/constants'
@@ -15,26 +15,26 @@ import { RequestState } from '../../../utils/constants'
 export interface MembershipsState {
   data: any,
   status: RequestState,
-  error: ErrorData | null
+  error: ErrorData | null,
 }
 
 export const getInitialState = () => ({
   data: {},
   status: RequestState.NEVER,
-  error: null
+  error: null,
 })
 const initialState = getInitialState()
 
 export interface MembershipState {
   data: MembershipData | null,
   status: RequestState,
-  error: ErrorData | null
+  error: ErrorData | null,
 }
 
 export const initialMembershipState = () => ({
   data: null,
   status: RequestState.NEVER,
-  error: null
+  error: null,
 })
 
 const getMembershipState = (state: MembershipsState, id: string) => {

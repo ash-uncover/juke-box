@@ -8,19 +8,19 @@ import { RequestState } from '../../../utils/constants'
 import {
   ErrorData,
   MembershipData,
-  UserData
+  UserData,
 } from '../../../types'
 
 export interface UsersState {
   data: any,
   status: RequestState,
-  error: ErrorData | null
+  error: ErrorData | null,
 }
 
 export const getInitialState = () => ({
   data: {},
   status: RequestState.NEVER,
-  error: null
+  error: null,
 })
 const initialState = getInitialState()
 
@@ -30,7 +30,7 @@ export interface UserState {
   error: ErrorData | null,
   membershipsData: Array<string> | null,
   membershipsStatus: RequestState,
-  membershipsError: ErrorData | null
+  membershipsError: ErrorData | null,
 }
 
 export const initialUserState = () => ({
@@ -39,7 +39,7 @@ export const initialUserState = () => ({
   error: null,
   membershipsData: null,
   membershipsStatus: RequestState.NEVER,
-  membershipsError: null
+  membershipsError: null,
 })
 
 const getUserState = (state: UsersState, id: string) => {

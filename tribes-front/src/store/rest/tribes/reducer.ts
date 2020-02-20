@@ -7,7 +7,7 @@ import { ActionsTypes as UsersActionsTypes } from '../users/actions'
 import {
   ErrorData,
   MembershipData,
-  TribeData
+  TribeData,
 } from '../../../types'
 
 import { RequestState } from '../../../utils/constants'
@@ -15,13 +15,13 @@ import { RequestState } from '../../../utils/constants'
 export interface TribesState {
   data: any,
   status: RequestState,
-  error: ErrorData | null
+  error: ErrorData | null,
 }
 
 export const getInitialState = () => ({
   data: {},
   status: RequestState.NEVER,
-  error: null
+  error: null,
 })
 const initialState = getInitialState()
 
@@ -31,7 +31,7 @@ export interface TribeState {
   error: ErrorData | null,
   membershipsData: Array<string> | null,
   membershipsStatus: RequestState,
-  membershipsError: ErrorData | null
+  membershipsError: ErrorData | null,
 }
 
 export const initialTribeState = () => ({
@@ -40,7 +40,7 @@ export const initialTribeState = () => ({
   error: null,
   membershipsData: null,
   membershipsStatus: RequestState.NEVER,
-  membershipsError: null
+  membershipsError: null,
 })
 
 const getTribeState = (state: TribesState, id: string) => {
