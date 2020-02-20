@@ -1,19 +1,19 @@
 import React, {
-  useState
+  useState,
 } from 'react'
 
 import {
-  useSelector
+  useSelector,
 } from "react-redux"
 
 import {
-  authStateSelector
+  authStateSelector,
 } from '../../store/auth/selectors'
 
 import {
   Redirect,
   Switch,
-  Route
+  Route,
 } from 'react-router-dom'
 
 import Login from './Login'

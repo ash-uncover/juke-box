@@ -1,26 +1,26 @@
 import React, {
-  useEffect
+  useEffect,
 } from 'react'
 
 import {
-  useSelector
+  useSelector,
 } from 'react-redux'
 
 import {
-  useDispatcher
+  useDispatcher,
 } from '../../utils/hooks'
 
 import {
-  useTranslation
+  useTranslation,
 } from 'react-i18next'
 
 import {
   authTokenSelector,
-  authStateSelector
+  authStateSelector,
 } from '../../store/auth/selectors'
 
 import {
-  Redirect
+  Redirect,
 } from 'react-router-dom'
 
 import RestService from '../../services/RestService'

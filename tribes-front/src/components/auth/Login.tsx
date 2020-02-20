@@ -1,22 +1,22 @@
 import React, {
-  useState
+  useState,
 } from 'react'
 
 import {
-  useSelector
+  useSelector,
 } from 'react-redux'
 
 import {
-  useDispatcher
+  useDispatcher,
 } from '../../utils/hooks'
 
 import {
-  useTranslation
+  useTranslation,
 } from 'react-i18next'
 
 import {
   authStateSelector,
-  authErrorSelector
+  authErrorSelector,
 } from '../../store/auth/selectors'
 
 import RestService from '../../services/RestService'

@@ -1,17 +1,17 @@
 import React, {
-  useEffect
+  useEffect,
 } from 'react'
 
 import {
-  useParams
+  useParams,
 } from 'react-router-dom'
 
 import {
-  useSelector
+  useSelector,
 } from 'react-redux'
 
 import {
-  useDispatcher
+  useDispatcher,
 } from '../../../utils/hooks'
 
 import {
@@ -50,7 +50,9 @@ import {
 import RestService from '../../../services/RestService'
 
 import './Tribe.scss'
-import { MembershipData } from '../../../types'
+import {
+  MembershipData,
+} from '../../../types'
 
 interface TribeRouteParamTypes {
   tribeId: string

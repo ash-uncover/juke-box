@@ -2,7 +2,9 @@ import React from 'react'
 
 import Image from './Image'
 
-import { UserStatus } from '../../utils/constants'
+import {
+  UserStatus,
+} from '../../utils/constants'
 
 import'./FriendListItem.scss'
 

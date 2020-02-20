@@ -1,44 +1,44 @@
 import React, {
-  useEffect
+  useEffect,
 } from 'react'
 
 import {
-  useSelector
+  useSelector,
 } from 'react-redux'
 
 import {
-  useDispatcher
+  useDispatcher,
 } from '../../utils/hooks'
 
 import {
-  useTranslation
+  useTranslation,
 } from 'react-i18next'
 
 import {
-  authUserSelector
+  authUserSelector,
 } from '../../store/auth/selectors'
 
 import {
   restUserDataSelector,
   restUserMembershipsDataSelector,
   restUserMembershipsStatusSelector,
-  restUserMembershipsErrorSelector
+  restUserMembershipsErrorSelector,
 } from '../../store/rest/users/selectors'
 
 import {
   restMembershipDataSelector,
   restMembershipStatusSelector,
-  restMembershipErrorSelector
+  restMembershipErrorSelector,
 } from '../../store/rest/memberships/selectors'
 
 import {
   restTribeDataSelector,
   restTribeStatusSelector,
-  restTribeErrorSelector
+  restTribeErrorSelector,
 } from '../../store/rest/tribes/selectors'
 
 import {
-  RequestState
+  RequestState,
 } from '../../utils/constants'
 
 import RestService from '../../services/RestService'
@@ -47,18 +47,18 @@ import {
   Link,
   Redirect,
   Switch,
-  Route
+  Route,
 } from 'react-router-dom'
 
 import {
-  FontAwesomeIcon
+  FontAwesomeIcon,
 } from '@fortawesome/react-fontawesome'
 
 import {
   faHiking,
   faMountain,
   faPowerOff,
-  faPlusCircle
+  faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
 import Profile from './profile/Profile'
