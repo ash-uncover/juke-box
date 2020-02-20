@@ -17,11 +17,12 @@ export interface UsersState {
   error: ErrorData | null
 }
 
-export const initialState: UsersState = {
+export const getInitialState = () => ({
   data: {},
   status: RequestState.NEVER,
   error: null
-}
+})
+const initialState = getInitialState()
 
 export interface UserState {
   data: UserData | null,
@@ -145,7 +146,7 @@ const reducer: Reducer<UsersState> = (state = initialState, action) => {
     // DELETE /auth
 
     case AuthActionsTypes.AUTH_DELETE_SUCCESS: {
-      return initialState
+      return getInitialState()
     }
 
     default: {

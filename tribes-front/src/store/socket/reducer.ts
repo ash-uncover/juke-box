@@ -3,6 +3,7 @@ import { ActionsTypes } from './actions'
 import { ActionsTypes as AuthActionsTypes } from '../auth/actions'
 
 import {
+  AuthStatus,
   SocketStatus,
   UserStatus,
 } from '../../utils/constants'
@@ -57,6 +58,19 @@ const reducer: Reducer<SocketState> = (state = initialState, action) => {
         {},
         state.users,
         { [`${id}`]: UserStatus.OFFLINE }
+      )
+      return {
+        ...state,
+        users
+      }
+    }
+
+    case AuthActionsTypes.AUTH_GET_SUCCESS: {
+      const { user } = action.payload
+      const users = Object.assign(
+        {},
+        state.users,
+        { [`${user.id}`]: UserStatus.ONLINE }
       )
       return {
         ...state,

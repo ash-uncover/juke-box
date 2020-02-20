@@ -49,6 +49,8 @@ wss.on('connection', (ws: WebSocket) => {
   ws.on('message', (message: string) => {
     const action = JSON.parse(message)
 
+    console.log(ws['_id'] + ' - ' + ws['_userId'] + ' - ' + action.type)
+
     switch (action.type) {
 
       case '@@AUTH/GET_SUCCESS': {

@@ -26,8 +26,8 @@ db.users.insert({
 })
 db.users.insert({
   "id":"userbulle",
-  "username":"bulle",
-  "password":"bulle",
+  "username":"b",
+  "password":"b",
   "name":"Bulle",
   "image":"images/userbulle.png"
 })

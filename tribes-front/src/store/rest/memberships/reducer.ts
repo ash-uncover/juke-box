@@ -18,11 +18,12 @@ export interface MembershipsState {
   error: ErrorData | null
 }
 
-export const initialState: MembershipsState = {
+export const getInitialState = () => ({
   data: {},
   status: RequestState.NEVER,
   error: null
-}
+})
+const initialState = getInitialState()
 
 export interface MembershipState {
   data: MembershipData | null,
@@ -79,7 +80,7 @@ const reducer: Reducer<MembershipsState> = (state = initialState, action) => {
     // DELETE /auth
 
     case AuthActionsTypes.AUTH_DELETE_SUCCESS: {
-      return initialState
+      return getInitialState()
     }
 
     default: {
