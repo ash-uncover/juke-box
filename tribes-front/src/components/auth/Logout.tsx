@@ -3,9 +3,12 @@ import React, {
 } from 'react'
 
 import {
-  useDispatch,
   useSelector
 } from 'react-redux'
+
+import {
+  useDispatcher
+} from '../../utils/hooks'
 
 import {
   useTranslation
@@ -22,6 +25,10 @@ import {
 
 import RestService from '../../services/RestService'
 
+import {
+  AuthStatus,
+} from '../../utils/constants'
+
 import './Logout.scss'
 
 /* TRACKS */
@@ -29,21 +36,28 @@ import './Logout.scss'
 interface LogoutProps {
 }
 
+const isDisconnected = (authState: AuthStatus) => {
+  return authState === AuthStatus.NONE || authState === AuthStatus.DISCONNECTED
+}
+
+const shouldDisconnected = (authState: AuthStatus) => {
+  return !isDisconnected(authState) && !(authState === AuthStatus.DISCONNECTING)
+}
+
 const Logout = (props: LogoutProps) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatcher()
 
   const { t } = useTranslation()
 
   const authState = useSelector(authStateSelector)
-  const isNone = authState === 'AUTH_NONE'
 
   useEffect(() => {
-    if (!isNone) {
+    if (shouldDisconnected(authState)) {
       RestService.auth.delete(dispatch)
     }
   })
 
-  if (isNone) {
+  if (isDisconnected(authState)) {
     return <Redirect to='/auth' />
   }
   return (

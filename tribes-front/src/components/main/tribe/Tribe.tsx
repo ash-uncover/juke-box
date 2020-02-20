@@ -7,9 +7,12 @@ import {
 } from 'react-router-dom'
 
 import {
-  useDispatch,
   useSelector
 } from 'react-redux'
+
+import {
+  useDispatcher
+} from '../../../utils/hooks'
 
 import {
   restMembershipDataSelector,
@@ -55,7 +58,7 @@ interface TribeProps {}
 const Tribe = (props: TribeProps) => {
   const { tribeId } = useParams<TribeRouteParamTypes>()
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatcher()
   const tribeStatus = useSelector(restTribeStatusSelector(tribeId))
   const membershipsStatus = useSelector(restTribeMembershipsStatusSelector(tribeId))
 
@@ -193,7 +196,7 @@ interface TribeMembershipProps {
 }
 
 const TribeMembership = (props: TribeMembershipProps) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatcher()
   const membershipData = useSelector(restMembershipDataSelector(props.id))
   const membershipStatus = useSelector(restMembershipStatusSelector(props.id))
 
@@ -243,7 +246,7 @@ interface TribeUserProps {
 }
 
 const TribeUser = (props: TribeUserProps) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatcher()
 
   const userData = useSelector(restUserDataSelector(props.id))
   const userStatus = useSelector(restUserStatusSelector(props.id))

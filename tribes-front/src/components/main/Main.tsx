@@ -3,9 +3,12 @@ import React, {
 } from 'react'
 
 import {
-  useDispatch,
   useSelector
 } from 'react-redux'
+
+import {
+  useDispatcher
+} from '../../utils/hooks'
 
 import {
   useTranslation
@@ -86,8 +89,6 @@ interface MainToolbarProps {}
 const MainToolbar = (props: MainToolbarProps) => {
   const { t } = useTranslation()
 
-  const exampleSocket = new WebSocket('ws://localhost:3091/')
-
   const userId = useSelector(authUserSelector)
   const userData = useSelector(restUserDataSelector(userId))
 
@@ -157,7 +158,7 @@ export const MainMenu = (props: MainMenuProps) => {
 export interface MainMenuMembershipsProps {}
 
 export const MainMenuMemberships = (props: MainMenuMembershipsProps) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatcher()
 
   const userId = useSelector(authUserSelector)
   const membershipsData = useSelector(restUserMembershipsDataSelector(userId))
@@ -201,7 +202,7 @@ export interface MainMenuMembershipProps {
 }
 
 export const MainMenuMembership = (props: MainMenuMembershipProps) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatcher()
 
   const membershipData = useSelector(restMembershipDataSelector(props.id))
   const membershipStatus = useSelector(restMembershipStatusSelector(props.id))
@@ -246,7 +247,7 @@ export interface MainMenuTribeProps {
 }
 
 export const MainMenuTribe = (props: MainMenuTribeProps) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatcher()
 
   const tribeData = useSelector(restTribeDataSelector(props.id))
   const tribeStatus = useSelector(restTribeStatusSelector(props.id))

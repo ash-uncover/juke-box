@@ -3,9 +3,12 @@ import React, {
 } from 'react'
 
 import {
-  useDispatch,
   useSelector
 } from 'react-redux'
+
+import {
+  useDispatcher
+} from '../../utils/hooks'
 
 import {
   useTranslation
@@ -30,7 +33,7 @@ interface LoginProps {
 }
 
 const Login = (props: LoginProps) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatcher()
 
   const { t } = useTranslation()
 
@@ -72,7 +75,10 @@ const Login = (props: LoginProps) => {
           className='Login-button'
           type='submit'
           disabled={!loginButtonEnabled}
-          onClick={() => RestService.auth.get(dispatch, username, password)}
+          onClick={(event) => {
+            event.preventDefault()
+            RestService.auth.get(dispatch, username, password)
+          }}
         >
           <FontAwesomeIcon
             icon={faSignInAlt}

@@ -1,9 +1,10 @@
 import { Reducer } from 'redux'
 import { ActionsTypes } from './actions'
 import { UserData } from '../../types'
+import { AuthStatus } from '../../utils/constants'
 
 export interface AuthState {
-  authState: string,
+  authState: AuthStatus,
   authToken: string | null,
   authError: string | null,
   authUsername: string | null,
@@ -12,7 +13,7 @@ export interface AuthState {
 }
 
 export const initialState: AuthState = {
-  authState: 'AUTH_NONE',
+  authState: AuthStatus.NONE,
   authToken: null,
   authError: null,
   authUsername: null,
@@ -26,7 +27,7 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
       const { username, password } = action.payload
       return {
         ...state,
-        authState: 'AUTH_CHECKING',
+        authState: AuthStatus.AUTHENTICATING,
         authUsername: username,
         authPassword: password
       }
@@ -35,7 +36,7 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
       const { user } = action.payload
       return {
         ...state,
-        authState: 'AUTH_OK',
+        authState: AuthStatus.AUTHENTICATED,
         authUser: user.id
       }
     }
@@ -43,7 +44,7 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
       const { error } = action.payload
       return {
         ...state,
-        authState: 'AUTH_ERROR',
+        authState: AuthStatus.AUTHENTICATION_ERROR,
         authError: error,
         authUsername: null,
         authPassword: null
@@ -53,7 +54,7 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
     case ActionsTypes.AUTH_DELETE_FETCH: {
       return {
         ...state,
-        authState: 'AUTH_DELETE'
+        authState: AuthStatus.DISCONNECTING
       }
     }
     case ActionsTypes.AUTH_DELETE_SUCCESS: {
@@ -63,7 +64,7 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
       const { error } = action.payload
       return {
         ...state,
-        authState: 'AUTH_ERROR',
+        authState: AuthStatus.DISCONNECTED,
         authError: error
       }
     }

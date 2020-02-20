@@ -1,16 +1,37 @@
-import React, { Suspense } from 'react'
-import { useSelector } from 'react-redux'
-import { authStateSelector } from '../store/auth/selectors'
+import React, {
+  Suspense,
+  useEffect,
+} from 'react'
+
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux'
+
+import {
+  authStateSelector,
+} from '../store/auth/selectors'
+
+import {
+  socketStatusSelector,
+} from '../store/socket/selectors'
 
 import {
   BrowserRouter as Router,
   Redirect,
   Switch,
-  Route
+  Route,
 } from 'react-router-dom'
 
 import Auth from './auth/Auth'
 import Main from './main/Main'
+
+import SocketService from '../services/SocketService'
+
+import {
+  AuthStatus,
+  SocketStatus,
+} from '../utils/constants'
 
 import './App.scss'
 
@@ -50,15 +71,43 @@ const renderAuth = () => (
 interface AppProps {}
 
 const App = (props: AppProps) => {
+  const dispatch = useDispatch()
   const authState = useSelector(authStateSelector)
+  const socketStatus = useSelector(socketStatusSelector)
 
-  const isLogged = authState === 'AUTH_OK'
+  useEffect(() => {
+    if (socketStatus === SocketStatus.NOT_CONNECTED) {
+      SocketService.connect(dispatch, 'ws://localhost:3091/')
+    }
+  })
 
-  if (!isLogged) {
-    return renderNoAuth()
+  switch (socketStatus) {
+    case SocketStatus.NOT_CONNECTED: {
+      return <div>Contacting server</div>
+    }
+    case SocketStatus.CONNECTING: {
+      return <div>Contacting server</div>
+    }
+    case SocketStatus.CONNECTED: {
+      switch (authState) {
+        case AuthStatus.AUTHENTICATED: {
+          return renderAuth()
+        }
+        default: {
+          return renderNoAuth()
+        }
+      }
+    }
+    case SocketStatus.CONNECTION_ERROR: {
+      return <div>Server Connection error</div>
+    }
+    case SocketStatus.CONNECTION_LOST: {
+      return <div>Connection lost</div>
+    }
+    default: {
+      return <div>WTF</div>
+    }
   }
-
-  return renderAuth()
 }
 
 export default App
