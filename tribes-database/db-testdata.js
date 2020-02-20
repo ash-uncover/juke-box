@@ -47,8 +47,8 @@ db.users.insert({
 })
 db.users.insert({
   "id":"userkarima",
-  "username":"karima",
-  "password":"karima",
+  "username":"k",
+  "password":"k",
   "name":"Karima",
   "image":"images/userkarima.png"
 })

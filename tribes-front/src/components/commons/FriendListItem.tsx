@@ -9,18 +9,16 @@ import'./FriendListItem.scss'
 interface FriendListItemProps {
   name: string,
   image: string,
-  status?: UserStatus
+  status: UserStatus
 }
 
 const FriendListItem = (props: FriendListItemProps) => {
-  let status = props.status || UserStatus.OFFLINE
-
   return (
     <div
       className='FriendListItem'
     >
       <div
-        className={`FriendListItem-image-area FriendListItem-status-${status.toLowerCase()}`}
+        className={`FriendListItem-image-area FriendListItem-status-${props.status.toLowerCase()}`}
       >
         <Image
           className='FriendListItem-image'

@@ -15,9 +15,13 @@ import {
 } from '../../../utils/hooks'
 
 import {
+  serverUserStatusSelector,
+} from '../../../store/socket/selectors'
+
+import {
   restMembershipDataSelector,
   restMembershipStatusSelector,
-  restMembershipErrorSelector
+  restMembershipErrorSelector,
 } from '../../../store/rest/memberships/selectors'
 
 import {
@@ -26,20 +30,21 @@ import {
   restTribeErrorSelector,
   restTribeMembershipsDataSelector,
   restTribeMembershipsStatusSelector,
-  restTribeMembershipsErrorSelector
+  restTribeMembershipsErrorSelector,
 } from '../../../store/rest/tribes/selectors'
 
 import {
   restUserDataSelector,
   restUserStatusSelector,
-  restUserErrorSelector
+  restUserErrorSelector,
 } from '../../../store/rest/users/selectors'
 
 import FriendListItem from '../../commons/FriendListItem'
 import Image from '../../commons/Image'
 
 import {
-  RequestState
+  RequestState,
+  UserStatus,
 } from '../../../utils/constants'
 
 import RestService from '../../../services/RestService'
@@ -249,15 +254,17 @@ const TribeUser = (props: TribeUserProps) => {
   const dispatch = useDispatcher()
 
   const userData = useSelector(restUserDataSelector(props.id))
-  const userStatus = useSelector(restUserStatusSelector(props.id))
+  const userDataStatus = useSelector(restUserStatusSelector(props.id))
+
+  const userStatus = useSelector(serverUserStatusSelector(props.id))
 
   useEffect(() => {
-    if (userStatus === RequestState.NEVER) {
+    if (userDataStatus === RequestState.NEVER) {
       RestService.rest.users.get(dispatch, props.id)
     }
   })
 
-  switch (userStatus) {
+  switch (userDataStatus) {
     case RequestState.NEVER: {
       return (
         <div>
@@ -277,6 +284,7 @@ const TribeUser = (props: TribeUserProps) => {
         <FriendListItem
           name={userData.name}
           image={userData.image}
+          status={userStatus || UserStatus.OFFLINE}
         />
       )
     }

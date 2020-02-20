@@ -2,14 +2,19 @@ import { Reducer } from 'redux'
 import { ActionsTypes } from './actions'
 import { ActionsTypes as AuthActionsTypes } from '../auth/actions'
 
-import { SocketStatus } from '../../utils/constants'
+import {
+  SocketStatus,
+  UserStatus,
+} from '../../utils/constants'
 
 export interface SocketState {
-  status: SocketStatus
+  status: SocketStatus,
+  users: any
 }
 
 export const initialState: SocketState = {
-  status: SocketStatus.NOT_CONNECTED
+  status: SocketStatus.NOT_CONNECTED,
+  users: {}
 }
 
 const reducer: Reducer<SocketState> = (state = initialState, action) => {
@@ -30,6 +35,32 @@ const reducer: Reducer<SocketState> = (state = initialState, action) => {
       return {
         ...state,
         status: SocketStatus.CONNECTION_ERROR
+      }
+    }
+
+    case ActionsTypes.SERVER_USER_CONNECTED: {
+      const id = action.payload.id
+      const users = Object.assign(
+        {},
+        state.users,
+        { [`${id}`]: UserStatus.ONLINE }
+      )
+      return {
+        ...state,
+        users
+      }
+    }
+
+    case ActionsTypes.SERVER_USER_DISCONNECTED: {
+      const id = action.payload.id
+      const users = Object.assign(
+        {},
+        state.users,
+        { [`${id}`]: UserStatus.OFFLINE }
+      )
+      return {
+        ...state,
+        users
       }
     }
 
