@@ -43,7 +43,7 @@ import {
   deleteMembership
 } from './rest/memberships'
 
-const LOGGER = new Logger('REST Server')
+const LOGGER = new Logger('SERVER-REST')
 
 export const useHeaders = (req: any, res: any, next: any) => {
   LOGGER.debug('useHeaders')
@@ -141,16 +141,4 @@ app.put('/rest/memberships/:membershipId', putMembership)
 app.patch('/rest/memberships/:membershipId', patchMembership)
 app.delete('/rest/memberships/:membershipId', deleteMembership)
 
-const PORT = process.env.PORT || 3090;
-
-const startup = () => {
-  const myApp = app.listen(PORT, () => {
-    LOGGER.info(`Server is running in http://localhost:${PORT}`)
-  })
-  myApp.on('close', () => {
-    LOGGER.debug('Server Shutting down')
-  })
-  return myApp
-}
-
-export default startup
+export default app

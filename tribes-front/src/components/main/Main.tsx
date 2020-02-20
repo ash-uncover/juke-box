@@ -86,6 +86,8 @@ interface MainToolbarProps {}
 const MainToolbar = (props: MainToolbarProps) => {
   const { t } = useTranslation()
 
+  const exampleSocket = new WebSocket('ws://localhost:3091/')
+
   const userId = useSelector(authUserSelector)
   const userData = useSelector(restUserDataSelector(userId))
 
