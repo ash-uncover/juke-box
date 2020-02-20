@@ -8,6 +8,22 @@ const wss = new WebSocket.Server({ server })
 
 let count = 0
 
+const DATA = {
+  users: {
+  }
+}
+
+const addUserConnection = (userId, connId) => {
+  DATA.users[userId] = DATA.users[userId] || []
+  DATA.users[userId].push(connId)
+}
+
+const removeUserConnection = (userId, connId) => {
+  const index = DATA.users[userId].indexOf(connId)
+  DATA.users[userId].splice(index, 1)
+  return DATA.users[userId]
+}
+
 wss.on('connection', (ws: WebSocket) => {
   ws['_id'] = '#' + count++
 
@@ -17,13 +33,17 @@ wss.on('connection', (ws: WebSocket) => {
     switch (action.type) {
 
       case '@@AUTH/GET_SUCCESS': {
-        ws['_userId'] = action.payload.user.id
+        const id = action.payload.user.id
+        ws['_userId'] = id
+        addUserConnection(id, ws['_id'])
+
         const data = {
           type: '@@SERVER/SOCKET/USER_CONNECTED',
-          payload: { id: ws['_userId'] }
+          payload: { id }
         }
+
         wss.clients.forEach((client) => {
-          if (client != ws) {
+          if (client['_userId'] !== id) {
             client.send(JSON.stringify(data));
           }
         })
@@ -31,16 +51,21 @@ wss.on('connection', (ws: WebSocket) => {
       }
 
       case '@@AUTH/DELETE_SUCCESS': {
-        const data = {
-          type: '@@SERVER/SOCKET/USER_DISCONNECTED',
-          payload: { id: ws['_userId'] }
-        }
-        delete ws['_userId']
-        wss.clients.forEach((client) => {
-          if (client != ws) {
-            client.send(JSON.stringify(data));
+        const remaningConn = removeUserConnection(ws['_userId'], ws['_id'])
+        console.log(remaningConn)
+        if (remaningConn.length === 0) {
+          const data = {
+            type: '@@SERVER/SOCKET/USER_DISCONNECTED',
+            payload: { id: ws['_userId'] }
           }
-        })
+          wss.clients.forEach((client) => {
+            if (client['_userId'] !== ws['_userId']) {
+              client.send(JSON.stringify(data));
+            }
+          })
+        }
+
+        delete ws['_userId']
         break
       }
     }
