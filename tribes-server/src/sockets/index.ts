@@ -2,15 +2,17 @@ import * as express from 'express'
 import * as http from 'http'
 import * as WebSocket from 'ws'
 
+import {
+  UUID
+} from '../utils'
+
 const app = express()
 const server = http.createServer(app)
 const wss = new WebSocket.Server({ server })
 
-let count = 0
-
 const DATA = {
-  users: {
-  }
+  users: {},
+  sessions: {}
 }
 
 const getOrInitUser = (userId) => {
@@ -21,42 +23,61 @@ const getOrInitUser = (userId) => {
   return DATA.users[userId]
 }
 
-const addUserConnection = (userId, connId) => {
-  DATA.users[userId] = getOrInitUser(userId)
+const addUserSession = (userId, connId) => {
+  getOrInitUser(userId)
   DATA.users[userId].sessions.push(connId)
 }
 
-const removeUserConnection = (userId, connId) => {
+const removeUserSession = (userId, connId) => {
+  getOrInitUser(userId)
   const index = DATA.users[userId].sessions.indexOf(connId)
   DATA.users[userId].sessions.splice(index, 1)
   return DATA.users[userId].sessions
 }
 
-const addUserListener = (userId, listenerId) => {
-  DATA.users[userId] = getOrInitUser(userId)
-  DATA.users[userId].listeners.push(listenerId)
-}
-
 const hasSessions = (userId) => {
-  DATA.users[userId] = getOrInitUser(userId)
+  getOrInitUser(userId)
   return DATA.users[userId].sessions.length > 0
 }
 
+const addUserListener = (userId, listenerId) => {
+  getOrInitUser(userId)
+  DATA.users[userId].listeners.push(listenerId)
+}
+
+const removeUserListener = (userId, listenerId) => {
+  getOrInitUser(userId)
+  const index = DATA.users[userId].listeners.indexOf(listenerId)
+  DATA.users[userId].listeners.splice(index, 1)
+  return DATA.users[userId].listeners
+}
+
+const hasListeners = (userId) => {
+  getOrInitUser(userId)
+  return DATA.users[userId].listeners.length > 0
+}
 
 wss.on('connection', (ws: WebSocket) => {
-  ws['_id'] = '#' + count++
+  ws['_id'] = '#' + UUID.next()
+
+  setInterval(() => {
+    console.log(ws['_id'] + ' - ' + ws['_userId'] + ' - TO - @@SERVER/CONNECTION_CHECK')
+    ws.send(JSON.stringify({
+      type: '@@SERVER/CONNECTION_CHECK'
+    }))
+  }, 30000)
 
   ws.on('message', (message: string) => {
     const action = JSON.parse(message)
 
-    console.log(ws['_id'] + ' - ' + ws['_userId'] + ' - ' + action.type)
+    console.log(ws['_id'] + ' - ' + ws['_userId'] + ' - FROM - ' + action.type)
 
     switch (action.type) {
 
       case '@@AUTH/GET_SUCCESS': {
         const id = action.payload.user.id
         ws['_userId'] = id
-        addUserConnection(id, ws['_id'])
+        addUserSession(id, ws['_id'])
 
         const data = {
           type: '@@SERVER/USER_CONNECTED',
@@ -72,7 +93,7 @@ wss.on('connection', (ws: WebSocket) => {
       }
 
       case '@@AUTH/DELETE_SUCCESS': {
-        const remaningConn = removeUserConnection(ws['_userId'], ws['_id'])
+        const remaningConn = removeUserSession(ws['_userId'], ws['_id'])
 
         if (remaningConn.length === 0) {
           const data = {

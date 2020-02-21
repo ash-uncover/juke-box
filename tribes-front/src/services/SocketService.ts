@@ -1,12 +1,19 @@
 import { action } from 'typesafe-actions'
-import { Actions as SocketActions } from '../store/socket/actions'
+import {
+  Actions as SocketActions,
+  ActionsTypes as SocketActionsTypes
+} from '../store/socket/actions'
+
+const CONN_TIMEOUT = 10000
 
 class SocketService {
 
   private _socket: WebSocket | null
+  private _interval: any
 
   constructor() {
     this._socket = null
+    this._interval = null
   }
 
   get socket() {
@@ -25,9 +32,21 @@ class SocketService {
     dispatch(SocketActions.socketConnectFetch())
 
     const socket = new WebSocket(url)
-
+    let interval
+    const fnInterval = () => {
+      try {
+        this.send({
+          type: SocketActionsTypes.SOCKECT_CONNECTION_CHECK
+        })
+      } catch (error) {
+        this.close(dispatch)
+      }
+    }
     socket.onopen = function(event) {
       dispatch(SocketActions.socketConnectSuccess())
+
+      interval = setInterval(fnInterval, CONN_TIMEOUT)
+
       this.onmessage = (event: any) => {
         const actionData = JSON.parse(event.data)
         dispatch(action(actionData.type, actionData.payload))
@@ -39,6 +58,12 @@ class SocketService {
     }
 
     this._socket = socket
+    this._interval = interval
+  }
+
+  close(dispatch: any) {
+    this._socket && this._socket.close()
+    dispatch(SocketActions.socketConnectionLost())
   }
 }
 
