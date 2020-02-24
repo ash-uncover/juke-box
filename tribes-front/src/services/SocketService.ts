@@ -1,46 +1,67 @@
 import { action } from 'typesafe-actions'
-import { Actions as SocketActions } from '../store/socket/actions'
 
-class SocketService {
+import {
+  Actions as SocketActions,
+  ActionsTypes as SocketActionsTypes
+} from '../store/socket/actions'
+import { faHeartbeat } from '@fortawesome/free-solid-svg-icons'
 
-  private _socket: WebSocket | null
+const CONN_TIMEOUT = 1000
 
-  constructor() {
-    this._socket = null
-  }
+let _socket: WebSocket
+let _pingTimeout: any
 
-  get socket() {
-    return this._socket
-  }
-
-  send(data: any) {
-    if (this._socket !== null)  {
-      this._socket.send(JSON.stringify(data))
-    } else {
-      throw new Error('not connected')
-    }
-  }
+const SocketService = {
 
   connect(dispatch: any, url: string) {
     dispatch(SocketActions.socketConnectFetch())
 
-    const socket = new WebSocket(url)
+    _socket = new WebSocket(url)
 
-    socket.onopen = function(event) {
+    _socket.onopen = function() {
       dispatch(SocketActions.socketConnectSuccess())
+
       this.onmessage = (event: any) => {
         const actionData = JSON.parse(event.data)
-        dispatch(action(actionData.type, actionData.payload))
+        switch (actionData.type) {
+          case SocketActionsTypes.SOCKECT_CONNECTION_CHECK: {
+            SocketService.heartbeat(dispatch)
+            _socket.send(event.data)
+            break
+          }
+          default: {
+            dispatch(action(actionData.type, actionData.payload))
+            break
+          }
+        }
       }
     }
 
-    socket.onerror = (error) => {
+    _socket.onerror = (error) => {
       dispatch(SocketActions.socketConnectFailure())
     }
+  },
 
-    this._socket = socket
+  heartbeat: (dispatch: any) => {
+    clearTimeout(_pingTimeout)
+    _pingTimeout = setTimeout(() => {
+      SocketService.close(dispatch)
+    }, 30000 + 10000)
+  },
+
+  send: (dispatch: any, data: any) => {
+    try {
+      _socket.send(JSON.stringify(data))
+    } catch (error) {
+      SocketService.close(dispatch)
+    }
+  },
+
+  close: (dispatch: any) => {
+    clearTimeout(_pingTimeout)
+    _socket.close()
+    dispatch(SocketActions.socketConnectionLost())
   }
 }
 
-const service = new SocketService()
-export default service
+export default SocketService

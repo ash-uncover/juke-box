@@ -24,6 +24,7 @@
     "@types/react-redux": "latest",
     "@types/react-router-dom": "latest",
     "@types/request": "latest",
+    "@types/ws": "latest",
     "ap-utils-logger": "latest",
     "i18next": "latest",
     "i18next-browser-languagedetector": "latest",
@@ -38,7 +39,8 @@
     "redux": "latest",
     "request": "latest",
     "typesafe-actions": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "ws": "latest"
   },
   "devDependencies": {
     "standard": "latest"
