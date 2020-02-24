@@ -8,7 +8,7 @@ export const useDispatcher = () => {
   const dispatch = useDispatch()
   return (arg: any) => {
     try {
-      SocketService.send(arg)
+      SocketService.send(dispatch, arg)
     } catch (error) {
       SocketService.close(dispatch)
     }

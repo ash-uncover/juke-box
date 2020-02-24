@@ -3,8 +3,19 @@ import * as http from 'http'
 import * as WebSocket from 'ws'
 
 import {
-  UUID
+  UUID,
+  dateString,
+  nowString,
 } from '../utils'
+
+import Logger from 'ap-utils-logger'
+const LOGGER = new Logger('server-sockets')
+
+interface ExtWebSocket extends WebSocket {
+  isAlive: boolean
+}
+
+const PING_INTERVAL = 30000
 
 const app = express()
 const server = http.createServer(app)
@@ -57,36 +68,44 @@ const hasListeners = (userId) => {
   return DATA.users[userId].listeners.length > 0
 }
 
-wss.on('connection', (ws: WebSocket) => {
+const send = (ws, type = '@@UNKNOWN', payload = {}) => {
+  LOGGER.info(`${ws['_id'].substring(0, 4)} - ${nowString()} - ${ws['_userId']} - TO - ${type}`)
+  ws.send(JSON.stringify({ type, payload }))
+}
+
+const received = (ws: WebSocket, message: string) => {
+  const date = Date.now()
+  try {
+    const action = JSON.parse(message)
+    LOGGER.info(`${ws['_id'].substring(0, 4)} - ${nowString()} - ${ws['_userId']} - FROM - ${action.type}`)
+    return action
+  } catch (error) {
+    LOGGER.error(`Failed to parse: ${message}`)
+    return {}
+  }
+}
+
+wss.on('connection', (ws: ExtWebSocket) => {
   ws['_id'] = '#' + UUID.next()
 
-  setInterval(() => {
-    console.log(ws['_id'] + ' - ' + ws['_userId'] + ' - TO - @@SERVER/CONNECTION_CHECK')
-    ws.send(JSON.stringify({
-      type: '@@SERVER/CONNECTION_CHECK'
-    }))
-  }, 30000)
-
   ws.on('message', (message: string) => {
-    const action = JSON.parse(message)
-
-    console.log(ws['_id'] + ' - ' + ws['_userId'] + ' - FROM - ' + action.type)
+    const action = received(ws, message)
 
     switch (action.type) {
+
+      case '@@SOCKET/CONNECTION_CHECK': {
+        ws.isAlive = true
+        break
+      }
 
       case '@@AUTH/GET_SUCCESS': {
         const id = action.payload.user.id
         ws['_userId'] = id
         addUserSession(id, ws['_id'])
 
-        const data = {
-          type: '@@SERVER/USER_CONNECTED',
-          payload: { id }
-        }
-
         wss.clients.forEach((client) => {
           if (client['_userId'] !== id) {
-            client.send(JSON.stringify(data))
+            send(ws, '@@SERVER/USER_CONNECTED', { id })
           }
         })
         break
@@ -94,19 +113,14 @@ wss.on('connection', (ws: WebSocket) => {
 
       case '@@AUTH/DELETE_SUCCESS': {
         const remaningConn = removeUserSession(ws['_userId'], ws['_id'])
-
         if (remaningConn.length === 0) {
-          const data = {
-            type: '@@SERVER/USER_DISCONNECTED',
-            payload: { id: ws['_userId'] }
-          }
+          const id = ws['_userId']
           wss.clients.forEach((client) => {
             if (client['_userId'] !== ws['_userId']) {
-              client.send(JSON.stringify(data))
+              send(ws, '@@SERVER/USER_DISCONNECTED', { id })
             }
           })
         }
-
         delete ws['_userId']
         break
       }
@@ -115,17 +129,25 @@ wss.on('connection', (ws: WebSocket) => {
         const id = action.payload.user.id
         addUserListener(id, ws['_userId'])
         if (hasSessions(id)) {
-          ws.send(JSON.stringify({
-            type: '@@SERVER/USER_CONNECTED',
-            payload: { id }
-          }))
+          send(ws, '@@SERVER/USER_CONNECTED', { id })
         }
         break
       }
     }
   })
 
-  console.log('Connected to WS server ' + ws['_id'])
+  LOGGER.info('Connected to WS server ' + ws['_id'])
 })
+
+setInterval(() => {
+  wss.clients.forEach((ws: ExtWebSocket) => {
+    if (ws.isAlive === false) {
+      LOGGER.warn(`${ws['_id']} - ${ws['_userId']} - CONNECTION LOST`)
+      return ws.terminate()
+    }
+    ws.isAlive = false
+    send(ws, '@@SOCKET/CONNECTION_CHECK')
+  })
+}, PING_INTERVAL)
 
 export default server
