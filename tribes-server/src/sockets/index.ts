@@ -74,7 +74,6 @@ const send = (ws, type = '@@UNKNOWN', payload = {}) => {
 }
 
 const received = (ws: WebSocket, message: string) => {
-  const date = Date.now()
   try {
     const action = JSON.parse(message)
     LOGGER.info(`${ws['_id'].substring(0, 4)} - ${nowString()} - ${ws['_userId']} - FROM - ${action.type}`)

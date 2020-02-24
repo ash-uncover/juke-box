@@ -53,7 +53,7 @@ const RestService = {
             dispatch(RestTribesActions.restTribesGetSuccess(id, result))
           })
           .catch((error: ErrorData) => {
-            RestTribesActions.restTribesGetFailure(id, error)
+            dispatch(RestTribesActions.restTribesGetFailure(id, error))
           })
       },
       post: (dispatch: any, tribe: TribePostData) => {},
@@ -69,7 +69,7 @@ const RestService = {
               dispatch(RestTribesActions.restTribesMembershipsGetAllSuccess(id, result))
             })
             .catch((error: ErrorData) => {
-              RestTribesActions.restTribesMembershipsGetAllFailure(id, error)
+              dispatch(RestTribesActions.restTribesMembershipsGetAllFailure(id, error))
             })
         },
       },
@@ -83,7 +83,7 @@ const RestService = {
             dispatch(RestUsersActions.restUsersGetSuccess(id, result))
           })
           .catch((error: ErrorData) => {
-            RestUsersActions.restUsersGetFailure(id, error)
+            dispatch(RestUsersActions.restUsersGetFailure(id, error))
           })
       },
       put: (dispatch: any, user: UserData) => {},
@@ -97,7 +97,7 @@ const RestService = {
               dispatch(RestUsersActions.restUsersMembershipsGetAllSuccess(id, result))
             })
             .catch((error: ErrorData) => {
-              RestUsersActions.restUsersMembershipsGetAllFailure(id, error)
+              dispatch(RestUsersActions.restUsersMembershipsGetAllFailure(id, error))
             })
         },
       },
