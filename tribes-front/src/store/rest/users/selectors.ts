@@ -15,3 +15,7 @@ export const restUserErrorSelector = (id: string) => ((state: any) => restUse
 export const restUserMembershipsDataSelector = (id: string) => ((state: any) => restUserSelector(id)(state).membershipsData)
 export const restUserMembershipsStatusSelector = (id: string) => ((state: any) => restUserSelector(id)(state).membershipsStatus)
 export const restUserMembershipsErrorSelector = (id: string) => ((state: any) => restUserSelector(id)(state).membershipsError)
+
+export const restUserFriendshipsDataSelector = (id: string) => ((state: any) => restUserSelector(id)(state).friendshipsData)
+export const restUserFriendshipsStatusSelector = (id: string) => ((state: any) => restUserSelector(id)(state).friendshipsStatus)
+export const restUserFriendshipsErrorSelector = (id: string) => ((state: any) => restUserSelector(id)(state).friendshipsError)

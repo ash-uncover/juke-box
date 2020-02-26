@@ -25,6 +25,24 @@ export interface TribePatchData {
   image?: string,
 }
 
+// FRIENDSHIP
+
+export interface FriendshipData {
+  id: string,
+  userId: string,
+  friendId: string,
+  status: string,
+}
+
+export interface MembershipPostData {
+  userId: string,
+  friendId: string,
+}
+
+export interface MembershipPatchData {
+  status: string,
+}
+
 // MEMBERSHIP
 
 export interface MembershipData {

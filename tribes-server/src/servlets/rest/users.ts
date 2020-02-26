@@ -123,3 +123,12 @@ export const getUserMemberships = function(req, res, next) {
     res.send(500, error)
   }
 }
+
+export const getUserFriendships = function(req, res, next) {
+  LOGGER.debug('GET ' + req.url)
+  try {
+    defaultGetDeep(SCHEMAS.FRIENDSHIPS, req, res, next, null)
+  } catch (error) {
+    res.send(500, error)
+  }
+}

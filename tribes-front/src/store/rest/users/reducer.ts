@@ -7,6 +7,7 @@ import { ActionsTypes as TribesActionsTypes} from '../tribes/actions'
 import { RequestState } from '../../../utils/constants'
 import {
   ErrorData,
+  FriendshipData,
   MembershipData,
   UserData,
 } from '../../../types'
@@ -28,6 +29,9 @@ export interface UserState {
   data: UserData | null,
   status: RequestState,
   error: ErrorData | null,
+  friendshipsData: Array<string> | null,
+  friendshipsStatus: RequestState,
+  friendshipsError: ErrorData | null,
   membershipsData: Array<string> | null,
   membershipsStatus: RequestState,
   membershipsError: ErrorData | null,
@@ -37,6 +41,9 @@ export const initialUserState = () => ({
   data: null,
   status: RequestState.NEVER,
   error: null,
+  friendshipsData: null,
+  friendshipsStatus: RequestState.NEVER,
+  friendshipsError: null,
   membershipsData: null,
   membershipsStatus: RequestState.NEVER,
   membershipsError: null,
@@ -127,6 +134,38 @@ const reducer: Reducer<UsersState> = (state = initialState, action) => {
       userState.membershipsData = null
       userState.membershipsError = error
       userState.membershipsStatus = RequestState.FAILURE
+
+      return { ...state }
+    }
+
+    // GET /users/{userId}/friendships
+
+    case UsersActionsTypes.REST_USERS_FRIENDSHIPS_GETALL_FETCH: {
+      const { id } = action.payload
+
+      const userState = getUserState(state, id)
+      userState.friendshipsError = null
+      userState.friendshipsStatus = RequestState.FETCHING
+
+      return { ...state }
+    }
+    case UsersActionsTypes.REST_USERS_FRIENDSHIPS_GETALL_SUCCESS: {
+      const { id, friendships } = action.payload
+
+      const userState = getUserState(state, id)
+      userState.friendshipsData = friendships.map((friendship: FriendshipData) => friendship.id)
+      userState.friendshipsError = null
+      userState.friendshipsStatus = RequestState.SUCCESS
+
+      return { ...state }
+    }
+    case UsersActionsTypes.REST_USERS_FRIENDSHIPS_GETALL_FAILURE: {
+      const { id, error } = action.payload
+
+      const userState = getUserState(state, id)
+      userState.friendshipsData = null
+      userState.friendshipsError = error
+      userState.friendshipsStatus = RequestState.FAILURE
 
       return { ...state }
     }

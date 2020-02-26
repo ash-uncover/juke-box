@@ -12,7 +12,7 @@ import {
   decodeBasicHeader,
   HttpHeader,
   HttpMethod,
-  HttpStatus
+  HttpStatus,
 } from '../utils'
 
 import {
@@ -22,7 +22,8 @@ import {
   putUser,
   patchUser,
   deleteUser,
-  getUserMemberships
+  getUserMemberships,
+  getUserFriendships,
 } from './rest/users'
 
 import {
@@ -32,7 +33,7 @@ import {
   putTribe,
   patchTribe,
   deleteTribe,
-  getTribeMemberships
+  getTribeMemberships,
 } from './rest/tribes'
 
 import {
@@ -40,14 +41,14 @@ import {
   getMembership,
   putMembership,
   patchMembership,
-  deleteMembership
+  deleteMembership,
 } from './rest/memberships'
 
 import {
   postFriendship,
   getFriendship,
   patchFriendship,
-  deleteFriendship
+  deleteFriendship,
 } from './rest/friendships'
 
 const LOGGER = new Logger('SERVER-REST')
@@ -131,6 +132,7 @@ app.put('/rest/users/:userId', putUser)
 app.patch('/rest/users/:userId', patchUser)
 app.delete('/rest/users/:userId', deleteUser)
 app.get('/rest/users/:userId/memberships', getUserMemberships)
+app.get('/rest/users/:userId/friendships', getUserFriendships)
 
 // Tribes end point
 app.get('/rest/tribes', getTribes)
@@ -147,5 +149,11 @@ app.get('/rest/memberships/:membershipId', getMembership)
 app.put('/rest/memberships/:membershipId', putMembership)
 app.patch('/rest/memberships/:membershipId', patchMembership)
 app.delete('/rest/memberships/:membershipId', deleteMembership)
+
+// Friendships end point
+app.post('/rest/friendships/', postFriendship)
+app.get('/rest/friendships/:friendshipId', getFriendship)
+app.patch('/rest/friendships/:friendshipId', patchFriendship)
+app.delete('/rest/friendships/:friendshipId', deleteFriendship)
 
 export default app

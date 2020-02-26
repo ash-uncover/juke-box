@@ -5,6 +5,7 @@ import { Actions as RestUsersActions } from '../store/rest/users/actions'
 
 import {
   ErrorData,
+  FriendshipData,
   MembershipData,
   MembershipPostData,
   MembershipPatchData,
@@ -88,6 +89,19 @@ const RestService = {
       },
       put: (dispatch: any, user: UserData) => {},
       patch: (dispatch: any, user: UserPatchData) => {},
+
+      friendships: {
+        getAll: (dispatch: any, id: string) => {
+          dispatch(RestUsersActions.restUsersFriendshipsGetAllFetch(id))
+          delayedPromise(_request({ url: `/rest/users/${id}/friendships` }))
+            .then((result: Array<FriendshipData>) => {
+              dispatch(RestUsersActions.restUsersFriendshipsGetAllSuccess(id, result))
+            })
+            .catch((error: ErrorData) => {
+              dispatch(RestUsersActions.restUsersFriendshipsGetAllFailure(id, error))
+            })
+        },
+      },
 
       memberships: {
         getAll: (dispatch: any, id: string) => {
