@@ -237,8 +237,16 @@ db.memberships.insert({
 
 // FRIENDS //
 
-db.friends.insert({
-  "id":"antoinebanana",
+db.friendsships.insert({
+  "id":"antoinekarima",
   "userId":"userantoine",
-  "tribeId":"tribebanana"
+  "friendId":"userkarima",
+  "status":"ACTIVE"
+})
+
+db.friendsships.insert({
+  "id":"karimaantoine",
+  "userId":"userkarima",
+  "friendId":"userantoine",
+  "status":"ACTIVE"
 })

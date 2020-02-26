@@ -43,6 +43,13 @@ import {
   deleteMembership
 } from './rest/memberships'
 
+import {
+  postFriendship,
+  getFriendship,
+  patchFriendship,
+  deleteFriendship
+} from './rest/friendships'
+
 const LOGGER = new Logger('SERVER-REST')
 
 export const useHeaders = (req: any, res: any, next: any) => {
