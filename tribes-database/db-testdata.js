@@ -9,6 +9,9 @@ db.tribes.createIndex({"id": 1}, {"unique": true})
 db.memberships.drop()
 db.memberships.createIndex({"id": 1}, {"unique": true})
 
+db.friendships.drop()
+db.friendships.createIndex({"id": 1}, {"unique": true})
+
 db.events.drop()
 db.events.createIndex({"id": 1}, {"unique": true})
 
@@ -236,6 +239,7 @@ db.memberships.insert({
 })
 
 // EVENTS //
+
 db.events.insert({
   "id":"eventmapo",
   "name":"eventmapo",
@@ -251,7 +255,7 @@ db.events.insert({
   "dateEnd": new Date("2020-02-25T17:30:00Z")
 })
 
-// FRIENDS //
+// FRIENDSHIPS //
 
 db.friendsships.insert({
   "id":"antoinekarima",
@@ -259,7 +263,6 @@ db.friendsships.insert({
   "friendId":"userkarima",
   "status":"ACTIVE"
 })
-
 db.friendsships.insert({
   "id":"karimaantoine",
   "userId":"userkarima",
