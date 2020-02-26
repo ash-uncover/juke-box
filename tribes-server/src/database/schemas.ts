@@ -63,6 +63,16 @@ export const friendshipsSchema = new mongoose.Schema(Object.assign({
 friendshipsSchema.pre('save', preSave)
 export const friendships = mongoose.model('friendships', friendshipsSchema)
 
+// Events collection
+export const eventsSchema = new mongoose.Schema(Object.assign({
+  name: String,
+  tribeId: String,
+  startDate: String,
+  endDate: String
+}, defaultSchema))
+eventsSchema.pre('save', preSave)
+export const events = mongoose.model('events', eventsSchema)
+
 const SCHEMAS = {
   USERS: {
     model: users,
@@ -83,6 +93,11 @@ const SCHEMAS = {
     model: friendships,
     name: 'friendship',
     collection: 'friendships'
+  },
+  EVENTS: {
+    model: events,
+    name: 'event',
+    collection: 'events'
   },
 }
 export default SCHEMAS

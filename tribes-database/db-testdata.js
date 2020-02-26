@@ -235,6 +235,22 @@ db.memberships.insert({
   "tribeId":"tribemapo"
 })
 
+// EVENTS //
+db.events.insert({
+  "id":"eventmapo",
+  "name":"eventmapo",
+  "tribeId": "tribemapo",
+  "dateStart": new Date("2020-04-05T10:30:00Z"),
+  "dateEnd": new Date("2020-04-05T17:30:00Z")
+})
+db.events.insert({
+  "id":"eventbanana",
+  "name":"eventbanana",
+  "tribeId": "tribebanana",
+  "dateStart": new Date("2020-02-25T10:30:00Z"),
+  "dateEnd": new Date("2020-02-25T17:30:00Z")
+})
+
 // FRIENDS //
 
 db.friendsships.insert({

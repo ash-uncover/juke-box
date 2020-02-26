@@ -51,6 +51,16 @@ import {
   deleteFriendship,
 } from './rest/friendships'
 
+import {
+  getEvents,
+  postEvent,
+  getEvent,
+  putEvent,
+  patchEvent,
+  deleteEvent,
+} from './rest/events'
+
+
 const LOGGER = new Logger('SERVER-REST')
 
 export const useHeaders = (req: any, res: any, next: any) => {
@@ -155,5 +165,13 @@ app.post('/rest/friendships/', postFriendship)
 app.get('/rest/friendships/:friendshipId', getFriendship)
 app.patch('/rest/friendships/:friendshipId', patchFriendship)
 app.delete('/rest/friendships/:friendshipId', deleteFriendship)
+
+// Events end point
+app.get('/rest/events', getEvents)
+app.post('/rest/events', postEvent)
+app.get('/rest/events/:eventId', getEvent)
+app.put('/rest/events/:eventId', putEvent)
+app.patch('/rest/events/:eventId', patchEvent)
+app.delete('/rest/events/:eventId', deleteEvent)
 
 export default app
