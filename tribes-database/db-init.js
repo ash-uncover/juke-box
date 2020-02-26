@@ -11,8 +11,8 @@ db.tribes.createIndex({"id": 1}, {"unique": true})
 db.memberships.drop()
 db.memberships.createIndex({"id": 1}, {"unique": true})
 
-db.friendsships.drop()
-db.friendsships.createIndex({"id": 1}, {"unique": true})
+db.friendships.drop()
+db.friendships.createIndex({"id": 1}, {"unique": true})
 
 db.threads.drop()
 db.threads.createIndex({"id": 1}, {"unique": true})

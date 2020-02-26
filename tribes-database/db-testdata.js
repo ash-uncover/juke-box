@@ -257,13 +257,13 @@ db.events.insert({
 
 // FRIENDSHIPS //
 
-db.friendsships.insert({
+db.friendships.insert({
   "id":"antoinekarima",
   "userId":"userantoine",
   "friendId":"userkarima",
   "status":"ACTIVE"
 })
-db.friendsships.insert({
+db.friendships.insert({
   "id":"karimaantoine",
   "userId":"userkarima",
   "friendId":"userantoine",
