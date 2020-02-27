@@ -22,6 +22,12 @@ export enum SortDirections {
   DESCENDING = 'DESCENDING',
 }
 
+export enum ThreadType {
+  DIRECT = 'DIRECT',
+  GROUP = 'GROUP',
+  CHANNEL = 'CHANNEL',
+}
+
 export enum RequestState {
   NEVER = 'NEVER',
   FETCHING = 'FETCHING',

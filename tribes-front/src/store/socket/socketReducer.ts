@@ -1,6 +1,6 @@
 import { Reducer } from 'redux'
-import { ActionsTypes } from './actions'
-import { ActionsTypes as AuthActionsTypes } from '../auth/actions'
+import { ActionsTypes } from './socketActions'
+import { ActionsTypes as AuthActionsTypes } from '../auth/authActions'
 
 import {
   AuthStatus,

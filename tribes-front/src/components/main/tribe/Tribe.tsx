@@ -14,30 +14,10 @@ import {
   useDispatcher,
 } from '../../../utils/hooks'
 
-import {
-  serverUserStatusSelector,
-} from '../../../store/socket/selectors'
-
-import {
-  restMembershipDataSelector,
-  restMembershipStatusSelector,
-  restMembershipErrorSelector,
-} from '../../../store/rest/memberships/selectors'
-
-import {
-  restTribeDataSelector,
-  restTribeStatusSelector,
-  restTribeErrorSelector,
-  restTribeMembershipsDataSelector,
-  restTribeMembershipsStatusSelector,
-  restTribeMembershipsErrorSelector,
-} from '../../../store/rest/tribes/selectors'
-
-import {
-  restUserDataSelector,
-  restUserStatusSelector,
-  restUserErrorSelector,
-} from '../../../store/rest/users/selectors'
+import { selectors as SocketSelectors } from '../../../store/socket'
+import { selectors as MembershipsSelectors } from '../../../store/rest/memberships'
+import { selectors as TribesSelectors } from '../../../store/rest/tribes'
+import { selectors as UsersSelectors } from '../../../store/rest/users'
 
 import FriendListItem from '../../commons/FriendListItem'
 import Image from '../../commons/Image'
@@ -66,8 +46,8 @@ const Tribe = (props: TribeProps) => {
   const { tribeId } = useParams<TribeRouteParamTypes>()
 
   const dispatch = useDispatcher()
-  const tribeStatus = useSelector(restTribeStatusSelector(tribeId))
-  const membershipsStatus = useSelector(restTribeMembershipsStatusSelector(tribeId))
+  const tribeStatus = useSelector(TribesSelectors.restTribeStatusSelector(tribeId))
+  const membershipsStatus = useSelector(TribesSelectors.restTribeMembershipsStatusSelector(tribeId))
 
   useEffect(() => {
     if (tribeStatus === RequestState.NEVER) {
@@ -116,7 +96,7 @@ interface TribeMenuProps {}
 const TribeMenu = (props: TribeMenuProps) => {
   const { tribeId } = useParams<TribeRouteParamTypes>()
 
-  const tribeData = useSelector(restTribeDataSelector(tribeId))
+  const tribeData = useSelector(TribesSelectors.restTribeDataSelector(tribeId))
 
   return (
     <div className='TribeMenu MainContent-menu'>
@@ -134,7 +114,7 @@ interface TribeContentProps {}
 const TribeContent = (props: TribeContentProps) => {
   const { tribeId } = useParams<TribeRouteParamTypes>()
 
-  const tribeData = useSelector(restTribeDataSelector(tribeId))
+  const tribeData = useSelector(TribesSelectors.restTribeDataSelector(tribeId))
 
   return (
     <div className='TribeContent'>
@@ -159,8 +139,8 @@ const TribeContent = (props: TribeContentProps) => {
 const TribeMemberships = () => {
   const { tribeId } = useParams<TribeRouteParamTypes>()
 
-  const membershipsData = useSelector(restTribeMembershipsDataSelector(tribeId))
-  const membershipsStatus = useSelector(restTribeMembershipsStatusSelector(tribeId))
+  const membershipsData = useSelector(TribesSelectors.restTribeMembershipsDataSelector(tribeId))
+  const membershipsStatus = useSelector(TribesSelectors.restTribeMembershipsStatusSelector(tribeId))
 
   switch (membershipsStatus) {
     case RequestState.NEVER: {
@@ -204,8 +184,8 @@ interface TribeMembershipProps {
 
 const TribeMembership = (props: TribeMembershipProps) => {
   const dispatch = useDispatcher()
-  const membershipData = useSelector(restMembershipDataSelector(props.id))
-  const membershipStatus = useSelector(restMembershipStatusSelector(props.id))
+  const membershipData = useSelector(MembershipsSelectors.restMembershipDataSelector(props.id))
+  const membershipStatus = useSelector(MembershipsSelectors.restMembershipStatusSelector(props.id))
 
   useEffect(() => {
     if (membershipStatus === RequestState.NEVER) {
@@ -255,10 +235,10 @@ interface TribeUserProps {
 const TribeUser = (props: TribeUserProps) => {
   const dispatch = useDispatcher()
 
-  const userData = useSelector(restUserDataSelector(props.id))
-  const userDataStatus = useSelector(restUserStatusSelector(props.id))
+  const userData = useSelector(UsersSelectors.restUserDataSelector(props.id))
+  const userDataStatus = useSelector(UsersSelectors.restUserStatusSelector(props.id))
 
-  const userStatus = useSelector(serverUserStatusSelector(props.id))
+  const userStatus = useSelector(SocketSelectors.serverUserStatusSelector(props.id))
 
   useEffect(() => {
     if (userDataStatus === RequestState.NEVER) {

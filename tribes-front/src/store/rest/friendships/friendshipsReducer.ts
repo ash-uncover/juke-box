@@ -1,8 +1,8 @@
 import { Reducer } from 'redux'
 
-import { ActionsTypes } from './actions'
-import { ActionsTypes as AuthActionsTypes } from '../../auth/actions'
-import { ActionsTypes as UsersActionsTypes } from '../users/actions'
+import { ActionsTypes } from './friendshipsActions'
+import { ActionsTypes as AuthActionsTypes } from '../../auth/authActions'
+import { ActionsTypes as UsersActionsTypes } from '../users/usersActions'
 
 import {
   ErrorData,

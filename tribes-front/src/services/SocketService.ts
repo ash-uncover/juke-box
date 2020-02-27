@@ -3,7 +3,7 @@ import { action } from 'typesafe-actions'
 import {
   Actions as SocketActions,
   ActionsTypes as SocketActionsTypes
-} from '../store/socket/actions'
+} from '../store/socket/socketActions'
 import { faHeartbeat } from '@fortawesome/free-solid-svg-icons'
 
 const CONN_TIMEOUT = 1000

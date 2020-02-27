@@ -8,7 +8,7 @@ import {
 
 import {
   authStateSelector,
-} from '../../store/auth/selectors'
+} from '../../store/auth/authSelectors'
 
 import {
   Redirect,

@@ -1,14 +1,15 @@
 import { Reducer } from 'redux'
 
-import { ActionsTypes as UsersActionsTypes } from './actions'
-import { ActionsTypes as AuthActionsTypes } from '../../auth/actions'
-import { ActionsTypes as TribesActionsTypes} from '../tribes/actions'
+import { ActionsTypes as UsersActionsTypes } from './usersActions'
+import { ActionsTypes as AuthActionsTypes } from '../../auth/authActions'
+import { ActionsTypes as TribesActionsTypes} from '../tribes/tribesActions'
 
 import { RequestState } from '../../../utils/constants'
 import {
   ErrorData,
   FriendshipData,
   MembershipData,
+  ThreadData,
   UserData,
 } from '../../../types'
 
@@ -35,6 +36,9 @@ export interface UserState {
   membershipsData: Array<string> | null,
   membershipsStatus: RequestState,
   membershipsError: ErrorData | null,
+  threadsData: Array<string> | null,
+  threadsStatus: RequestState,
+  threadsError: ErrorData | null,
 }
 
 export const initialUserState = () => ({
@@ -47,6 +51,9 @@ export const initialUserState = () => ({
   membershipsData: null,
   membershipsStatus: RequestState.NEVER,
   membershipsError: null,
+  threadsData: null,
+  threadsStatus: RequestState.NEVER,
+  threadsError: null,
 })
 
 const getUserState = (state: UsersState, id: string) => {
@@ -170,6 +177,44 @@ const reducer: Reducer<UsersState> = (state = initialState, action) => {
       userState.friendshipsData = null
       userState.friendshipsError = error
       userState.friendshipsStatus = RequestState.FAILURE
+
+      return { ...state }
+    }
+
+    // GET /users/{userId}/threads
+
+    case UsersActionsTypes.REST_USERS_THREADS_GETALL_FETCH: {
+      const { id } = action.payload
+
+      const userState = getUserState(state, id)
+      userState.threadsError = null
+      userState.threadsStatus = RequestState.FETCHING
+
+      return { ...state }
+    }
+    case UsersActionsTypes.REST_USERS_THREADS_GETALL_SUCCESS: {
+      const { id, threads } = action.payload
+
+      threads.forEach((thread: ThreadData) => {
+        thread.userId.forEach((userId: string) => {
+          getUserState(state, userId)
+        })
+      })
+
+      const userState = getUserState(state, id)
+      userState.threadsData = threads.map((thread: ThreadData) => thread.id)
+      userState.threadsError = null
+      userState.threadsStatus = RequestState.SUCCESS
+
+      return { ...state }
+    }
+    case UsersActionsTypes.REST_USERS_THREADS_GETALL_FAILURE: {
+      const { id, error } = action.payload
+
+      const userState = getUserState(state, id)
+      userState.threadsData = null
+      userState.threadsError = error
+      userState.threadsStatus = RequestState.FAILURE
 
       return { ...state }
     }

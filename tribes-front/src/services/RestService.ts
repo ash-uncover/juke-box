@@ -1,7 +1,9 @@
 import store from '../store'
-import { Actions as AuthActions } from '../store/auth/actions'
-import { Actions as RestTribesActions } from '../store/rest/tribes/actions'
-import { Actions as RestUsersActions } from '../store/rest/users/actions'
+
+import { Actions as AuthActions } from '../store/auth/authActions'
+import { Actions as RestThreadsActions } from '../store/rest/threads/threadsActions'
+import { Actions as RestTribesActions } from '../store/rest/tribes/tribesActions'
+import { Actions as RestUsersActions } from '../store/rest/users/usersActions'
 
 import {
   ErrorData,
@@ -11,6 +13,9 @@ import {
   MembershipData,
   MembershipPostData,
   MembershipPatchData,
+  ThreadData,
+  ThreadPostData,
+  ThreadPatchData,
   TribeData,
   TribePostData,
   TribePatchData,
@@ -48,6 +53,23 @@ const RestService = {
   },
 
   rest: {
+    threads: {
+      get: (dispatch: any, id: string) => {
+        dispatch(RestThreadsActions.restThreadsGetFetch(id))
+        delayedPromise(_request({ url: `/rest/threads/${id}` }))
+          .then((result: ThreadData) => {
+            dispatch(RestThreadsActions.restThreadsGetSuccess(id, result))
+          })
+          .catch((error: ErrorData) => {
+            dispatch(RestThreadsActions.restThreadsGetFailure(id, error))
+          })
+      },
+      post: (dispatch: any, friendship: FriendshipPostData) => {},
+      put: (dispatch: any, friendship: FriendshipData) => {},
+      patch: (dispatch: any, friendship: FriendshipPatchData) => {},
+      delete: (dispatch: any, id: string) => {},
+    },
+
     tribes: {
       get: (dispatch: any, id: string) => {
         dispatch(RestTribesActions.restTribesGetFetch(id))
@@ -117,6 +139,19 @@ const RestService = {
             })
         },
       },
+
+      threads: {
+        getAll: (dispatch: any, id: string) => {
+          dispatch(RestUsersActions.restUsersThreadsGetAllFetch(id))
+          delayedPromise(_request({ url: `/rest/users/${id}/threads` }))
+            .then((result: Array<ThreadData>) => {
+              dispatch(RestUsersActions.restUsersThreadsGetAllSuccess(id, result))
+            })
+            .catch((error: ErrorData) => {
+              dispatch(RestUsersActions.restUsersThreadsGetAllFailure(id, error))
+            })
+        },
+      },
     },
 
     memberships: {
@@ -133,7 +168,7 @@ const RestService = {
       put: (dispatch: any, friendship: FriendshipData) => {},
       patch: (dispatch: any, friendship: FriendshipPatchData) => {},
       delete: (dispatch: any, id: string) => {},
-    }
+    },
   }
 }
 

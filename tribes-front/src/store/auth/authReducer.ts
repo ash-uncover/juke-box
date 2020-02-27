@@ -1,5 +1,5 @@
 import { Reducer } from 'redux'
-import { ActionsTypes } from './actions'
+import { ActionsTypes } from './authActions'
 import { UserData } from '../../types'
 import { AuthStatus } from '../../utils/constants'
 

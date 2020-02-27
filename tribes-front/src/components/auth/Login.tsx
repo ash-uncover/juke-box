@@ -17,7 +17,7 @@ import {
 import {
   authStateSelector,
   authErrorSelector,
-} from '../../store/auth/selectors'
+} from '../../store/auth/authSelectors'
 
 import RestService from '../../services/RestService'
 

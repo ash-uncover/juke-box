@@ -334,7 +334,7 @@ db.threads.insert({
   "id":"threadantoinekarima",
   "name":"",
   "type":"DIRECT",
-  "users":["userantoine","userkarima"]
+  "userId":["userantoine","userkarima"]
 })
 
 
@@ -342,7 +342,7 @@ db.threads.insert({
   "id":"threadantoinebulle",
   "name":"",
   "type":"DIRECT",
-  "users":["userantoine","userbulle"]
+  "userId":["userantoine","userbulle"]
 })
 
 // MESSAGES //

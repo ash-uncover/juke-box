@@ -19,3 +19,7 @@ export const restUserMembershipsErrorSelector = (id: string) => ((state: any)�
 export const restUserFriendshipsDataSelector = (id: string) => ((state: any) => restUserSelector(id)(state).friendshipsData)
 export const restUserFriendshipsStatusSelector = (id: string) => ((state: any) => restUserSelector(id)(state).friendshipsStatus)
 export const restUserFriendshipsErrorSelector = (id: string) => ((state: any) => restUserSelector(id)(state).friendshipsError)
+
+export const restUserThreadsDataSelector = (id: string) => ((state: any) => restUserSelector(id)(state).threadsData)
+export const restUserThreadsStatusSelector = (id: string) => ((state: any) => restUserSelector(id)(state).threadsStatus)
+export const restUserThreadsErrorSelector = (id: string) => ((state: any) => restUserSelector(id)(state).threadsError)

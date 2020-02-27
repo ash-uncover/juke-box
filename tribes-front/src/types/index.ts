@@ -6,24 +6,6 @@ export interface ErrorData {
   trace: string,
 }
 
-// TRIBE
-
-export interface TribeData {
-  id: string,
-  name: string,
-  image: string,
-}
-
-export interface TribePostData {
-  name: string,
-  image: string,
-}
-
-export interface TribePatchData {
-  id: string,
-  name?: string,
-  image?: string,
-}
 
 // FRIENDSHIP
 
@@ -60,6 +42,70 @@ export interface MembershipPatchData {
   id: string,
   userId?: string,
   tribeId?: string,
+}
+
+// MESSAGE
+
+export interface MessageData {
+  id: string,
+  threadId: string,
+  userId: string,
+  text: string,
+  date: string,
+  readBy: Array<string>,
+}
+
+export interface MessagePostData {
+  threadId: string,
+  userId: string,
+  text: string,
+  date: string,
+}
+
+export interface MessagePatchData {
+  id: string,
+  text?: string,
+  readBy?: Array<string>,
+}
+
+// THREAD
+
+export interface ThreadData {
+  id: string,
+  name: string,
+  type: string,
+  userId: Array<string>,
+}
+
+export interface ThreadPostData {
+  name: string,
+  type: string,
+  userId: Array<string>,
+}
+
+export interface ThreadPatchData {
+  id: string,
+  name?: string,
+  userId?: Array<string>,
+}
+
+// TRIBE
+
+export interface TribeData {
+  id: string,
+  name: string,
+  image: string,
+}
+
+export interface TribePostData {
+  name: string,
+  image: string,
+}
+
+export interface TribePatchData {
+  id: string,
+  name?: string,
+  image?: string,
 }
 
 // USER

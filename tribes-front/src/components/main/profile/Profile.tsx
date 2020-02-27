@@ -14,24 +14,10 @@ import {
   useTranslation,
 } from 'react-i18next'
 
-import {
-  authUserSelector,
-} from '../../../store/auth/selectors'
-
-import {
-  restUserDataSelector,
-  restUserStatusSelector,
-  restUserErrorSelector,
-  restUserFriendshipsDataSelector,
-  restUserFriendshipsStatusSelector,
-  restUserFriendshipsErrorSelector,
-} from '../../../store/rest/users/selectors'
-
-import {
-  restFriendshipDataSelector,
-  restFriendshipStatusSelector,
-  restFriendshipErrorSelector,
-} from '../../../store/rest/friendships/selectors'
+import { selectors as AuthSelectors } from '../../../store/auth'
+import { selectors as UsersSelectors } from '../../../store/rest/users'
+import { selectors as FriendshipsSelectors } from '../../../store/rest/friendships'
+import { selectors as ThreadsSelectors } from '../../../store/rest/threads'
 
 import {
   RequestState,
@@ -74,30 +60,33 @@ const ProfileMenu = (props: ProfileMenuProps) => {
           {t('main.profile.menu.section.friends')}
         </div>
         <div className='MainContent-menu-section-content'>
-          <ProfileFriendsMenu />
+          <ProfileFriendships />
         </div>
       </div>
       <div className='ProfileMenu-content MainContent-menu-section'>
         <div className='MainContent-menu-section-title'>
           {t('main.profile.menu.section.conversations')}
         </div>
+        <div className='MainContent-menu-section-content'>
+          <ProfileThreads />
+        </div>
       </div>
     </div>
   )
 }
 
-/* PROFILE MENU FRIENDS */
+/* PROFILE FRIENDSHIPS */
 
-interface ProfileMenuFriendsProps {}
+interface ProfileFriendshipsProps {}
 
-const ProfileFriendsMenu = (props: ProfileMenuFriendsProps) => {
+const ProfileFriendships = (props: ProfileFriendshipsProps) => {
   const { t } = useTranslation()
 
   const dispatch = useDispatcher()
 
-  const userId = useSelector(authUserSelector)
-  const friendshipsData = useSelector(restUserFriendshipsDataSelector(userId))
-  const friendshipsStatus = useSelector(restUserFriendshipsStatusSelector(userId))
+  const userId = useSelector(AuthSelectors.authUserSelector)
+  const friendshipsData = useSelector(UsersSelectors.restUserFriendshipsDataSelector(userId))
+  const friendshipsStatus = useSelector(UsersSelectors.restUserFriendshipsStatusSelector(userId))
 
   useEffect(() => {
     if (friendshipsStatus === RequestState.NEVER) {
@@ -139,8 +128,8 @@ export interface ProfileFriendshipProps {
 export const ProfileFriendship = (props: ProfileFriendshipProps) => {
   const dispatch = useDispatcher()
 
-  const friendshipData = useSelector(restFriendshipDataSelector(props.id))
-  const friendshipStatus = useSelector(restFriendshipStatusSelector(props.id))
+  const friendshipData = useSelector(FriendshipsSelectors.restFriendshipDataSelector(props.id))
+  const friendshipStatus = useSelector(FriendshipsSelectors.restFriendshipStatusSelector(props.id))
 
   useEffect(() => {
     if (friendshipStatus === RequestState.NEVER) {
@@ -185,8 +174,8 @@ export interface ProfileFriendProps {
 export const ProfileFriend = (props: ProfileFriendProps) => {
   const dispatch = useDispatcher()
 
-  const userData = useSelector(restUserDataSelector(props.id))
-  const userStatus = useSelector(restUserStatusSelector(props.id))
+  const userData = useSelector(UsersSelectors.restUserDataSelector(props.id))
+  const userStatus = useSelector(UsersSelectors.restUserStatusSelector(props.id))
 
   useEffect(() => {
     if (userStatus === RequestState.NEVER) {
@@ -216,6 +205,98 @@ export const ProfileFriend = (props: ProfileFriendProps) => {
           image={userData.image}
           status={userStatus || UserStatus.OFFLINE}
         />
+      )
+    }
+    case RequestState.FAILURE:
+    default: {
+      return (
+        <div>
+          Error
+        </div>
+      )
+    }
+  }
+}
+
+
+/* PROFILE THREADS */
+
+interface ProfileThreadsProps {}
+
+const ProfileThreads = (props: ProfileThreadsProps) => {
+  const { t } = useTranslation()
+
+  const dispatch = useDispatcher()
+
+  const userId = useSelector(AuthSelectors.authUserSelector)
+  const threadsData = useSelector(UsersSelectors.restUserThreadsDataSelector(userId))
+  const threadsStatus = useSelector(UsersSelectors.restUserThreadsStatusSelector(userId))
+
+  useEffect(() => {
+    if (threadsStatus === RequestState.NEVER) {
+      RestService.rest.users.threads.getAll(dispatch, userId)
+    }
+  })
+
+  switch (threadsStatus) {
+    case RequestState.NEVER:
+    case RequestState.FETCHING: {
+      return (
+        <div>
+          Loading...
+        </div>
+      )
+    }
+    case RequestState.SUCCESS: {
+      return threadsData.map(
+        (id: string) => <ProfileThread key={id} id={id} />
+      )
+    }
+    case RequestState.FAILURE:
+    default: {
+      return (
+        <div>
+          Error
+        </div>
+      )
+    }
+  }
+}
+
+/* PROFILE THREAD */
+
+interface ProfileThreadProps {
+  id: string
+}
+
+const ProfileThread = (props: ProfileThreadProps) => {
+  const { t } = useTranslation()
+
+  const dispatch = useDispatcher()
+
+  const threadData = useSelector(ThreadsSelectors.restThreadDataSelector(props.id))
+  const threadStatus = useSelector(ThreadsSelectors.restThreadStatusSelector(props.id))
+
+  useEffect(() => {
+    if (threadStatus === RequestState.NEVER) {
+      RestService.rest.threads.get(dispatch, props.id)
+    }
+  })
+
+  switch (threadStatus) {
+    case RequestState.NEVER:
+    case RequestState.FETCHING: {
+      return (
+        <div>
+          Loading thread...
+        </div>
+      )
+    }
+    case RequestState.SUCCESS: {
+      return (
+        <div>
+          {props.id}
+        </div>
       )
     }
     case RequestState.FAILURE:

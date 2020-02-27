@@ -71,7 +71,7 @@ export const messages = mongoose.model('messages', messagesSchema)
 export const threadsSchema = new mongoose.Schema(Object.assign({
   name: { type: String },
   type: { type: String },
-  users: { type: [String] },
+  userId: { type: [String] },
 }, defaultSchema))
 threadsSchema.pre('save', preSave)
 export const threads = mongoose.model('threads', threadsSchema)
