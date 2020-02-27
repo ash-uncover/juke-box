@@ -1,18 +1,11 @@
-import React, {
-  useEffect
-} from 'react'
-
-import {
-  useSelector,
-} from 'react-redux'
+import React from 'react'
 
 import {
   useDispatcher,
-} from '../../../utils/hooks'
-
-import {
+  useEffect,
+  useSelector,
   useTranslation,
-} from 'react-i18next'
+} from '../../../utils/hooks'
 
 import { selectors as AuthSelectors } from '../../../store/auth'
 import { selectors as UsersSelectors } from '../../../store/rest/users'
@@ -39,6 +32,9 @@ const Profile = (props: ProfileProps) => {
   return (
     <div className='Profile MainContent-area'>
       <ProfileMenu />
+      <div>
+        toto
+      </div>
     </div>
   )
 }

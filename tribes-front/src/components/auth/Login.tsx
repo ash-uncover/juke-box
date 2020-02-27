@@ -1,18 +1,11 @@
-import React, {
-  useState,
-} from 'react'
-
-import {
-  useSelector,
-} from 'react-redux'
+import React from 'react'
 
 import {
   useDispatcher,
-} from '../../utils/hooks'
-
-import {
+  useState,
+  useSelector,
   useTranslation,
-} from 'react-i18next'
+} from '../../utils/hooks'
 
 import {
   authStateSelector,

@@ -1,12 +1,12 @@
 import React, {
   Suspense,
-  useEffect,
 } from 'react'
 
 import {
   useDispatch,
+  useEffect,
   useSelector,
-} from 'react-redux'
+} from '../utils/hooks'
 
 import { selectors as AuthSelectors } from '../store/auth'
 import { selectors as SocketSelectors } from '../store/socket'

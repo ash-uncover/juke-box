@@ -1,17 +1,10 @@
-import React, {
-  useEffect,
-} from 'react'
-
-import {
-  useParams,
-} from 'react-router-dom'
-
-import {
-  useSelector,
-} from 'react-redux'
+import React from 'react'
 
 import {
   useDispatcher,
+  useEffect,
+  useSelector,
+  useParams,
 } from '../../../utils/hooks'
 
 import { selectors as SocketSelectors } from '../../../store/socket'
@@ -20,7 +13,6 @@ import { selectors as TribesSelectors } from '../../../store/rest/tribes'
 import { selectors as UsersSelectors } from '../../../store/rest/users'
 
 import FriendListItem from '../../commons/FriendListItem'
-import Image from '../../commons/Image'
 
 import {
   RequestState,
@@ -30,9 +22,6 @@ import {
 import RestService from '../../../services/RestService'
 
 import './Tribe.scss'
-import {
-  MembershipData,
-} from '../../../types'
 
 interface TribeRouteParamTypes {
   tribeId: string
