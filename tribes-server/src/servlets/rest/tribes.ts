@@ -1,13 +1,16 @@
 import SCHEMAS from '../../database/schemas'
-import { defaultGetAll, defaultPost, defaultGet, defaultPut, defaultDelete, defaultGetDeep } from '../servlet-base'
+
+import {
+  defaultGetAll,
+  defaultPost,
+  defaultGet,
+  defaultPut,
+  defaultDelete,
+  defaultGetDeep,
+} from '../servlet-base'
 
 import Logger from 'ap-utils-logger'
 const LOGGER = new Logger('rest-tribes')
-
-export const getTribes = function(req, res, next) {
-  LOGGER.debug('GET ' + req.url)
-  defaultGetAll(SCHEMAS.TRIBES, req, res, next)
-}
 
 export const postTribe = function(req, res, next) {
   LOGGER.debug('POST ' + req.url)
@@ -39,3 +42,14 @@ export const getTribeMemberships = function(req, res, next) {
   LOGGER.debug(JSON.stringify(req.param))
   defaultGetDeep(SCHEMAS.MEMBERSHIPS, req, res, next, null)
 }
+
+const addRoutes = (app) => {
+  app.post('/rest/tribes/', postTribe)
+  app.get('/rest/tribes/:tribeId', getTribe)
+  app.put('/rest/tribes/:tribeId', putTribe)
+  app.patch('/rest/tribes/:tribeId', patchTribe)
+  app.delete('/rest/tribes/:tribeId', deleteTribe)
+
+  app.get('/rest/tribes/:tribeId/memberships', getTribeMemberships)
+}
+export default addRoutes
