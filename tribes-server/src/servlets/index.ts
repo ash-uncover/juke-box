@@ -60,7 +60,6 @@ import {
   deleteEvent,
 } from './rest/events'
 
-
 const LOGGER = new Logger('SERVER-REST')
 
 export const useHeaders = (req: any, res: any, next: any) => {
@@ -130,6 +129,9 @@ app.use(useHeaders)
 app.options('*', optionsRoute)
 
 app.use(useAuth)
+
+app.use(express.urlencoded({extended: true}))
+app.use(express.json())
 
 // Auth end point
 app.get('/auth', getAuth)
