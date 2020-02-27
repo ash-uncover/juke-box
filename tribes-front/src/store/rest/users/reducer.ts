@@ -152,6 +152,10 @@ const reducer: Reducer<UsersState> = (state = initialState, action) => {
     case UsersActionsTypes.REST_USERS_FRIENDSHIPS_GETALL_SUCCESS: {
       const { id, friendships } = action.payload
 
+      friendships.forEach((friendship: FriendshipData) => {
+        getUserState(state, friendship.friendId)
+      })
+
       const userState = getUserState(state, id)
       userState.friendshipsData = friendships.map((friendship: FriendshipData) => friendship.id)
       userState.friendshipsError = null

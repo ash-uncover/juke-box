@@ -34,12 +34,12 @@ export interface FriendshipData {
   status: string,
 }
 
-export interface MembershipPostData {
+export interface FriendshipPostData {
   userId: string,
   friendId: string,
 }
 
-export interface MembershipPatchData {
+export interface FriendshipPatchData {
   status: string,
 }
 

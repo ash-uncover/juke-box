@@ -269,3 +269,55 @@ db.friendships.insert({
   "friendId":"userantoine",
   "status":"ACTIVE"
 })
+
+db.friendships.insert({
+  "id":"antoinebulle",
+  "userId":"userantoine",
+  "friendId":"userbulle",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"bulleantoine",
+  "userId":"userbulle",
+  "friendId":"userantoine",
+  "status":"ACTIVE"
+})
+
+db.friendships.insert({
+  "id":"antoinejin",
+  "userId":"userantoine",
+  "friendId":"userjin",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"jinantoine",
+  "userId":"userjin",
+  "friendId":"userantoine",
+  "status":"ACTIVE"
+})
+
+db.friendships.insert({
+  "id":"antoinemya",
+  "userId":"userantoine",
+  "friendId":"usermya",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"myaantoine",
+  "userId":"usermya",
+  "friendId":"userantoine",
+  "status":"ACTIVE"
+})
+
+db.friendships.insert({
+  "id":"karimaenea",
+  "userId":"userkarima",
+  "friendId":"userenea",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"eneakarima",
+  "userId":"userenea",
+  "friendId":"userkarima",
+  "status":"ACTIVE"
+})
