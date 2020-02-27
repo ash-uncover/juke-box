@@ -65,10 +65,10 @@ const reducer: Reducer<ThreadsState> = (state = initialState, action) => {
       return { ...state }
     }
     case ThreadsActionsTypes.REST_THREADS_GET_SUCCESS: {
-      const { id, tribe } = action.payload
+      const { id, thread } = action.payload
 
       const threadState = getThreadState(state, id)
-      threadState.data = tribe
+      threadState.data = thread
       threadState.error = null
       threadState.status = RequestState.SUCCESS
 

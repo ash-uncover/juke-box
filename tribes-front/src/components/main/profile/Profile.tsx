@@ -274,6 +274,7 @@ const ProfileThread = (props: ProfileThreadProps) => {
 
   const dispatch = useDispatcher()
 
+  const currentUserId = useSelector(AuthSelectors.authUserSelector)
   const threadData = useSelector(ThreadsSelectors.restThreadDataSelector(props.id))
   const threadStatus = useSelector(ThreadsSelectors.restThreadStatusSelector(props.id))
 
@@ -294,8 +295,60 @@ const ProfileThread = (props: ProfileThreadProps) => {
     }
     case RequestState.SUCCESS: {
       return (
+        <ProfileThreadDirect
+          id={props.id}
+          userId={threadData.userId.find((userId: string) => userId != currentUserId)}
+        />
+      )
+    }
+    case RequestState.FAILURE:
+    default: {
+      return (
         <div>
-          {props.id}
+          Error
+        </div>
+      )
+    }
+  }
+}
+
+
+/* PROFILE THREAD */
+
+interface ProfileThreadDirectProps {
+  id: string,
+  userId: string
+}
+
+const ProfileThreadDirect = (props: ProfileThreadDirectProps) => {
+  const { t } = useTranslation()
+
+  const dispatch = useDispatcher()
+
+  const threadData = useSelector(ThreadsSelectors.restThreadDataSelector(props.id))
+
+  const userData = useSelector(UsersSelectors.restUserDataSelector(props.userId))
+  const userStatus = useSelector(UsersSelectors.restUserStatusSelector(props.userId))
+
+  useEffect(() => {
+    if (userStatus === RequestState.NEVER) {
+      RestService.rest.users.get(dispatch, props.userId)
+    }
+  })
+
+  switch (userStatus) {
+    case RequestState.NEVER:
+    case RequestState.FETCHING: {
+      return (
+        <div>
+          Loading user...
+        </div>
+      )
+    }
+    case RequestState.SUCCESS: {
+      return (
+        <div>
+          {userData.name}
         </div>
       )
     }
