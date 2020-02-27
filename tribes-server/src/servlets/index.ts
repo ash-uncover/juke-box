@@ -93,6 +93,9 @@ app.options('*', optionsRoute)
 
 app.use(useAuth)
 
+app.use(express.urlencoded({extended: true}))
+app.use(express.json())
+
 // Auth end point
 app.get('/auth', getAuth)
 

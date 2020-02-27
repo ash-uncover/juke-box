@@ -1,0 +1,234 @@
+{
+	"info": {
+		"_postman_id": "f983898c-a797-4328-8331-d9b4a752c8ee",
+		"name": "Tribe",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "Get /events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_ROOT}}/events",
+							"host": [
+								"{{URL_ROOT}}"
+							],
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get /events/eventmapo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_ROOT}}/events/eventmapo",
+							"host": [
+								"{{URL_ROOT}}"
+							],
+							"path": [
+								"events",
+								"eventmapo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put /events/eventmapo",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"eventmapo\",\n    \"name\": \"eventmapomapo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_ROOT}}/events/eventmapo",
+							"host": [
+								"{{URL_ROOT}}"
+							],
+							"path": [
+								"events",
+								"eventmapo"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f0b5c3d1-3d92-49c0-878a-83c7bcea8cbf",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "c78be190-d217-433d-9234-12840f039731",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get /users/userantoine",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_ROOT}}/users/userantoine",
+							"host": [
+								"{{URL_ROOT}}"
+							],
+							"path": [
+								"users",
+								"userantoine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get /users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_ROOT}}/users",
+							"host": [
+								"{{URL_ROOT}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Tribes",
+			"item": [
+				{
+					"name": "Get /tribes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_ROOT}}/tribes",
+							"host": [
+								"{{URL_ROOT}}"
+							],
+							"path": [
+								"tribes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get tribes/tribebanana",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_ROOT}}/tribes/tribebanana",
+							"host": [
+								"{{URL_ROOT}}"
+							],
+							"path": [
+								"tribes",
+								"tribebanana"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "a",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "a",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "e13e01b5-67ea-4073-a6b4-aa4db6ab2e50",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "42fcbd69-dfff-4ae8-859b-ed146d72a8dc",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "d99fcb75-7977-4206-802c-2f1d9b8c3aac",
+			"key": "URL_ROOT",
+			"value": "http://localhost:3090/rest",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
