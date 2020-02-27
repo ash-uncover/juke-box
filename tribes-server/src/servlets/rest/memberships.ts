@@ -1,5 +1,11 @@
 import SCHEMAS from '../../database/schemas'
-import { defaultPost, defaultGet, defaultPut, defaultDelete } from '../servlet-base'
+
+import {
+  defaultPost,
+  defaultGet,
+  defaultPut,
+  defaultDelete,
+} from '../servlet-base'
 
 import Logger from 'ap-utils-logger'
 const LOGGER = new Logger('rest-memberships')
@@ -28,3 +34,12 @@ export const deleteMembership = function(req, res, next) {
   LOGGER.debug('DELETE ' + req.url)
   defaultDelete(SCHEMAS.MEMBERSHIPS, req, res, next, null)
 }
+
+const addRoutes = (app) => {
+  app.post('/rest/memberships/', postMembership)
+  app.get('/rest/memberships/:membershipId', getMembership)
+  app.put('/rest/memberships/:membershipId', putMembership)
+  app.patch('/rest/memberships/:membershipId', patchMembership)
+  app.delete('/rest/memberships/:membershipId', deleteMembership)
+}
+export default addRoutes

@@ -1,5 +1,12 @@
 import SCHEMAS from '../../database/schemas'
-import { defaultGetAll, defaultPost, defaultGet, defaultPut, defaultDelete } from '../servlet-base'
+
+import {
+  defaultGetAll,
+  defaultPost,
+  defaultGet,
+  defaultPut,
+  defaultDelete,
+} from '../servlet-base'
 
 import Logger from 'ap-utils-logger'
 const LOGGER = new Logger('rest-events')
@@ -34,3 +41,11 @@ export const deleteEvent = function(req, res, next) {
   defaultDelete(SCHEMAS.EVENTS, req, res, next, null)
 }
 
+const addRoutes = (app) => {
+  app.post('/rest/events/', postEvent)
+  app.get('/rest/events/:eventId', getEvent)
+  app.put('/rest/events/:eventId', putEvent)
+  app.patch('/rest/events/:eventId', patchEvent)
+  app.delete('/rest/events/:eventId', deleteEvent)
+}
+export default addRoutes

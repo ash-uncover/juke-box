@@ -327,3 +327,49 @@ db.friendships.insert({
   "friendId":"userkarima",
   "status":"ACTIVE"
 })
+
+// THREADS //
+
+db.threads.insert({
+  "id":"threadantoinekarima",
+  "name":"",
+  "type":"DIRECT",
+  "users":["userantoine","userkarima"]
+})
+
+
+db.threads.insert({
+  "id":"threadantoinebulle",
+  "name":"",
+  "type":"DIRECT",
+  "users":["userantoine","userbulle"]
+})
+
+// MESSAGES //
+
+db.messages.insert({
+  "id":"messageantoinekarima1",
+  "threadId":"threadantoinekarima",
+  "userId":"userantoine",
+  "date":new Date("2020-02-2711:50:23Z"),
+  "text":"Hello",
+  "readBy":["userkarima"]
+})
+
+db.messages.insert({
+  "id":"messageantoinekarima2",
+  "threadId":"threadantoinekarima",
+  "userId":"userkarima",
+  "date":new Date("2020-02-2711:51:45Z"),
+  "text":"Coucou :)",
+  "readBy":[]
+})
+
+db.messages.insert({
+  "id":"messageantoinebulle1",
+  "threadId":"threadantoinebulle",
+  "userId":"userbulle",
+  "date":new Date("2020-01-2710:50:23Z"),
+  "text":"Coucou Antoine",
+  "readBy":[]
+})

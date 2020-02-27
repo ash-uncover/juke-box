@@ -15,50 +15,13 @@ import {
   HttpStatus,
 } from '../utils'
 
-import {
-  getUsers,
-  postUser,
-  getUser,
-  putUser,
-  patchUser,
-  deleteUser,
-  getUserMemberships,
-  getUserFriendships,
-} from './rest/users'
-
-import {
-  getTribes,
-  postTribe,
-  getTribe,
-  putTribe,
-  patchTribe,
-  deleteTribe,
-  getTribeMemberships,
-} from './rest/tribes'
-
-import {
-  postMembership,
-  getMembership,
-  putMembership,
-  patchMembership,
-  deleteMembership,
-} from './rest/memberships'
-
-import {
-  postFriendship,
-  getFriendship,
-  patchFriendship,
-  deleteFriendship,
-} from './rest/friendships'
-
-import {
-  getEvents,
-  postEvent,
-  getEvent,
-  putEvent,
-  patchEvent,
-  deleteEvent,
-} from './rest/events'
+import addEventsRoutes from './rest/events'
+import addFriendshipsRoutes from './rest/friendships'
+import addMembershipsRoutes from './rest/memberships'
+import addMessagesRoutes from './rest/messages'
+import addThreadsRoutes from './rest/threads'
+import addTribesRoutes from './rest/tribes'
+import addUsersRoutes from './rest/users'
 
 const LOGGER = new Logger('SERVER-REST')
 
@@ -136,44 +99,12 @@ app.use(express.json())
 // Auth end point
 app.get('/auth', getAuth)
 
-// Users end point
-app.get('/rest/users', getUsers)
-app.post('/rest/users', postUser)
-app.get('/rest/users/:userId', getUser)
-app.put('/rest/users/:userId', putUser)
-app.patch('/rest/users/:userId', patchUser)
-app.delete('/rest/users/:userId', deleteUser)
-app.get('/rest/users/:userId/memberships', getUserMemberships)
-app.get('/rest/users/:userId/friendships', getUserFriendships)
-
-// Tribes end point
-app.get('/rest/tribes', getTribes)
-app.post('/rest/tribes', postTribe)
-app.get('/rest/tribes/:tribeId', getTribe)
-app.put('/rest/tribes/:tribeId', putTribe)
-app.patch('/rest/tribes/:tribeId', patchTribe)
-app.delete('/rest/tribes/:tribeId', deleteTribe)
-app.get('/rest/tribes/:tribeId/memberships', getTribeMemberships)
-
-// Memberships end point
-app.post('/rest/memberships/', postMembership)
-app.get('/rest/memberships/:membershipId', getMembership)
-app.put('/rest/memberships/:membershipId', putMembership)
-app.patch('/rest/memberships/:membershipId', patchMembership)
-app.delete('/rest/memberships/:membershipId', deleteMembership)
-
-// Friendships end point
-app.post('/rest/friendships/', postFriendship)
-app.get('/rest/friendships/:friendshipId', getFriendship)
-app.patch('/rest/friendships/:friendshipId', patchFriendship)
-app.delete('/rest/friendships/:friendshipId', deleteFriendship)
-
-// Events end point
-app.get('/rest/events', getEvents)
-app.post('/rest/events', postEvent)
-app.get('/rest/events/:eventId', getEvent)
-app.put('/rest/events/:eventId', putEvent)
-app.patch('/rest/events/:eventId', patchEvent)
-app.delete('/rest/events/:eventId', deleteEvent)
+addEventsRoutes(app)
+addFriendshipsRoutes(app)
+addMembershipsRoutes(app)
+addMessagesRoutes(app)
+addThreadsRoutes(app)
+addTribesRoutes(app)
+addUsersRoutes(app)
 
 export default app

@@ -29,75 +29,105 @@ const preSave = function (next) {
   next()
 }
 
+// Events collection
+export const eventsSchema = new mongoose.Schema(Object.assign({
+  name: { type: String },
+  tribeId: { type: String },
+  startDate: String,
+  endDate: String,
+}, defaultSchema))
+eventsSchema.pre('save', preSave)
+export const events = mongoose.model('events', eventsSchema)
+
+// Friendship collection
+export const friendshipsSchema = new mongoose.Schema(Object.assign({
+  userId: { type: String },
+  friendId: { type: String },
+  status: { type: String },
+}, defaultSchema))
+friendshipsSchema.pre('save', preSave)
+export const friendships = mongoose.model('friendships', friendshipsSchema)
+
+// Memberships collection
+export const membershipsSchema = new mongoose.Schema(Object.assign({
+  tribeId: { type: String },
+  userId: { type: String },
+}, defaultSchema))
+membershipsSchema.pre('save', preSave)
+export const memberships = mongoose.model('memberships', membershipsSchema)
+
+// Messages collection
+export const messagesSchema = new mongoose.Schema(Object.assign({
+  threadId: { type: String },
+  userId: { type: String },
+  text: { type: String },
+  date: { type: Date },
+  readBy: { type: [String] },
+}, defaultSchema))
+messagesSchema.pre('save', preSave)
+export const messages = mongoose.model('messages', messagesSchema)
+
+// Threads collection
+export const threadsSchema = new mongoose.Schema(Object.assign({
+  name: { type: String },
+  type: { type: String },
+  users: { type: [String] },
+}, defaultSchema))
+threadsSchema.pre('save', preSave)
+export const threads = mongoose.model('threads', threadsSchema)
+
+// Tribes collection
+export const tribesSchema = new mongoose.Schema(Object.assign({
+  name: { type: String },
+}, defaultSchema))
+tribesSchema.pre('save', preSave)
+export const tribes = mongoose.model('tribes', tribesSchema)
+
 // Users collection
 export const usersSchema = new mongoose.Schema(Object.assign({
   username: { type: String, required: true },
   password: { type: String, required: true },
   name: { type: String, required: true },
-  image: { type: String }
+  image: { type: String },
 }, defaultSchema))
 usersSchema.pre('save', preSave)
 export const users = mongoose.model('users', usersSchema)
 
-// Tribes collection
-export const tribesSchema = new mongoose.Schema(Object.assign({
-  name: String
-}, defaultSchema))
-tribesSchema.pre('save', preSave)
-export const tribes = mongoose.model('tribes', tribesSchema)
-
-// Memberships collection
-export const membershipsSchema = new mongoose.Schema(Object.assign({
-  tribeId: String,
-  userId: String
-}, defaultSchema))
-membershipsSchema.pre('save', preSave)
-export const memberships = mongoose.model('memberships', membershipsSchema)
-
-// Friendship collection
-export const friendshipsSchema = new mongoose.Schema(Object.assign({
-  userId: String,
-  friendId: String,
-  status: String
-}, defaultSchema))
-friendshipsSchema.pre('save', preSave)
-export const friendships = mongoose.model('friendships', friendshipsSchema)
-
-// Events collection
-export const eventsSchema = new mongoose.Schema(Object.assign({
-  name: String,
-  tribeId: String,
-  startDate: String,
-  endDate: String
-}, defaultSchema))
-eventsSchema.pre('save', preSave)
-export const events = mongoose.model('events', eventsSchema)
-
 const SCHEMAS = {
-  USERS: {
-    model: users,
-    name: 'user',
-    collection: 'users'
-  },
-  TRIBES: {
-    model: tribes,
-    name: 'tribe',
-    collection: 'tribes'
-  },
-  MEMBERSHIPS: {
-    model: memberships,
-    name: 'membership',
-    collection: 'memberships'
+  EVENTS: {
+    model: events,
+    name: 'event',
+    collection: 'events',
   },
   FRIENDSHIPS: {
     model: friendships,
     name: 'friendship',
-    collection: 'friendships'
+    collection: 'friendships',
   },
-  EVENTS: {
-    model: events,
-    name: 'event',
-    collection: 'events'
+  MEMBERSHIPS: {
+    model: memberships,
+    name: 'membership',
+    collection: 'memberships',
+  },
+  MESSAGES: {
+    model: messages,
+    name: 'message',
+    collection: 'messages',
+  },
+  THREADS: {
+    model: threads,
+    name: 'thread',
+    collection: 'threads',
+  },
+  TRIBES: {
+    model: tribes,
+    name: 'tribe',
+    collection: 'tribes',
+  },
+  USERS: {
+    model: users,
+    name: 'user',
+    collection: 'users',
   },
 }
 export default SCHEMAS

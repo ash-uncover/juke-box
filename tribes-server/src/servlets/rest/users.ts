@@ -11,7 +11,7 @@ import {
   defaultPut,
   defaultPatch,
   defaultDelete,
-  defaultGetDeep
+  defaultGetDeep,
 } from '../servlet-base'
 
 import Logger from 'ap-utils-logger'
@@ -132,3 +132,15 @@ export const getUserFriendships = function(req, res, next) {
     res.send(500, error)
   }
 }
+
+const addRoutes = (app) => {
+  app.post('/rest/users/', postUser)
+  app.get('/rest/users/:userId', getUser)
+  app.put('/rest/users/:userId', putUser)
+  app.patch('/rest/users/:userId', patchUser)
+  app.delete('/rest/users/:userId', deleteUser)
+
+  app.get('/rest/users/:userId/memberships', getUserMemberships)
+  app.get('/rest/users/:userId/friendships', getUserFriendships)
+}
+export default addRoutes
