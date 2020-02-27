@@ -5,6 +5,9 @@ import { Actions as RestUsersActions } from '../store/rest/users/actions'
 
 import {
   ErrorData,
+  FriendshipData,
+  FriendshipPostData,
+  FriendshipPatchData,
   MembershipData,
   MembershipPostData,
   MembershipPatchData,
@@ -89,6 +92,19 @@ const RestService = {
       put: (dispatch: any, user: UserData) => {},
       patch: (dispatch: any, user: UserPatchData) => {},
 
+      friendships: {
+        getAll: (dispatch: any, id: string) => {
+          dispatch(RestUsersActions.restUsersFriendshipsGetAllFetch(id))
+          delayedPromise(_request({ url: `/rest/users/${id}/friendships` }))
+            .then((result: Array<FriendshipData>) => {
+              dispatch(RestUsersActions.restUsersFriendshipsGetAllSuccess(id, result))
+            })
+            .catch((error: ErrorData) => {
+              dispatch(RestUsersActions.restUsersFriendshipsGetAllFailure(id, error))
+            })
+        },
+      },
+
       memberships: {
         getAll: (dispatch: any, id: string) => {
           dispatch(RestUsersActions.restUsersMembershipsGetAllFetch(id))
@@ -108,6 +124,14 @@ const RestService = {
       post: (dispatch: any, membership: MembershipPostData) => {},
       put: (dispatch: any, membership: MembershipData) => {},
       patch: (dispatch: any, membership: MembershipPatchData) => {},
+      delete: (dispatch: any, id: string) => {},
+    },
+
+    friendships: {
+      get: (dispatch: any, id: string) => {},
+      post: (dispatch: any, friendship: FriendshipPostData) => {},
+      put: (dispatch: any, friendship: FriendshipData) => {},
+      patch: (dispatch: any, friendship: FriendshipPatchData) => {},
       delete: (dispatch: any, id: string) => {},
     }
   }

@@ -1,20 +1,3 @@
-db.dropDatabase()
-
-db.users.drop()
-db.users.createIndex({"id": 1}, {"unique": true})
-
-db.tribes.drop()
-db.tribes.createIndex({"id": 1}, {"unique": true})
-
-db.memberships.drop()
-db.memberships.createIndex({"id": 1}, {"unique": true})
-
-db.events.drop()
-db.events.createIndex({"id": 1}, {"unique": true})
-
-db.participations.drop()
-db.participations.createIndex({"id": 1}, {"unique": true})
-
 // USERS //
 
 db.users.insert({
@@ -236,6 +219,7 @@ db.memberships.insert({
 })
 
 // EVENTS //
+
 db.events.insert({
   "id":"eventmapo",
   "name":"eventmapo",
@@ -251,10 +235,95 @@ db.events.insert({
   "dateEnd": new Date("2020-02-25T17:30:00Z")
 })
 
-// FRIENDS //
+// FRIENDSHIPS //
 
-db.friends.insert({
-  "id":"antoinebanana",
+db.friendships.insert({
+  "id":"antoinebulle",
   "userId":"userantoine",
-  "tribeId":"tribebanana"
+  "friendId":"userbulle",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"bulleantoine",
+  "userId":"userbulle",
+  "friendId":"userantoine",
+  "status":"ACTIVE"
+})
+
+db.friendships.insert({
+  "id":"antoinejin",
+  "userId":"userantoine",
+  "friendId":"userjin",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"jinantoine",
+  "userId":"userjin",
+  "friendId":"userantoine",
+  "status":"ACTIVE"
+})
+
+db.friendships.insert({
+  "id":"antoinemya",
+  "userId":"userantoine",
+  "friendId":"usermya",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"myaantoine",
+  "userId":"usermya",
+  "friendId":"userantoine",
+  "status":"ACTIVE"
+})
+
+db.friendships.insert({
+  "id":"jinbulle",
+  "userId":"userjin",
+  "friendId":"userbulle",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"bullejin",
+  "userId":"userbulle",
+  "friendId":"userjin",
+  "status":"ACTIVE"
+})
+
+db.friendships.insert({
+  "id":"myabulle",
+  "userId":"usermya",
+  "friendId":"userbulle",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"bullemya",
+  "userId":"userbulle",
+  "friendId":"usermya",
+  "status":"ACTIVE"
+})
+
+db.friendships.insert({
+  "id":"antoinekarima",
+  "userId":"userantoine",
+  "friendId":"userkarima",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"karimaantoine",
+  "userId":"userkarima",
+  "friendId":"userantoine",
+  "status":"ACTIVE"
+})
+
+db.friendships.insert({
+  "id":"karimaenea",
+  "userId":"userkarima",
+  "friendId":"userenea",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"eneakarima",
+  "userId":"userenea",
+  "friendId":"userkarima",
+  "status":"ACTIVE"
 })
