@@ -1,23 +1,3 @@
-db.dropDatabase()
-
-db.users.drop()
-db.users.createIndex({"id": 1}, {"unique": true})
-
-db.tribes.drop()
-db.tribes.createIndex({"id": 1}, {"unique": true})
-
-db.memberships.drop()
-db.memberships.createIndex({"id": 1}, {"unique": true})
-
-db.friendships.drop()
-db.friendships.createIndex({"id": 1}, {"unique": true})
-
-db.events.drop()
-db.events.createIndex({"id": 1}, {"unique": true})
-
-db.participations.drop()
-db.participations.createIndex({"id": 1}, {"unique": true})
-
 // USERS //
 
 db.users.insert({
@@ -258,19 +238,6 @@ db.events.insert({
 // FRIENDSHIPS //
 
 db.friendships.insert({
-  "id":"antoinekarima",
-  "userId":"userantoine",
-  "friendId":"userkarima",
-  "status":"ACTIVE"
-})
-db.friendships.insert({
-  "id":"karimaantoine",
-  "userId":"userkarima",
-  "friendId":"userantoine",
-  "status":"ACTIVE"
-})
-
-db.friendships.insert({
   "id":"antoinebulle",
   "userId":"userantoine",
   "friendId":"userbulle",
@@ -305,6 +272,45 @@ db.friendships.insert({
 db.friendships.insert({
   "id":"myaantoine",
   "userId":"usermya",
+  "friendId":"userantoine",
+  "status":"ACTIVE"
+})
+
+db.friendships.insert({
+  "id":"jinbulle",
+  "userId":"userjin",
+  "friendId":"userbulle",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"bullejin",
+  "userId":"userbulle",
+  "friendId":"userjin",
+  "status":"ACTIVE"
+})
+
+db.friendships.insert({
+  "id":"myabulle",
+  "userId":"usermya",
+  "friendId":"userbulle",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"bullemya",
+  "userId":"userbulle",
+  "friendId":"usermya",
+  "status":"ACTIVE"
+})
+
+db.friendships.insert({
+  "id":"antoinekarima",
+  "userId":"userantoine",
+  "friendId":"userkarima",
+  "status":"ACTIVE"
+})
+db.friendships.insert({
+  "id":"karimaantoine",
+  "userId":"userkarima",
   "friendId":"userantoine",
   "status":"ACTIVE"
 })
