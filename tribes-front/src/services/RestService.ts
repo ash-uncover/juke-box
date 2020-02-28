@@ -10,6 +10,9 @@ import {
   FriendshipData,
   FriendshipPostData,
   FriendshipPatchData,
+  MessageData,
+  MessagePostData,
+  MessagePatchData,
   MembershipData,
   MembershipPostData,
   MembershipPatchData,
@@ -68,6 +71,19 @@ const RestService = {
       put: (dispatch: any, friendship: FriendshipData) => {},
       patch: (dispatch: any, friendship: FriendshipPatchData) => {},
       delete: (dispatch: any, id: string) => {},
+
+      messages: {
+        getAll: (dispatch: any, id: string) => {
+          dispatch(RestThreadsActions.restThreadsMessagesGetAllFetch(id))
+          delayedPromise(_request({ url: `/rest/threads/${id}/messages` }))
+            .then((result: Array<MessageData>) => {
+              dispatch(RestThreadsActions.restThreadsMessagesGetAllSuccess(id, result))
+            })
+            .catch((error: ErrorData) => {
+              dispatch(RestThreadsActions.restThreadsMessagesGetAllFailure(id, error))
+            })
+        },
+      }
     },
 
     tribes: {

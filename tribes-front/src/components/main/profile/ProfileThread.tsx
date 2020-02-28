@@ -4,12 +4,11 @@ import {
   useDispatcher,
   useEffect,
   useSelector,
+  useParams,
   useTranslation,
 } from '../../../utils/hooks'
 
 import { selectors as AuthSelectors } from '../../../store/auth'
-import { selectors as UsersSelectors } from '../../../store/rest/users'
-import { selectors as FriendshipsSelectors } from '../../../store/rest/friendships'
 import { selectors as ThreadsSelectors } from '../../../store/rest/threads'
 
 import {
@@ -21,11 +20,34 @@ import RestService from '../../../services/RestService'
 
 import './Profile.scss'
 
-/* PROFILE */
+interface ThreadRouteParamTypes {
+  threadId: string
+}
 
-interface ProfileThreadProps {}
+/* PROFILE THREAD */
+
+interface ProfileThreadProps {
+}
 
 const ProfileThread = (props: ProfileThreadProps) => {
+  const { threadId } = useParams<ThreadRouteParamTypes>()
+
+  const dispatch = useDispatcher()
+
+  const threadData = useSelector(ThreadsSelectors.restThreadDataSelector(threadId))
+  const threadStatus = useSelector(ThreadsSelectors.restThreadStatusSelector(threadId))
+
+  const messagesData = useSelector(ThreadsSelectors.restThreadDataSelector(threadId))
+  const messagesStatus = useSelector(ThreadsSelectors.restThreadStatusSelector(threadId))
+
+  useEffect(() => {
+    if (threadStatus === RequestState.NEVER) {
+      RestService.rest.threads.get(dispatch, threadId)
+    }
+    if (messagesStatus === RequestState.NEVER) {
+      RestService.rest.threads.messages.getAll(dispatch, threadId)
+    }
+  })
 
   return (
     <div className='ProfileThread'>
