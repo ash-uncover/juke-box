@@ -19,6 +19,15 @@ import {
 
 import RestService from '../../../services/RestService'
 
+import {
+  Link,
+  Redirect,
+  Switch,
+  Route,
+} from 'react-router-dom'
+
+import ProfileFriends from './ProfileFriends'
+import ProfileThreadContent from './ProfileThread'
 import FriendListItem from '../../commons/FriendListItem'
 
 import './Profile.scss'
@@ -32,9 +41,20 @@ const Profile = (props: ProfileProps) => {
   return (
     <div className='Profile MainContent-area'>
       <ProfileMenu />
-      <div>
-        toto
-      </div>
+      <Switch>
+        <Route path='/profile/friends'>
+          <ProfileFriends />
+        </Route>
+        <Route path='/profile/threads/:threadId'>
+          <ProfileThreadContent />
+        </Route>
+        <Route path='/profile'>
+          Profile
+        </Route>
+        <Route path='*'>
+          <Redirect to='/profile' />
+        </Route>
+      </Switch>
     </div>
   )
 }
@@ -53,10 +73,11 @@ const ProfileMenu = (props: ProfileMenuProps) => {
       </div>
       <div className='ProfileMenu-content MainContent-menu-section'>
         <div className='MainContent-menu-section-title'>
-          {t('main.profile.menu.section.friends')}
-        </div>
-        <div className='MainContent-menu-section-content'>
-          <ProfileFriendships />
+          <Link
+            to={`/profile/friends`}
+          >
+            {t('main.profile.menu.section.friends')}
+          </Link>
         </div>
       </div>
       <div className='ProfileMenu-content MainContent-menu-section'>
@@ -70,150 +91,6 @@ const ProfileMenu = (props: ProfileMenuProps) => {
     </div>
   )
 }
-
-/* PROFILE FRIENDSHIPS */
-
-interface ProfileFriendshipsProps {}
-
-const ProfileFriendships = (props: ProfileFriendshipsProps) => {
-  const { t } = useTranslation()
-
-  const dispatch = useDispatcher()
-
-  const userId = useSelector(AuthSelectors.authUserSelector)
-  const friendshipsData = useSelector(UsersSelectors.restUserFriendshipsDataSelector(userId))
-  const friendshipsStatus = useSelector(UsersSelectors.restUserFriendshipsStatusSelector(userId))
-
-  useEffect(() => {
-    if (friendshipsStatus === RequestState.NEVER) {
-      RestService.rest.users.friendships.getAll(dispatch, userId)
-    }
-  })
-
-  switch (friendshipsStatus) {
-    case RequestState.NEVER:
-    case RequestState.FETCHING: {
-      return (
-        <div>
-          Loading...
-        </div>
-      )
-    }
-    case RequestState.SUCCESS: {
-      return friendshipsData.map(
-        (id: string) => <ProfileFriendship key={id} id={id} />
-      )
-    }
-    case RequestState.FAILURE:
-    default: {
-      return (
-        <div>
-          Error
-        </div>
-      )
-    }
-  }
-}
-
-/* PROFILE FRIENDSHIP */
-
-export interface ProfileFriendshipProps {
-  id: string
-}
-
-export const ProfileFriendship = (props: ProfileFriendshipProps) => {
-  const dispatch = useDispatcher()
-
-  const friendshipData = useSelector(FriendshipsSelectors.restFriendshipDataSelector(props.id))
-  const friendshipStatus = useSelector(FriendshipsSelectors.restFriendshipStatusSelector(props.id))
-
-  useEffect(() => {
-    if (friendshipStatus === RequestState.NEVER) {
-      RestService.rest.friendships.get(dispatch, props.id)
-    }
-  })
-
-  switch (friendshipStatus) {
-    case RequestState.NEVER:
-    case RequestState.FETCHING: {
-      return (
-        <div>
-          Loading...
-        </div>
-      )
-    }
-    case RequestState.SUCCESS: {
-      return (
-        <ProfileFriend
-          id={friendshipData.friendId}
-        />
-      )
-    }
-    case RequestState.FAILURE:
-    default: {
-      return (
-        <div>
-          Error
-        </div>
-      )
-    }
-  }
-}
-
-
-/* PROFILE FRIEND */
-
-export interface ProfileFriendProps {
-  id: string
-}
-
-export const ProfileFriend = (props: ProfileFriendProps) => {
-  const dispatch = useDispatcher()
-
-  const userData = useSelector(UsersSelectors.restUserDataSelector(props.id))
-  const userStatus = useSelector(UsersSelectors.restUserStatusSelector(props.id))
-
-  useEffect(() => {
-    if (userStatus === RequestState.NEVER) {
-      RestService.rest.users.get(dispatch, props.id)
-    }
-  })
-
-  switch (userStatus) {
-    case RequestState.NEVER: {
-      return (
-        <div>
-          Not Loaded
-        </div>
-      )
-    }
-    case RequestState.FETCHING: {
-      return (
-        <div>
-          Loading...
-        </div>
-      )
-    }
-    case RequestState.SUCCESS: {
-      return (
-        <FriendListItem
-          name={userData.name}
-          image={userData.image}
-          status={userStatus || UserStatus.OFFLINE}
-        />
-      )
-    }
-    case RequestState.FAILURE:
-    default: {
-      return (
-        <div>
-          Error
-        </div>
-      )
-    }
-  }
-}
-
 
 /* PROFILE THREADS */
 
@@ -343,9 +220,14 @@ const ProfileThreadDirect = (props: ProfileThreadDirectProps) => {
     }
     case RequestState.SUCCESS: {
       return (
-        <div>
-          {userData.name}
-        </div>
+        <Link
+          to={`/profile/threads/${props.id}`}
+        >
+          <FriendListItem
+            name={userData.name}
+            image={userData.image}
+          />
+        </Link>
       )
     }
     case RequestState.FAILURE:

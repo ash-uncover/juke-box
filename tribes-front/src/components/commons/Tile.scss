@@ -1,0 +1,24 @@
+.Tile {
+  display: inline-block;
+  height: 6rem;
+  width: 6rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
+
+  background: lightgrey;
+  border: 1px solid grey;
+  border-radius: 0.5rem;
+
+  overflow: hidden;
+  text-align: center;
+
+  .Tile-image {
+    height: 4rem;
+    width: 4rem;
+    object-fit: cover;
+  }
+
+  .Tile-title {
+    text-align: center;
+  }
+}
