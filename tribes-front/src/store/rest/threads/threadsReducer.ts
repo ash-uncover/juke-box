@@ -38,9 +38,9 @@ export const initialThreadState = () => ({
   data: null,
   status: RequestState.NEVER,
   error: null,
-  membershipsData: null,
-  membershipsStatus: RequestState.NEVER,
-  membershipsError: null,
+  messagesData: null,
+  messagesStatus: RequestState.NEVER,
+  messagesError: null,
 })
 
 const getThreadState = (state: ThreadsState, id: string) => {

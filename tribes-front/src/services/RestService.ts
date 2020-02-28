@@ -1,6 +1,7 @@
 import store from '../store'
 
 import { Actions as AuthActions } from '../store/auth/authActions'
+import { Actions as RestMessagesActions } from '../store/rest/messages/messagesActions'
 import { Actions as RestThreadsActions } from '../store/rest/threads/threadsActions'
 import { Actions as RestTribesActions } from '../store/rest/tribes/tribesActions'
 import { Actions as RestUsersActions } from '../store/rest/users/usersActions'
@@ -56,6 +57,39 @@ const RestService = {
   },
 
   rest: {
+    messages: {
+      get: (dispatch: any, id: string) => {
+        dispatch(RestMessagesActions.restMessagesGetFetch(id))
+        delayedPromise(_request({ url: `/rest/messages/${id}` }))
+          .then((result: MessageData) => {
+            dispatch(RestMessagesActions.restMessagesGetSuccess(id, result))
+          })
+          .catch((error: ErrorData) => {
+            dispatch(RestMessagesActions.restMessagesGetFailure(id, error))
+          })
+      },
+      post: (dispatch: any, membership: MembershipPostData) => {},
+      put: (dispatch: any, membership: MembershipData) => {},
+      patch: (dispatch: any, membership: MembershipPatchData) => {},
+      delete: (dispatch: any, id: string) => {},
+    },
+
+    memberships: {
+      get: (dispatch: any, id: string) => {},
+      post: (dispatch: any, membership: MembershipPostData) => {},
+      put: (dispatch: any, membership: MembershipData) => {},
+      patch: (dispatch: any, membership: MembershipPatchData) => {},
+      delete: (dispatch: any, id: string) => {},
+    },
+
+    friendships: {
+      get: (dispatch: any, id: string) => {},
+      post: (dispatch: any, friendship: FriendshipPostData) => {},
+      put: (dispatch: any, friendship: FriendshipData) => {},
+      patch: (dispatch: any, friendship: FriendshipPatchData) => {},
+      delete: (dispatch: any, id: string) => {},
+    },
+
     threads: {
       get: (dispatch: any, id: string) => {
         dispatch(RestThreadsActions.restThreadsGetFetch(id))
@@ -168,22 +202,6 @@ const RestService = {
             })
         },
       },
-    },
-
-    memberships: {
-      get: (dispatch: any, id: string) => {},
-      post: (dispatch: any, membership: MembershipPostData) => {},
-      put: (dispatch: any, membership: MembershipData) => {},
-      patch: (dispatch: any, membership: MembershipPatchData) => {},
-      delete: (dispatch: any, id: string) => {},
-    },
-
-    friendships: {
-      get: (dispatch: any, id: string) => {},
-      post: (dispatch: any, friendship: FriendshipPostData) => {},
-      put: (dispatch: any, friendship: FriendshipData) => {},
-      patch: (dispatch: any, friendship: FriendshipPatchData) => {},
-      delete: (dispatch: any, id: string) => {},
     },
   }
 }

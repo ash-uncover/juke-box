@@ -1,6 +1,6 @@
 import { restSelector } from '../selectors'
 
-export const restMessagesSelector = (state: any) => restSelector(state).tribes
+export const restMessagesSelector = (state: any) => restSelector(state).messages
 
 export const restMessagesDataSelector = (state: any) => restMessagesSelector(state).data
 export const restMessagesStatusSelector = (state: any) => restMessagesSelector(state).status
