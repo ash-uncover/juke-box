@@ -239,6 +239,7 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
             {userData.name}
           </div>
           <div className={`ProfileThreadMessageText-separator`} />
+          <div className={`ProfileThreadMessageText-separator`} />
           <div className={`ProfileThreadMessageText-text`}>
             {messageData.text}
           </div>

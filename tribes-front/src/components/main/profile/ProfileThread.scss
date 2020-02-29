@@ -23,10 +23,11 @@
     flex-grow: 1;
     flex-shrink: 1;
 
+    margin-top: 0.25rem;
     margin-right: 0.25rem;
-    padding: 0.5rem;
+    padding: 0;
 
-    overflow: auto;
+    overflow-y: scroll;
 
     &::-webkit-scrollbar {
       // addresses the background of the bar itself. It is usually covered by the other elements
@@ -61,7 +62,7 @@
 
     .ProfileThreadMessageText {
       display: flex;
-      align-items: center;
+      align-items: start;
 
       margin: 0.5rem;
       padding: 0.5rem;
@@ -81,16 +82,23 @@
         text-transform: capitalize;
         font-family: monospace;
         font-size: 0.8rem;
+        line-height: 1.1rem;
+        flex-shrink: 0;
       }
       .ProfileThreadMessageText-separator {
-        width: 0.5rem;
+        width: 0.25rem;
+        flex-shrink: 0;
       }
       .ProfileThreadMessageText-user {
         user-select: text;
         font-weight: bold;
+        line-height: 1rem;
+        flex-shrink: 0;
       }
       .ProfileThreadMessageText-text {
         user-select: text;
+        line-height: 1rem;
+        flex-shrink: 1;
       }
     }
   }
@@ -102,6 +110,7 @@
     display: flex;
     align-items: center;
     margin: 0.5rem;
+    margin-right: 1rem;
 
     background-color: lightgrey;
     border-radius: 0.5rem;
