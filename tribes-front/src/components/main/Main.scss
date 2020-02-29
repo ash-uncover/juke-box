@@ -114,6 +114,7 @@ $main-menu-width: 4rem;
       .MainContent-menu {
         border-right: 2px solid $color-main-background;
         width: 14rem;
+        flex-shrink: 0;
 
         .MainContent-menu-header {
           height: 2.5rem;

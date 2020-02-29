@@ -110,6 +110,7 @@ const ProfileThreadMessages = (props: ProfileThreadMessagesProps) => {
         <div
           className={`ProfileThreadMessages`}
         >
+          <ProfileThreadStart />
           Loading...
         </div>
       )
@@ -121,6 +122,7 @@ const ProfileThreadMessages = (props: ProfileThreadMessagesProps) => {
         <div
           className={`ProfileThreadMessages`}
         >
+          <ProfileThreadStart />
           {messagesData.map((id: string) => (<ProfileThreadMessage key={id} id={id} />))}
         </div>
       )
@@ -131,11 +133,35 @@ const ProfileThreadMessages = (props: ProfileThreadMessagesProps) => {
         <div
           className={`ProfileThreadMessages`}
         >
+          <ProfileThreadStart />
           Error ProfileThreadMessages
         </div>
       )
     }
   }
+}
+
+/* PROFILE THREAD START */
+
+interface ProfileThreadStartProps {
+}
+
+const ProfileThreadStart = (props: ProfileThreadStartProps) => {
+  const { threadId } = useParams<ThreadRouteParamTypes>()
+  const {t } = useTranslation()
+  const messagesData = useSelector(ThreadsSelectors.restThreadMessagesDataSelector(threadId))
+
+  return (
+    <div
+      className={`ProfileThreadStart`}
+    >
+      {t('thread.start')}
+      <img
+        className={`ProfileThreadStart-image`}
+        src='/logo-big-grey.png'
+      />
+    </div>
+  )
 }
 
 /* PROFILE THREAD MESSAGE */
