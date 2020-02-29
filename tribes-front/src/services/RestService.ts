@@ -68,7 +68,16 @@ const RestService = {
             dispatch(RestMessagesActions.restMessagesGetFailure(id, error))
           })
       },
-      post: (dispatch: any, membership: MembershipPostData) => {},
+      post: (dispatch: any, message: MessagePostData) => {
+        dispatch(RestMessagesActions.restMessagesPostFetch(message.threadId))
+        return delayedPromise(_request({ url: `/rest/messages`, method: 'POST', body: message }))
+          .then((result: MessageData) => {
+            dispatch(RestMessagesActions.restMessagesPostSuccess(result))
+          })
+          .catch((error: ErrorData) => {
+            dispatch(RestMessagesActions.restMessagesPostFailure(error))
+          })
+      },
       put: (dispatch: any, membership: MembershipData) => {},
       patch: (dispatch: any, membership: MembershipPatchData) => {},
       delete: (dispatch: any, id: string) => {},
@@ -216,6 +225,10 @@ const _request = (reqParam: any) => {
       reqParam,
       { url: `${URL_BASE}${reqParam.url}` }
     )
+
+    if (params.body) {
+      params.json = true
+    }
 
     const auth = store.getState().auth
 

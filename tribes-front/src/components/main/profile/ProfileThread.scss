@@ -1,17 +1,56 @@
 .ProfileThread {
+  flex-grow: 1;
 
-  .ProfileThreadMessage {
-    padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+
+  .ProfileThreadMessages {
+    flex-grow: 1;
+
+    .ProfileThreadMessage {
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+
+      &.ProfileThreadMessage-currentUser {
+        background-color: lightgrey;
+        color: black;
+      }
+
+      &.ProfileThreadMessage-otherUser {
+        background-color: darkgrey;
+        color: black;
+      }
+    }
+  }
+
+  .ProfileThreadInput {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem;
+
+    background-color: lightgrey;
     border-radius: 0.5rem;
 
-    &.ProfileThreadMessage-currentUser {
-      background-color: lightgrey;
-      color: black;
+    .ProfileThreadInput-input {
+      flex-grow: 1;
+      height: 2rem;
+      border: 0;
+      padding: 0;
+      margin-left: 0.5rem;
+      outline: none;
+      background: transparent;
     }
 
-    &.ProfileThreadMessage-otherUser {
-      background-color: darkgrey;
-      color: black;
+    .ProfileThreadInput-action {
+      height: 2rem;
+      padding: 0;
+      width: 1.75rem;
+      border: 0;
+      background: transparent;
+    }
+
+    .ProfileThreadInput-action:last-child {
+      margin-right: 0.25rem;
     }
   }
 }

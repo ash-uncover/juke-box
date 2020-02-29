@@ -1,6 +1,7 @@
 import React from 'react'
 
 import {
+  useState,
   useDispatcher,
   useEffect,
   useSelector,
@@ -12,6 +13,13 @@ import { selectors as AuthSelectors } from '../../../store/auth'
 import { selectors as MessagesSelectors } from '../../../store/rest/messages'
 import { selectors as ThreadsSelectors } from '../../../store/rest/threads'
 import { selectors as UsersSelectors } from '../../../store/rest/users'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faSignInAlt,
+  faBackspace,
+  faPaperPlane,
+} from '@fortawesome/free-solid-svg-icons'
 
 import {
   RequestState,
@@ -59,6 +67,7 @@ const ProfileThread = (props: ProfileThreadProps) => {
         <div className='ProfileThread'>
           Thread trololo
           <ProfileThreadMessages />
+          <ProfileThreadInput />
         </div>
       )
     }
@@ -170,7 +179,7 @@ const ProfileThreadMessage = (props: ProfileThreadMessageProps) => {
   }
 }
 
-/* PROFILE THREAD MESSAGE */
+/* PROFILE THREAD MESSAGE TEXT */
 
 interface ProfileThreadMessageTextProps {
   id: string
@@ -226,6 +235,76 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
       )
     }
   }
+}
+
+
+/* PROFILE THREAD INPUT */
+
+interface ProfileThreadInputProps {}
+
+const ProfileThreadInput = (props: ProfileThreadInputProps) => {
+  const dispatch = useDispatcher()
+  const { t } = useTranslation()
+
+  const { threadId } = useParams<ThreadRouteParamTypes>()
+  const userId = useSelector(AuthSelectors.authUserSelector)
+
+  const [text, setText] = useState('')
+  const [sending, setSending] = useState(false)
+
+  const onSendMessage = (event: React.FormEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    RestService.rest.messages.post(
+      dispatch,
+      {
+        threadId,
+        userId,
+        text,
+        date: Date.now().toString()
+      }
+    )
+      .then(() => setText('ok'))
+      .catch(() => setText('nok'))
+  }
+
+  return (
+    <form
+      className={`ProfileThreadInput`}
+    >
+      <input
+        className={`ProfileThreadInput-input`}
+        value={text}
+        type='text'
+        placeholder={t('placeholder')}
+        onChange={(event) => setText(event.target.value)}
+      />
+      <button
+        className={`ProfileThreadInput-action`}
+        type='reset'
+        title={t('message.clear')}
+        onClick={() => setText('')}
+      >
+        <FontAwesomeIcon
+          icon={faBackspace}
+          color={'white'}
+          size='1x'
+        />
+      </button>
+      <button
+        className={`ProfileThreadInput-action`}
+        type='submit'
+        title={t('message.send')}
+        disabled={!text}
+        onClick={onSendMessage}
+      >
+        <FontAwesomeIcon
+          icon={faPaperPlane}
+          color={'white'}
+          size='1x'
+        />
+      </button>
+    </form>
+  )
 }
 
 export default ProfileThread
