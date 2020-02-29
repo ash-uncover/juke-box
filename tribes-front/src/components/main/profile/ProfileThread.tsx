@@ -96,20 +96,22 @@ const ProfileThreadMessages = (props: ProfileThreadMessagesProps) => {
   const messagesStatus = useSelector(ThreadsSelectors.restThreadMessagesStatusSelector(threadId))
 
   useEffect(() => {
-    if (messagesStatus === RequestState.NEVER) {
+    if (messagesStatus === RequestState.NEVER || messagesStatus === RequestState.OUTDATED) {
       RestService.rest.threads.messages.getAll(dispatch, threadId)
     }
   })
 
   switch (messagesStatus) {
     case RequestState.NEVER:
-    case RequestState.FETCHING: {
+    case RequestState.FETCHING_FIRST: {
       return (
         <div>
           Loading...
         </div>
       )
     }
+    case RequestState.FETCHING:
+    case RequestState.OUTDATED:
     case RequestState.SUCCESS: {
       return (
         <div
@@ -254,6 +256,7 @@ const ProfileThreadInput = (props: ProfileThreadInputProps) => {
 
   const onSendMessage = (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault()
+    setSending(true)
     RestService.rest.messages.post(
       dispatch,
       {
@@ -263,8 +266,12 @@ const ProfileThreadInput = (props: ProfileThreadInputProps) => {
         date: Date.now().toString()
       }
     )
-      .then(() => setText('ok'))
-      .catch(() => setText('nok'))
+      .then(() => {
+        setText('')
+      })
+      .finally(() => {
+        setSending(false)
+      })
   }
 
   return (
@@ -275,6 +282,7 @@ const ProfileThreadInput = (props: ProfileThreadInputProps) => {
         className={`ProfileThreadInput-input`}
         value={text}
         type='text'
+        disabled={sending}
         placeholder={t('placeholder')}
         onChange={(event) => setText(event.target.value)}
       />

@@ -2,6 +2,8 @@ import * as express from 'express'
 import * as http from 'http'
 import * as WebSocket from 'ws'
 
+import SCHEMAS from '../database/schemas'
+
 import {
   UUID,
   dateString,
@@ -86,6 +88,7 @@ const received = (ws: WebSocket, message: string) => {
 
 wss.on('connection', (ws: ExtWebSocket) => {
   ws['_id'] = '#' + UUID.next()
+  DATA.sessions[ws['_id']] = ws
 
   ws.on('message', (message: string) => {
     const action = received(ws, message)
@@ -132,6 +135,27 @@ wss.on('connection', (ws: ExtWebSocket) => {
         }
         break
       }
+
+      case '@@REST/MESSAGES/POST_SUCCESS': {
+        const id = action.payload.message.id
+        SCHEMAS.MESSAGES.model.findOne({ id }).exec((err, dataMessage) => {
+          err ?
+            LOGGER.error('@@REST/MESSAGES/POST_SUCCESS - Cannot retreive created message')
+          :
+            SCHEMAS.THREADS.model.findOne({ id: dataMessage.threadId }).exec((err, dataThread) => {
+              err ?
+                LOGGER.error('@@REST/MESSAGES/POST_SUCCESS - Cannot retreive parent thread')
+              :
+                dataThread.userId.forEach((userId) => {
+                  DATA.users[userId].sessions.forEach((sessionId) => {
+                    const session = DATA.sessions[sessionId]
+                    send(session, '@@SERVER/THREAD/MESSAGE_POSTED', { threadId: dataMessage.threadId })
+                  })
+                })
+            })
+        })
+        break
+      }
     }
   })
 
@@ -142,6 +166,7 @@ setInterval(() => {
   wss.clients.forEach((ws: ExtWebSocket) => {
     if (ws.isAlive === false) {
       LOGGER.warn(`${ws['_id']} - ${ws['_userId']} - CONNECTION LOST`)
+      delete DATA.sessions[ws['_id']]
       return ws.terminate()
     }
     ws.isAlive = false

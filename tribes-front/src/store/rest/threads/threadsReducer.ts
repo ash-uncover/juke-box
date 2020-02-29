@@ -3,6 +3,7 @@ import { Reducer } from 'redux'
 import { ActionsTypes as ThreadsActionsTypes} from './threadsActions'
 import { ActionsTypes as AuthActionsTypes } from '../../auth/authActions'
 import { ActionsTypes as UsersActionsTypes } from '../users/usersActions'
+import { ActionsTypes as SocketActionsTypes } from '../../socket/socketActions'
 
 import {
   ErrorData,
@@ -92,7 +93,7 @@ const reducer: Reducer<ThreadsState> = (state = initialState, action) => {
 
       const threadState = getThreadState(state, id)
       threadState.messagesError = null
-      threadState.messagesStatus = RequestState.FETCHING
+      threadState.messagesStatus = threadState.messagesStatus === RequestState.NEVER ? RequestState.FETCHING_FIRST : RequestState.FETCHING
 
       return { ...state }
     }
@@ -125,6 +126,16 @@ const reducer: Reducer<ThreadsState> = (state = initialState, action) => {
       threads.forEach((thread: ThreadData) => {
         getThreadState(state, thread.id)
       })
+
+      return { ...state }
+    }
+
+    // SOCKET events
+
+    case SocketActionsTypes.SERVER_THREAD_MESSAGE_POSTED: {
+      const { threadId } = action.payload
+
+      state.data[threadId].messagesStatus = RequestState.OUTDATED
 
       return { ...state }
     }
