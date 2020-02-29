@@ -331,12 +331,18 @@ db.friendships.insert({
 // THREADS //
 
 db.threads.insert({
-  "id":"threadantoinekarima",
+  "id":"threadantoinemya",
   "name":"",
   "type":"DIRECT",
-  "userId":["userantoine","userkarima"]
+  "userId":["userantoine","usermya"]
 })
 
+db.threads.insert({
+  "id":"threadantoinejin",
+  "name":"",
+  "type":"DIRECT",
+  "userId":["userantoine","userjin"]
+})
 
 db.threads.insert({
   "id":"threadantoinebulle",
@@ -348,28 +354,28 @@ db.threads.insert({
 // MESSAGES //
 
 db.messages.insert({
-  "id":"messageantoinekarima1",
-  "threadId":"threadantoinekarima",
+  "id":"messageantoinemya1",
+  "threadId":"threadantoinemya",
   "userId":"userantoine",
   "date":new Date("2020-02-2711:50:23Z"),
-  "text":"Hello",
-  "readBy":["userkarima"]
+  "text":"Sois sage ma fille",
+  "readBy":[]
 })
 
 db.messages.insert({
-  "id":"messageantoinekarima2",
-  "threadId":"threadantoinekarima",
-  "userId":"userkarima",
+  "id":"messageantoinejin1",
+  "threadId":"threadantoinejin",
+  "userId":"userantoine",
   "date":new Date("2020-02-2711:51:45Z"),
-  "text":"Coucou :)",
+  "text":"Sois sage mon fils",
   "readBy":[]
 })
 
 db.messages.insert({
   "id":"messageantoinebulle1",
   "threadId":"threadantoinebulle",
-  "userId":"userbulle",
+  "userId":"userantoine",
   "date":new Date("2020-01-2710:50:23Z"),
-  "text":"Coucou Antoine",
+  "text":"plop",
   "readBy":[]
 })
