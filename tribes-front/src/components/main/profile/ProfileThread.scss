@@ -23,9 +23,41 @@
     flex-grow: 1;
     flex-shrink: 1;
 
+    margin-right: 0.25rem;
     padding: 0.5rem;
 
     overflow: auto;
+
+    &::-webkit-scrollbar {
+      // addresses the background of the bar itself. It is usually covered by the other elements
+      background: $color-third-background;
+      width: 0.5rem;
+    }
+    &::-webkit-scrollbar-button {
+      // addresses the directional buttons on the scrollbar
+      display: none;
+    }
+    &::-webkit-scrollbar-track {
+      // addresses the empty space “below” the progress bar
+      display: none;
+    }
+    &::-webkit-scrollbar-track-piece {
+      // is the top-most layer of the the progress bar not covered by the draggable scrolling element (thumb)
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      // addresses the draggable scrolling element that resizes depending on the size of the scrollable element
+      background: $color-main-background;
+      border-radius: 0.5rem;
+    }
+    &::-webkit-scrollbar-corner {
+      // addresses the (usually) bottom corner of the scrollable element, where two scrollbars might meet
+      display: none;
+    }
+    &::-webkit-resizer {
+      // addresses the draggable resizing handle that appears above the scrollbar-corner at the bottom corner of some elements
+      display: none;
+    }
 
     .ProfileThreadMessageText {
       display: flex;
