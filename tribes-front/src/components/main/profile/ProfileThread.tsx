@@ -48,7 +48,7 @@ const ProfileThread = (props: ProfileThreadProps) => {
   const threadStatus = useSelector(ThreadsSelectors.restThreadStatusSelector(threadId))
 
   useEffect(() => {
-    if (threadStatus === RequestState.NEVER) {
+    if (threadStatus === RequestState.NEVER || threadStatus === RequestState.OUTDATED) {
       RestService.rest.threads.get(dispatch, threadId)
     }
   })
@@ -105,7 +105,9 @@ const ProfileThreadMessages = (props: ProfileThreadMessagesProps) => {
     case RequestState.NEVER:
     case RequestState.FETCHING_FIRST: {
       return (
-        <div>
+        <div
+          className={`ProfileThreadMessages`}
+        >
           Loading...
         </div>
       )
@@ -124,7 +126,9 @@ const ProfileThreadMessages = (props: ProfileThreadMessagesProps) => {
     case RequestState.FAILURE:
     default: {
       return (
-        <div>
+        <div
+          className={`ProfileThreadMessages`}
+        >
           Error ProfileThreadMessages
         </div>
       )

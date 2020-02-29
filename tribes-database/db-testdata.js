@@ -351,6 +351,13 @@ db.threads.insert({
   "userId":["userantoine","userbulle"]
 })
 
+db.threads.insert({
+  "id":"threadkarimaenea",
+  "name":"",
+  "type":"DIRECT",
+  "userId":["userkarima","userenea"]
+})
+
 // MESSAGES //
 
 db.messages.insert({
@@ -377,5 +384,14 @@ db.messages.insert({
   "userId":"userantoine",
   "date":new Date("2020-01-2710:50:23Z"),
   "text":"plop",
+  "readBy":[]
+})
+
+db.messages.insert({
+  "id":"messagekarimaenea1",
+  "threadId":"threadkarimaenea",
+  "userId":"userkarima",
+  "date":new Date("2020-01-2710:50:23Z"),
+  "text":"Coucou Enéa",
   "readBy":[]
 })
