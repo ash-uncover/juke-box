@@ -65,7 +65,9 @@ const ProfileThread = (props: ProfileThreadProps) => {
     case RequestState.SUCCESS: {
       return (
         <div className='ProfileThread'>
-          Thread trololo
+          <div className='ProfileThread-header'>
+            Thread trololo
+          </div>
           <ProfileThreadMessages />
           <ProfileThreadInput />
         </div>
@@ -207,35 +209,46 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
     }
   })
 
+  let className = 'ProfileThreadMessageText '
+
   switch (userStatus) {
     case RequestState.NEVER:
     case RequestState.FETCHING: {
       return (
-        <div>
+        <div className={className}>
           Loading ProfileThreadMessageText...
         </div>
       )
     }
     case RequestState.SUCCESS: {
-      let className = 'ProfileThreadMessage '
       if (currentUserId === messageData.userId) {
-        className += 'ProfileThreadMessage-currentUser'
+        className += 'ProfileThreadMessageText-currentUser'
       } else {
-        className += 'ProfileThreadMessage-otherUser'
+        className += 'ProfileThreadMessageText-otherUser'
       }
-
+      const date = new Date(messageData.date)
+      const hours = date.getHours().toString().padStart(2, '0')
+      const minutes = date.getMinutes().toString().padStart(2, '0')
       return (
-        <div
-          className={className}
-        >
-          {userData.name} - {messageData.text}
+        <div className={className}>
+          <div className={`ProfileThreadMessageText-time`}>
+            {`${hours}:${minutes}`}
+          </div>
+          <div className={`ProfileThreadMessageText-separator`} />
+          <div className={`ProfileThreadMessageText-user`}>
+            {userData.name}
+          </div>
+          <div className={`ProfileThreadMessageText-separator`} />
+          <div className={`ProfileThreadMessageText-text`}>
+            {messageData.text}
+          </div>
         </div>
       )
     }
     case RequestState.FAILURE:
     default: {
       return (
-        <div>
+        <div className={className}>
           Error ProfileThreadMessageText
         </div>
       )

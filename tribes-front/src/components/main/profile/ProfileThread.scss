@@ -1,24 +1,56 @@
+@import '../../../variables.scss';
+
 .ProfileThread {
   flex-grow: 1;
 
   display: flex;
   flex-direction: column;
+  background: $color-third-background;
+
+  .ProfileThread-header {
+    height: 2.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    border-bottom: 1px solid $color-main-background;
+  }
 
   .ProfileThreadMessages {
     flex-grow: 1;
 
-    .ProfileThreadMessage {
+    .ProfileThreadMessageText {
+      display: flex;
+      align-items: center;
+
+      margin: 0.5rem 1rem;
       padding: 0.5rem;
       border-radius: 0.5rem;
 
-      &.ProfileThreadMessage-currentUser {
+      &.ProfileThreadMessageText-currentUser {
         background-color: lightgrey;
         color: black;
       }
 
-      &.ProfileThreadMessage-otherUser {
+      &.ProfileThreadMessageText-otherUser {
         background-color: darkgrey;
         color: black;
+      }
+      .ProfileThreadMessageText-time {
+        user-select: text;
+        text-transform: capitalize;
+        font-family: monospace;
+        font-size: 0.8rem;
+      }
+      .ProfileThreadMessageText-separator {
+        width: 0.5rem;
+      }
+      .ProfileThreadMessageText-user {
+        user-select: text;
+        font-weight: bold;
+      }
+      .ProfileThreadMessageText-text {
+        user-select: text;
       }
     }
   }
