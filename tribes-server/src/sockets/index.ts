@@ -156,6 +156,22 @@ wss.on('connection', (ws: ExtWebSocket) => {
         })
         break
       }
+
+      case '@@REST/MESSAGES/DELETE_SUCCESS': {
+        const { threadId } = action.payload.message
+        SCHEMAS.THREADS.model.findOne({ id: threadId }).exec((err, dataThread) => {
+          err ?
+            LOGGER.error('@@REST/MESSAGES/DELETE_SUCCESS - Cannot retreive parent thread')
+          :
+            dataThread.userId.forEach((userId) => {
+              DATA.users[userId].sessions.forEach((sessionId) => {
+                const session = DATA.sessions[sessionId]
+                send(session, '@@SERVER/THREAD/MESSAGE_DELETED', action.payload)
+              })
+            })
+        })
+        break
+      }
     }
   })
 

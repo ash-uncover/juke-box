@@ -140,6 +140,18 @@ const reducer: Reducer<ThreadsState> = (state = initialState, action) => {
       return { ...state }
     }
 
+    case SocketActionsTypes.SERVER_THREAD_MESSAGE_DELETED: {
+      const { threadId, id } = action.payload.message
+
+      const messages = state.data[threadId].messagesData.slice()
+      const index = messages.indexOf(id)
+      messages.splice(index, 1)
+
+      state.data[threadId].messagesData = messages
+
+      return { ...state }
+    }
+
     // DELETE /auth
 
     case AuthActionsTypes.AUTH_DELETE_SUCCESS: {

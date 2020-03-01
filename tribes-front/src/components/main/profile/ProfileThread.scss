@@ -77,6 +77,8 @@
     }
 
     .ProfileThreadMessageText {
+      position: relative;
+
       display: flex;
       align-items: start;
       padding: 0.25rem 0.5rem;
@@ -84,12 +86,10 @@
       &:hover {
         background: $color-third-highlight-background;
         color: $color-third-highlight-foreground;
-      }
 
-      &.ProfileThreadMessageText-currentUser {
-      }
-
-      &.ProfileThreadMessageText-otherUser {
+        .ProfileThreadMessageText-actions {
+          display: block;
+        }
       }
 
       .ProfileThreadMessageText-time {
@@ -114,6 +114,26 @@
         user-select: text;
         line-height: 1rem;
         flex-shrink: 1;
+      }
+      .ProfileThreadMessageText-actions {
+        position: absolute;
+        bottom: 100%;
+        right: 0;
+
+        display: none;
+
+        border: 1px solid $color-secondary-foreground;
+        border-radius: 0.25rem;
+        padding: 0.25rem;
+        background: $color-secondary-background;
+        color: $color-secondary-foreground;
+        .ProfileThreadMessageText-action {
+          &:hover {
+            path {
+              fill: red;
+            }
+          }
+        }
       }
     }
   }

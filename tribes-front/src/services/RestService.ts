@@ -69,18 +69,27 @@ const RestService = {
           })
       },
       post: (dispatch: any, message: MessagePostData) => {
-        dispatch(RestMessagesActions.restMessagesPostFetch(message.threadId))
+        dispatch(RestMessagesActions.restMessagesPostFetch(message))
         return delayedPromise(_request({ url: `/rest/messages`, method: 'POST', body: message }))
           .then((result: MessageData) => {
             dispatch(RestMessagesActions.restMessagesPostSuccess(result))
           })
           .catch((error: ErrorData) => {
-            dispatch(RestMessagesActions.restMessagesPostFailure(error))
+            dispatch(RestMessagesActions.restMessagesPostFailure(message, error))
           })
       },
       put: (dispatch: any, membership: MembershipData) => {},
       patch: (dispatch: any, membership: MembershipPatchData) => {},
-      delete: (dispatch: any, id: string) => {},
+      delete: (dispatch: any, message: MessageData) => {
+        dispatch(RestMessagesActions.restMessagesDeleteFetch(message))
+        return delayedPromise(_request({ url: `/rest/messages/${message.id}`, method: 'DELETE' }))
+          .then(() => {
+            dispatch(RestMessagesActions.restMessagesDeleteSuccess(message))
+          })
+          .catch((error: ErrorData) => {
+            dispatch(RestMessagesActions.restMessagesDeleteFailure(message, error))
+          })
+      },
     },
 
     memberships: {

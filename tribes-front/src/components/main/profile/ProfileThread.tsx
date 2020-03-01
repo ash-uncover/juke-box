@@ -19,7 +19,13 @@ import {
   faSignInAlt,
   faBackspace,
   faPaperPlane,
+  faTrashAlt,
+  faEdit,
 } from '@fortawesome/free-solid-svg-icons'
+
+import {
+  Button
+} from '../../commons'
 
 import {
   RequestState,
@@ -221,7 +227,7 @@ interface ProfileThreadMessageTextProps {
 
 const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
   const dispatch = useDispatcher()
-
+  const { t } = useTranslation()
   const currentUserId = useSelector(AuthSelectors.authUserSelector)
 
   const messageData = useSelector(MessagesSelectors.restMessageDataSelector(props.id))
@@ -235,6 +241,14 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
     }
   })
 
+  const onEditMessage = () => {
+
+  }
+
+  const onDeleteMessage = () => {
+    RestService.rest.messages.delete(dispatch, messageData)
+  }
+
   let className = 'ProfileThreadMessageText '
 
   switch (userStatus) {
@@ -247,8 +261,19 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
       )
     }
     case RequestState.SUCCESS: {
+      const actions = []
       if (currentUserId === messageData.userId) {
         className += 'ProfileThreadMessageText-currentUser'
+        actions.push({
+          title: t('message.edit'),
+          onClick: onEditMessage,
+          icon: faEdit,
+        })
+        actions.push({
+          title: t('message.delete'),
+          onClick: onDeleteMessage,
+          icon: faTrashAlt,
+        })
       } else {
         className += 'ProfileThreadMessageText-otherUser'
       }
@@ -269,6 +294,21 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
           <div className={`ProfileThreadMessageText-text`}>
             {messageData.text}
           </div>
+          { actions.length &&
+            <div className={`ProfileThreadMessageText-actions`}>
+              {actions.map((action, index) => (
+                <Button
+                  key={index}
+                  className={`ProfileThreadMessageText-action`}
+                  title={action.title}
+                  onClick={action.onClick}
+                  icon={action.icon}
+                  color={'white'}
+                  size='1x'
+                />
+              ))}
+            </div>
+          }
         </div>
       )
     }
@@ -330,31 +370,24 @@ const ProfileThreadInput = (props: ProfileThreadInputProps) => {
         placeholder={t('placeholder')}
         onChange={(event) => setText(event.target.value)}
       />
-      <button
+      <Button
         className={`ProfileThreadInput-action`}
         type='reset'
         title={t('message.clear')}
         onClick={() => setText('')}
-      >
-        <FontAwesomeIcon
-          icon={faBackspace}
-          color={'white'}
-          size='1x'
-        />
-      </button>
-      <button
+        icon={faBackspace}
+        color={'white'}
+        size='1x'
+      />
+      <Button
         className={`ProfileThreadInput-action`}
         type='submit'
         title={t('message.send')}
-        disabled={!text}
         onClick={onSendMessage}
-      >
-        <FontAwesomeIcon
-          icon={faPaperPlane}
-          color={'white'}
-          size='1x'
-        />
-      </button>
+        icon={faPaperPlane}
+        color={'white'}
+        size='1x'
+      />
     </form>
   )
 }
