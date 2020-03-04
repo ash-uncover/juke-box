@@ -11,13 +11,13 @@ import {
 } from '../utils'
 
 import Logger from 'ap-utils-logger'
-const LOGGER = new Logger('server-sockets')
+const LOGGER = new Logger('SERVER - SOCKET')
 
 interface ExtWebSocket extends WebSocket {
   isAlive: boolean
 }
 
-const PING_INTERVAL = 30000
+const PING_INTERVAL = 10000
 
 const app = express()
 const server = http.createServer(app)
@@ -44,7 +44,10 @@ const addUserSession = (userId, connId) => {
 const removeUserSession = (userId, connId) => {
   getOrInitUser(userId)
   const index = DATA.users[userId].sessions.indexOf(connId)
-  DATA.users[userId].sessions.splice(index, 1)
+  if (index > -1) {
+    DATA.users[userId].sessions.splice(index, 1)
+  }
+  delete DATA.sessions[connId]
   return DATA.users[userId].sessions
 }
 
@@ -70,15 +73,25 @@ const hasListeners = (userId) => {
   return DATA.users[userId].listeners.length > 0
 }
 
+const removeSession = (sessionId) => {
+  const session = DATA.sessions[sessionId]
+  if (session && session['_userId']) {
+    removeUserSession(session['_userId'], sessionId)
+  } else {
+    delete DATA.sessions[sessionId]
+  }
+}
+
+
 const send = (ws, type = '@@UNKNOWN', payload = {}) => {
-  LOGGER.info(`${ws['_id'].substring(0, 4)} - ${nowString()} - ${ws['_userId']} - TO - ${type}`)
+  LOGGER.debug(`${ws['_id'].substring(0, 4)} - ${nowString()} - ${ws['_userId']} - TO - ${type}`)
   ws.send(JSON.stringify({ type, payload }))
 }
 
 const received = (ws: WebSocket, message: string) => {
   try {
     const action = JSON.parse(message)
-    LOGGER.info(`${ws['_id'].substring(0, 4)} - ${nowString()} - ${ws['_userId']} - FROM - ${action.type}`)
+    LOGGER.debug(`${ws['_id'].substring(0, 4)} - ${nowString()} - ${ws['_userId']} - FROM - ${action.type}`)
     return action
   } catch (error) {
     LOGGER.error(`Failed to parse: ${message}`)
@@ -89,6 +102,10 @@ const received = (ws: WebSocket, message: string) => {
 wss.on('connection', (ws: ExtWebSocket) => {
   ws['_id'] = '#' + UUID.next()
   DATA.sessions[ws['_id']] = ws
+
+  ws.on('close', (message: string) => {
+    removeSession(ws['_id'])
+  })
 
   ws.on('message', (message: string) => {
     const action = received(ws, message)
@@ -105,9 +122,13 @@ wss.on('connection', (ws: ExtWebSocket) => {
         ws['_userId'] = id
         addUserSession(id, ws['_id'])
 
+        LOGGER.warn(`${ws['_id']} - ${ws['_userId']} - CONNCET`)
+
         wss.clients.forEach((client) => {
-          if (client['_userId'] !== id) {
-            send(ws, '@@SERVER/USER_CONNECTED', { id })
+          const userId = client['_userId']
+          if (userId && userId !== id) {
+            send(ws, '@@SERVER/USER_CONNECTED', { id: userId })
+            send(client, '@@SERVER/USER_CONNECTED', { id })
           }
         })
         break
@@ -118,8 +139,9 @@ wss.on('connection', (ws: ExtWebSocket) => {
         if (remaningConn.length === 0) {
           const id = ws['_userId']
           wss.clients.forEach((client) => {
-            if (client['_userId'] !== ws['_userId']) {
-              send(ws, '@@SERVER/USER_DISCONNECTED', { id })
+            LOGGER.warn(client['_id'])
+            if (client['_userId'] !== id) {
+              send(client, '@@SERVER/USER_DISCONNECTED', { id })
             }
           })
         }
@@ -173,18 +195,23 @@ wss.on('connection', (ws: ExtWebSocket) => {
         break
       }
     }
+
   })
 
   LOGGER.info('Connected to WS server ' + ws['_id'])
 })
 
 setInterval(() => {
+  LOGGER.info('-------------- INTERVAL ----------------------')
+  console.log(DATA.users)
+  console.log(Object.keys(DATA.sessions))
   wss.clients.forEach((ws: ExtWebSocket) => {
     if (ws.isAlive === false) {
       LOGGER.warn(`${ws['_id']} - ${ws['_userId']} - CONNECTION LOST`)
-      delete DATA.sessions[ws['_id']]
+      removeUserSession(ws['_userId'], ws['_id'])
       return ws.terminate()
     }
+    LOGGER.warn(`${ws['_id']} - ${ws['_userId']} - STILL ALIVE`)
     ws.isAlive = false
     send(ws, '@@SOCKET/CONNECTION_CHECK')
   })

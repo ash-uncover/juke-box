@@ -4,7 +4,11 @@ import {
   Actions as SocketActions,
   ActionsTypes as SocketActionsTypes
 } from '../store/socket/socketActions'
+
 import { faHeartbeat } from '@fortawesome/free-solid-svg-icons'
+
+import Logger from 'ap-utils-logger'
+const LOGGER = new Logger('SocketService')
 
 const CONN_TIMEOUT = 1000
 
@@ -23,8 +27,9 @@ const SocketService = {
 
       this.onmessage = (event: any) => {
         const actionData = JSON.parse(event.data)
+        LOGGER.info(actionData)
         switch (actionData.type) {
-          case SocketActionsTypes.SOCKECT_CONNECTION_CHECK: {
+          case SocketActionsTypes.SOCKET_CONNECTION_CHECK: {
             SocketService.heartbeat(dispatch)
             _socket.send(event.data)
             break
@@ -43,6 +48,7 @@ const SocketService = {
   },
 
   heartbeat: (dispatch: any) => {
+    LOGGER.info('heartbeat')
     clearTimeout(_pingTimeout)
     _pingTimeout = setTimeout(() => {
       SocketService.close(dispatch)

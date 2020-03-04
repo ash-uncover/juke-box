@@ -20,19 +20,19 @@ export const initialState: SocketState = {
 
 const reducer: Reducer<SocketState> = (state = initialState, action) => {
   switch (action.type) {
-    case ActionsTypes.SOCKECT_CONNECT_FETCH: {
+    case ActionsTypes.SOCKET_CONNECT_FETCH: {
       return {
         ...state,
         status: SocketStatus.CONNECTING,
       }
     }
-    case ActionsTypes.SOCKECT_CONNECT_SUCCESS: {
+    case ActionsTypes.SOCKET_CONNECT_SUCCESS: {
       return {
         ...state,
         status: SocketStatus.CONNECTED,
       }
     }
-    case ActionsTypes.SOCKECT_CONNECT_FAILURE: {
+    case ActionsTypes.SOCKET_CONNECT_FAILURE: {
       return {
         ...state,
         status: SocketStatus.CONNECTION_ERROR,

@@ -32,6 +32,8 @@ import './App.scss'
 
 interface AppProps {}
 
+let socketInterval: any
+
 const App = (props: AppProps) => {
   const dispatch = useDispatch()
 

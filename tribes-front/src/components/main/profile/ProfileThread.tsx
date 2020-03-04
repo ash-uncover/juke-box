@@ -294,7 +294,7 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
           <div className={`ProfileThreadMessageText-text`}>
             {messageData.text}
           </div>
-          { actions.length &&
+          { actions.length ?
             <div className={`ProfileThreadMessageText-actions`}>
               {actions.map((action, index) => (
                 <Button
@@ -308,6 +308,8 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
                 />
               ))}
             </div>
+          :
+            ''
           }
         </div>
       )
