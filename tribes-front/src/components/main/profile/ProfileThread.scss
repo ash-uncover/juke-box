@@ -5,7 +5,7 @@
 
   display: flex;
   flex-direction: column;
-  background: $color-third-background;
+  background: $layer3-color-background;
 
   .ProfileThread-header {
     flex-grow: 0;
@@ -16,7 +16,7 @@
     display: flex;
     align-items: center;
     padding: 0 1rem;
-    border-bottom: 1px solid $color-main-background;
+    border-bottom: 1px solid $layer1-color-background;
   }
 
   .ProfileThreadMessages {
@@ -31,7 +31,7 @@
 
     &::-webkit-scrollbar {
       // addresses the background of the bar itself. It is usually covered by the other elements
-      background: $color-third-background;
+      background: $layer3-color-background;
       width: 0.5rem;
     }
     &::-webkit-scrollbar-button {
@@ -48,7 +48,7 @@
     }
     &::-webkit-scrollbar-thumb {
       // addresses the draggable scrolling element that resizes depending on the size of the scrollable element
-      background: $color-main-background;
+      background: $layer1-color-background;
       border-radius: 0.5rem;
     }
     &::-webkit-scrollbar-corner {
@@ -84,8 +84,8 @@
       padding: 0.25rem 0.5rem;
 
       &:hover {
-        background: $color-third-highlight-background;
-        color: $color-third-highlight-foreground;
+        background: $layer3-color-highlight-background;
+        color: $layer3-color-highlight-foreground;
 
         .ProfileThreadMessageText-actions {
           display: block;
@@ -122,11 +122,11 @@
 
         display: none;
 
-        border: 1px solid $color-secondary-foreground;
+        border: 1px solid $layer2-color-foreground;
         border-radius: 0.25rem;
         padding: 0.25rem;
-        background: $color-secondary-background;
-        color: $color-secondary-foreground;
+        background: $layer2-color-background;
+        color: $layer2-color-foreground;
         .ProfileThreadMessageText-action {
           &:hover {
             path {

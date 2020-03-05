@@ -97,17 +97,23 @@ export interface MainMenuProps {}
 
 export const MainMenu = (props: MainMenuProps) => {
   return (
-    <div className='MainMenu'>
-      <Link
+    <div
+      className='MainMenu'
+    >
+      <div
         className='MainMenuItem'
-        to='/profile'
       >
-        <FontAwesomeIcon
-          icon={faHiking}
-          color='white'
-          size='2x'
-        />
-      </Link>
+        <Link
+          className='MainMenuItem-inner'
+          to='/profile'
+        >
+          <FontAwesomeIcon
+            icon={faHiking}
+            color='white'
+            size='2x'
+          />
+        </Link>
+      </div>
       <div
         className='MainMenu-separator'
       />
@@ -118,11 +124,15 @@ export const MainMenu = (props: MainMenuProps) => {
       <div
         className='MainMenuItem'
       >
-        <FontAwesomeIcon
-          icon={faPlusCircle}
-          color='white'
-          size='3x'
-        />
+        <div
+          className='MainMenuItem-inner'
+        >
+          <FontAwesomeIcon
+            icon={faPlusCircle}
+            color='white'
+            size='3x'
+          />
+        </div>
       </div>
     </div>
   )
@@ -273,20 +283,24 @@ export interface MainMenuItemProps {
 export const MainMenuItem = (props: MainMenuItemProps) => {
   if (props.to) {
     return (
-      <Link
+      <div
         className='MainMenuItem'
-        to={props.to}
       >
-        {props.image
-        ?
-          <Image
-            src={props.image}
-            title={props.name}
-          />
-        :
-          props.name
-        }
-      </Link>
+        <Link
+          className='MainMenuItem-inner'
+          to={props.to}
+        >
+          {props.image
+          ?
+            <Image
+              src={props.image}
+              title={props.name}
+            />
+          :
+            props.name
+          }
+        </Link>
+      </div>
     )
   }
   return (

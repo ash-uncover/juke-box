@@ -5,5 +5,5 @@ import * as selectors from './socketSelectors'
 export {
   actions,
   reducer,
-  selectors
+  selectors,
 }
