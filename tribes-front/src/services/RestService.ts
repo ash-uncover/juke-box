@@ -39,7 +39,9 @@ const RestService = {
   auth: {
     get: (dispatch: any, username: string, password: string) => {
       dispatch(AuthActions.authGetFetch(username, password))
-      delayedPromise(_request({ url: `/auth` }))
+      return delayedPromise(_request({
+        url: `/auth`,
+      }))
         .then((result: UserData) => {
           dispatch(AuthActions.authGetSuccess(result))
         })
@@ -60,7 +62,9 @@ const RestService = {
     messages: {
       get: (dispatch: any, id: string) => {
         dispatch(RestMessagesActions.restMessagesGetFetch(id))
-        delayedPromise(_request({ url: `/rest/messages/${id}` }))
+        return delayedPromise(_request({
+          url: `/rest/messages/${id}`,
+        }))
           .then((result: MessageData) => {
             dispatch(RestMessagesActions.restMessagesGetSuccess(id, result))
           })
@@ -70,7 +74,11 @@ const RestService = {
       },
       post: (dispatch: any, message: MessagePostData) => {
         dispatch(RestMessagesActions.restMessagesPostFetch(message))
-        return delayedPromise(_request({ url: `/rest/messages`, method: 'POST', body: message }))
+        return delayedPromise(_request({
+          url: `/rest/messages`,
+          method: 'POST',
+          body: message
+        }))
           .then((result: MessageData) => {
             dispatch(RestMessagesActions.restMessagesPostSuccess(result))
           })
@@ -80,9 +88,13 @@ const RestService = {
       },
       patch: (dispatch: any, message: MessagePatchData) => {
         dispatch(RestMessagesActions.restMessagesPatchFetch(message))
-        return delayedPromise(_request({ url: `/rest/messages/${message.id}`, method: 'PATCH' }))
+        return delayedPromise(_request({
+          url: `/rest/messages/${message.id}`,
+          method: 'PATCH',
+          body: message,
+        }))
           .then((result: MessageData) => {
-            dispatch(RestMessagesActions.restMessagesPatchSuccess(result))
+            dispatch(RestMessagesActions.restMessagesPatchSuccess(message))
           })
           .catch((error: ErrorData) => {
             dispatch(RestMessagesActions.restMessagesPatchFailure(message, error))
@@ -90,7 +102,10 @@ const RestService = {
       },
       delete: (dispatch: any, message: MessageData) => {
         dispatch(RestMessagesActions.restMessagesDeleteFetch(message))
-        return delayedPromise(_request({ url: `/rest/messages/${message.id}`, method: 'DELETE' }))
+        return delayedPromise(_request({
+          url: `/rest/messages/${message.id}`,
+          method: 'DELETE'
+        }))
           .then(() => {
             dispatch(RestMessagesActions.restMessagesDeleteSuccess(message))
           })
@@ -119,7 +134,9 @@ const RestService = {
     threads: {
       get: (dispatch: any, id: string) => {
         dispatch(RestThreadsActions.restThreadsGetFetch(id))
-        delayedPromise(_request({ url: `/rest/threads/${id}` }))
+        return delayedPromise(_request({
+          url: `/rest/threads/${id}`,
+        }))
           .then((result: ThreadData) => {
             dispatch(RestThreadsActions.restThreadsGetSuccess(id, result))
           })
@@ -135,7 +152,9 @@ const RestService = {
       messages: {
         getAll: (dispatch: any, id: string) => {
           dispatch(RestThreadsActions.restThreadsMessagesGetAllFetch(id))
-          delayedPromise(_request({ url: `/rest/threads/${id}/messages` }))
+          return delayedPromise(_request({
+            url: `/rest/threads/${id}/messages`,
+          }))
             .then((result: Array<MessageData>) => {
               dispatch(RestThreadsActions.restThreadsMessagesGetAllSuccess(id, result))
             })
@@ -149,7 +168,9 @@ const RestService = {
     tribes: {
       get: (dispatch: any, id: string) => {
         dispatch(RestTribesActions.restTribesGetFetch(id))
-        delayedPromise(_request({ url: `/rest/tribes/${id}` }))
+        return delayedPromise(_request({
+          url: `/rest/tribes/${id}`,
+        }))
           .then((result: TribeData) => {
             dispatch(RestTribesActions.restTribesGetSuccess(id, result))
           })
@@ -165,7 +186,9 @@ const RestService = {
       memberships: {
         getAll: (dispatch: any, id: string) => {
           dispatch(RestTribesActions.restTribesMembershipsGetAllFetch(id))
-          delayedPromise(_request({ url: `/rest/tribes/${id}/memberships` }))
+          return delayedPromise(_request({
+            url: `/rest/tribes/${id}/memberships`,
+          }))
             .then((result: Array<MembershipData>) => {
               dispatch(RestTribesActions.restTribesMembershipsGetAllSuccess(id, result))
             })
@@ -179,7 +202,9 @@ const RestService = {
     users: {
       get: (dispatch: any, id: string) => {
         dispatch(RestUsersActions.restUsersGetFetch(id))
-        delayedPromise(_request({ url: `/rest/users/${id}` }))
+        return delayedPromise(_request({
+          url: `/rest/users/${id}`,
+        }))
           .then((result: UserData) => {
             dispatch(RestUsersActions.restUsersGetSuccess(id, result))
           })
@@ -193,7 +218,9 @@ const RestService = {
       friendships: {
         getAll: (dispatch: any, id: string) => {
           dispatch(RestUsersActions.restUsersFriendshipsGetAllFetch(id))
-          delayedPromise(_request({ url: `/rest/users/${id}/friendships` }))
+          return delayedPromise(_request({
+            url: `/rest/users/${id}/friendships`,
+          }))
             .then((result: Array<FriendshipData>) => {
               dispatch(RestUsersActions.restUsersFriendshipsGetAllSuccess(id, result))
             })
@@ -206,7 +233,9 @@ const RestService = {
       memberships: {
         getAll: (dispatch: any, id: string) => {
           dispatch(RestUsersActions.restUsersMembershipsGetAllFetch(id))
-          delayedPromise(_request({ url: `/rest/users/${id}/memberships` }))
+          return delayedPromise(_request({
+            url: `/rest/users/${id}/memberships`,
+          }))
             .then((result: Array<MembershipData>) => {
               dispatch(RestUsersActions.restUsersMembershipsGetAllSuccess(id, result))
             })
@@ -219,7 +248,9 @@ const RestService = {
       threads: {
         getAll: (dispatch: any, id: string) => {
           dispatch(RestUsersActions.restUsersThreadsGetAllFetch(id))
-          delayedPromise(_request({ url: `/rest/users/${id}/threads` }))
+          return delayedPromise(_request({
+            url: `/rest/users/${id}/threads`,
+          }))
             .then((result: Array<ThreadData>) => {
               dispatch(RestUsersActions.restUsersThreadsGetAllSuccess(id, result))
             })

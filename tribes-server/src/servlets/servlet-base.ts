@@ -6,6 +6,9 @@ import {
   HttpStatus
 } from '../utils'
 
+import Logger from 'ap-utils-logger'
+const LOGGER = new Logger('servlet-base')
+
 export const defaultGetAll = (schema, req, res, next) => {
   schema.model.find().select('-_id -__v').exec((err, data) => {
     err ? res.status(HttpStatus.ERROR).send(err) : res.json(data)
@@ -38,7 +41,7 @@ export const defaultPut = (schema, req, res, next, onError) => {
     } else if (data) {
       Object.assign(data, removeReserved(req.body))
       data.save((err) => {
-        err ? (onError ? onError(err) : res.status(HttpStatus.ERROR).send(err)) : res.sendStatus(HttpStatus.REMOVED)
+        err ? (onError ? onError(err) : res.status(HttpStatus.ERROR).send(err)) : res.sendStatus(HttpStatus.OK)
       })
     } else {
       res.sendStatus(HttpStatus.NOT_FOUND)
@@ -53,7 +56,7 @@ export const defaultPatch = (schema, req, res, next, onError) => {
     } else if (data) {
       Object.assign(data, removeReserved(req.body))
       data.save((err) => {
-        err ? (onError ? onError(err) : res.status(HttpStatus.ERROR).send(err)) : res.sendStatus(HttpStatus.REMOVED)
+        err ? (onError ? onError(err) : res.status(HttpStatus.ERROR).send(err)) : res.sendStatus(HttpStatus.OK)
       })
     } else {
       res.sendStatus(HttpStatus.NOT_FOUND)

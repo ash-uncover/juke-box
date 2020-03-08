@@ -55,6 +55,19 @@ const Message = (props: MessageProps) => {
     setFocused(false)
   }
 
+  const onKeyUp = (event: any) => {
+    switch (event.key) {
+      case 'Escape': {
+        props.onCancelEdit()
+        break
+      }
+      case 'Enter': {
+        props.onValidateEdit(text)
+        break
+      }
+    }
+  }
+
   return (
     <div
       className={buildClassName('Message', props.className, props.isEdit ? 'Message-edit' : null)}
@@ -76,9 +89,10 @@ const Message = (props: MessageProps) => {
             onFocus={onFocus}
             onBlur={onBlur}
             onChange={(event) => setText(event.target.value)}
+            onKeyUp={onKeyUp}
           />
           <div className={`Message-footer`}>
-            {t('')}
+            {t('message.footer')}
           </div>
         </div>
       :

@@ -43,7 +43,7 @@ export const Actions = {
   restMessagesPostFailure: (message: MessagePostData, error: ErrorData) => action(ActionsTypes.REST_MESSAGES_POST_FAILURE, { error, message }),
 
   restMessagesPatchFetch: (message: MessagePatchData) => action(ActionsTypes.REST_MESSAGES_PATCH_FETCH, { message }),
-  restMessagesPatchSuccess: (message: MessageData) => action(ActionsTypes.REST_MESSAGES_PATCH_SUCCESS, { message }),
+  restMessagesPatchSuccess: (message: MessagePatchData) => action(ActionsTypes.REST_MESSAGES_PATCH_SUCCESS, { message }),
   restMessagesPatchFailure: (message: MessagePatchData, error: ErrorData) => action(ActionsTypes.REST_MESSAGES_PATCH_FAILURE, { error, message }),
 
   restMessagesDeleteFetch: (message: MessageData) => action(ActionsTypes.REST_MESSAGES_DELETE_FETCH, { message: extractIds(message) }),

@@ -27,7 +27,6 @@ import {
 import {
   Button,
   Message,
-  MessageEdit,
 } from '../../commons'
 
 import {
@@ -211,20 +210,21 @@ const ProfileThreadMessage = (props: ProfileThreadMessageProps) => {
   const messageStatus = useSelector(MessagesSelectors.restMessageStatusSelector(props.id))
 
   useEffect(() => {
-    if (messageStatus === RequestState.NEVER) {
+    if (messageStatus === RequestState.NEVER || messageStatus === RequestState.OUTDATED) {
       RestService.rest.messages.get(dispatch, props.id)
     }
   })
 
   switch (messageStatus) {
     case RequestState.NEVER:
-    case RequestState.FETCHING: {
+    case RequestState.FETCHING_FIRST: {
       return (
         <div>
           Loading...
         </div>
       )
     }
+    case RequestState.FETCHING:
     case RequestState.SUCCESS: {
       return (
         <ProfileThreadMessageText
@@ -260,13 +260,17 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
   const { threadId } = useParams<ThreadRouteParamTypes>()
 
   const messageData = useSelector(MessagesSelectors.restMessageDataSelector(props.id))
+  const messageStatus = useSelector(MessagesSelectors.restMessageStatusSelector(props.id))
 
   const userData = useSelector(UsersSelectors.restUserDataSelector(messageData.userId))
   const userStatus = useSelector(UsersSelectors.restUserStatusSelector(messageData.userId))
 
   useEffect(() => {
-    if (userStatus === RequestState.NEVER) {
+    if (userStatus === RequestState.NEVER || userStatus === RequestState.OUTDATED) {
       RestService.rest.users.get(dispatch, messageData.userId)
+    }
+    if (messageStatus === RequestState.NEVER || messageStatus === RequestState.OUTDATED) {
+      RestService.rest.messages.get(dispatch, props.id)
     }
   })
 
@@ -280,6 +284,7 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
 
   const onDoEditMessage = (text: string) => {
     RestService.rest.messages.patch(dispatch, { id: props.id, text })
+      .then(() => AppService.profile.messageRelease(dispatch))
   }
 
   const onDeleteMessage = () => {

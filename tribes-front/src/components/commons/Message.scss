@@ -2,7 +2,7 @@
   position: relative;
 
   display: flex;
-  align-items: start;
+  align-items: center;
   justify-content: center;
 
   &:hover {
@@ -13,19 +13,19 @@
 
   .Message-header {
     display: flex;
-    align-items: start;
-    justify-content: center;
+    align-items: center;
+    justify-content: start;
     padding: 0.25rem 0.5rem;
 
-    .Message-time {
+    .Message-date {
       user-select: text;
       text-transform: capitalize;
       font-family: monospace;
-      font-size: 0.8rem;
-      line-height: 1.1rem;
+      font-size: 0.85rem;
+      line-height: 1.2rem;
       flex-shrink: 0;
 
-      margin-right: 0.25rem;
+      margin-right: 0.35rem;
     }
 
     .Message-user {
@@ -54,14 +54,31 @@
 
     border: 1px solid;
     border-radius: 0.25rem;
-    padding: 0.25rem;
+    padding: 0.5rem;
+    .Message-action {
+      margin: 0.5rem;
+    }
   }
 
   &.Message-edit {
     flex-direction: column;
-    .Message-input {
-      margin: 0 1rem;
+    align-items: start;
+    .Message-content {
+      padding: 0 1rem;
       width: calc(100% - 2rem);
+      .Message-input {
+        width: 100%;
+        border-radius: 0.5rem;
+        background: lightgrey;
+        padding: 0.5rem;;
+        outline: none;
+        border: none;
+      }
+    }
+    .Message-footer {
+      padding: 0 1rem;
+      width: 100%;
+      text-align: right;
     }
   }
 }

@@ -53,7 +53,7 @@ const reducer: Reducer<MessagesState> = (state = initialState, action) => {
 
       const messageState = getMessageState(state, id)
       messageState.error = null
-      messageState.status = RequestState.FETCHING
+      messageState.status = messageState.status === RequestState.NEVER ? RequestState.FETCHING_FIRST : RequestState.FETCHING
 
       return { ...state }
     }
@@ -74,6 +74,18 @@ const reducer: Reducer<MessagesState> = (state = initialState, action) => {
       messageState.data = null
       messageState.error = error
       messageState.status = RequestState.FAILURE
+
+      return { ...state }
+    }
+
+    // PUT /messages/{messageId}
+    // PATCH /messages/{messageId}
+
+    case MessagesActionsTypes.REST_MESSAGES_PATCH_SUCCESS: {
+      const { message } = action.payload
+
+      const messageState = getMessageState(state, message.id)
+      messageState.status = RequestState.OUTDATED
 
       return { ...state }
     }

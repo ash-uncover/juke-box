@@ -4,6 +4,7 @@ import {
   defaultPost,
   defaultGet,
   defaultPut,
+  defaultPatch,
   defaultDelete,
 } from '../servlet-base'
 
@@ -27,7 +28,7 @@ export const putMessage = function(req, res, next) {
 
 export const patchMessage = function(req, res, next) {
   LOGGER.debug('PATCH ' + req.url)
-  defaultPut(SCHEMAS.MESSAGES, req, res, next, null)
+  defaultPatch(SCHEMAS.MESSAGES, req, res, next, null)
 }
 
 export const deleteMessage = function(req, res, next) {
