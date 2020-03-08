@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import {
   useState,
+  useRef,
+  useTranslation,
 } from '../../utils/hooks'
 
 import {
@@ -21,28 +23,71 @@ export interface MessageActionsProps {
 }
 
 export interface MessageProps {
-  className?: string | Array<string>,
+  className?: string,
   time: string,
   user: string,
   text: string,
+  isEdit?: boolean,
+  showActions?: boolean,
   actions: Array<MessageActionsProps>,
+  onCancelEdit: any,
+  onValidateEdit: any,
 }
 
 const Message = (props: MessageProps) => {
+  const { t } = useTranslation()
+  const [text, setText] = useState(props.text)
+  const [focused, setFocused] = useState(false)
+
+  const input = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (input && input.current) {
+      input.current.focus()
+    }
+  })
+
+  const onFocus = () => {
+    setFocused(true)
+  }
+
+  const onBlur = () => {
+    setFocused(false)
+  }
+
   return (
     <div
-      className={buildClassName('Message', props.className)}
+      className={buildClassName('Message', props.className, props.isEdit ? 'Message-edit' : null)}
     >
-      <div className={`Message-date`}>
-        {props.time}
+      <div className={`Message-header`}>
+        <div className={`Message-date`}>
+          {props.time}
+        </div>
+        <div className={`Message-user`}>
+          {props.user}
+        </div>
       </div>
-      <div className={`Message-user`}>
-        {props.user}
-      </div>
-      <div className={`Message-text`}>
-        {props.text}
-      </div>
-      { props.actions.length ?
+      { props.isEdit ?
+        <div className={`Message-content`}>
+          <input
+            className={`Message-input`}
+            ref={input}
+            value={text}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            onChange={(event) => setText(event.target.value)}
+          />
+          <div className={`Message-footer`}>
+            {t('')}
+          </div>
+        </div>
+      :
+        <div className={`Message-text`}>
+          {props.text}
+        </div>
+      }
+
+      { props.showActions && props.actions.length ?
         <div className={`Message-actions`}>
           {props.actions.map((action, index) => (
             <Button

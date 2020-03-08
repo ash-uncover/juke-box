@@ -1,5 +1,6 @@
 import {
   useEffect as useEffectBase,
+  useRef as useRefBase,
   useState as useStateBase,
 } from 'react'
 
@@ -19,6 +20,7 @@ import {
 import SocketService from '../services/SocketService'
 
 export const useEffect = useEffectBase
+export const useRef = useRefBase
 export const useState = useStateBase
 export const useParams = useParamsBase
 export const useDispatch = useDispatchBase

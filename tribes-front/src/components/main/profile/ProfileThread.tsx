@@ -27,6 +27,7 @@ import {
 import {
   Button,
   Message,
+  MessageEdit,
 } from '../../commons'
 
 import {
@@ -38,6 +39,7 @@ import AppService from '../../../services/AppService'
 import RestService from '../../../services/RestService'
 
 import './ProfileThread.scss'
+import ProfileFriendships from './ProfileFriends'
 
 interface ThreadRouteParamTypes {
   threadId: string
@@ -272,6 +274,14 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
     AppService.profile.messageEdit(dispatch, threadId, props.id)
   }
 
+  const onCancelEditMessage = () => {
+    AppService.profile.messageRelease(dispatch)
+  }
+
+  const onDoEditMessage = (text: string) => {
+    RestService.rest.messages.patch(dispatch, { id: props.id, text })
+  }
+
   const onDeleteMessage = () => {
     RestService.rest.messages.delete(dispatch, messageData)
   }
@@ -288,15 +298,8 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
       )
     }
     case RequestState.SUCCESS: {
-      if (props.isEdit) {
-        return (
-          <div className={className}>
-            edit
-          </div>
-        )
-      }
       const actions = []
-      if (props.canEdit && currentUserId === messageData.userId) {
+      if (currentUserId === messageData.userId) {
         actions.push({
           title: t('message.edit'),
           onClick: onEditMessage,
@@ -318,6 +321,10 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
           user={userData.name}
           text={messageData.text}
           actions={actions}
+          isEdit={props.isEdit}
+          showActions={props.canEdit}
+          onCancelEdit={onCancelEditMessage}
+          onValidateEdit={onDoEditMessage}
         />
       )
     }

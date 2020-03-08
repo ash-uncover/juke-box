@@ -78,8 +78,16 @@ const RestService = {
             dispatch(RestMessagesActions.restMessagesPostFailure(message, error))
           })
       },
-      put: (dispatch: any, membership: MembershipData) => {},
-      patch: (dispatch: any, membership: MembershipPatchData) => {},
+      patch: (dispatch: any, message: MessagePatchData) => {
+        dispatch(RestMessagesActions.restMessagesPatchFetch(message))
+        return delayedPromise(_request({ url: `/rest/messages/${message.id}`, method: 'PATCH' }))
+          .then((result: MessageData) => {
+            dispatch(RestMessagesActions.restMessagesPatchSuccess(result))
+          })
+          .catch((error: ErrorData) => {
+            dispatch(RestMessagesActions.restMessagesPatchFailure(message, error))
+          })
+      },
       delete: (dispatch: any, message: MessageData) => {
         dispatch(RestMessagesActions.restMessagesDeleteFetch(message))
         return delayedPromise(_request({ url: `/rest/messages/${message.id}`, method: 'DELETE' }))

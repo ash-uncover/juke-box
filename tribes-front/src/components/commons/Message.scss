@@ -3,7 +3,7 @@
 
   display: flex;
   align-items: start;
-  padding: 0.25rem 0.5rem;
+  justify-content: center;
 
   &:hover {
     .Message-actions {
@@ -11,30 +11,38 @@
     }
   }
 
-  .Message-time {
-    user-select: text;
-    text-transform: capitalize;
-    font-family: monospace;
-    font-size: 0.8rem;
-    line-height: 1.1rem;
-    flex-shrink: 0;
+  .Message-header {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    padding: 0.25rem 0.5rem;
 
-    margin-right: 0.25rem;
-  }
+    .Message-time {
+      user-select: text;
+      text-transform: capitalize;
+      font-family: monospace;
+      font-size: 0.8rem;
+      line-height: 1.1rem;
+      flex-shrink: 0;
 
-  .Message-user {
-    user-select: text;
-    font-weight: bold;
-    line-height: 1rem;
-    flex-shrink: 0;
+      margin-right: 0.25rem;
+    }
 
-    margin-right: 0.25rem;
+    .Message-user {
+      user-select: text;
+      font-weight: bold;
+      line-height: 1rem;
+      flex-shrink: 0;
+
+      margin-right: 0.25rem;
+    }
   }
 
   .Message-text {
     user-select: text;
     line-height: 1rem;
     flex-shrink: 1;
+    flex-grow: 1;
   }
 
   .Message-actions {
@@ -47,5 +55,13 @@
     border: 1px solid;
     border-radius: 0.25rem;
     padding: 0.25rem;
+  }
+
+  &.Message-edit {
+    flex-direction: column;
+    .Message-input {
+      margin: 0 1rem;
+      width: calc(100% - 2rem);
+    }
   }
 }
