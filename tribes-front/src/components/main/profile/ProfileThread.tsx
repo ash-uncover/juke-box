@@ -9,6 +9,7 @@ import {
   useTranslation,
 } from '../../../utils/hooks'
 
+import { selectors as ProfileSelectors } from '../../../store/app/profile'
 import { selectors as AuthSelectors } from '../../../store/auth'
 import { selectors as MessagesSelectors } from '../../../store/rest/messages'
 import { selectors as ThreadsSelectors } from '../../../store/rest/threads'
@@ -24,7 +25,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
-  Button
+  Button,
+  Message,
 } from '../../commons'
 
 import {
@@ -32,6 +34,7 @@ import {
   UserStatus,
 } from '../../../utils/constants'
 
+import AppService from '../../../services/AppService'
 import RestService from '../../../services/RestService'
 
 import './ProfileThread.scss'
@@ -53,9 +56,17 @@ const ProfileThread = (props: ProfileThreadProps) => {
   const threadData = useSelector(ThreadsSelectors.restThreadDataSelector(threadId))
   const threadStatus = useSelector(ThreadsSelectors.restThreadStatusSelector(threadId))
 
+  const messageEdit = useSelector(ProfileSelectors.appProfileMessageEditSelector)
+
   useEffect(() => {
     if (threadStatus === RequestState.NEVER || threadStatus === RequestState.OUTDATED) {
       RestService.rest.threads.get(dispatch, threadId)
+    }
+  })
+
+  useEffect(() => {
+    if (messageEdit && threadId !== messageEdit.threadId) {
+      AppService.profile.messageRelease(dispatch)
     }
   })
 
@@ -103,6 +114,8 @@ const ProfileThreadMessages = (props: ProfileThreadMessagesProps) => {
   const messagesData = useSelector(ThreadsSelectors.restThreadMessagesDataSelector(threadId))
   const messagesStatus = useSelector(ThreadsSelectors.restThreadMessagesStatusSelector(threadId))
 
+  const messageEdit = useSelector(ProfileSelectors.appProfileMessageEditSelector)
+
   useEffect(() => {
     if (messagesStatus === RequestState.NEVER || messagesStatus === RequestState.OUTDATED) {
       RestService.rest.threads.messages.getAll(dispatch, threadId)
@@ -129,7 +142,14 @@ const ProfileThreadMessages = (props: ProfileThreadMessagesProps) => {
           className={`ProfileThreadMessages`}
         >
           <ProfileThreadStart />
-          {messagesData.map((id: string) => (<ProfileThreadMessage key={id} id={id} />))}
+          {messagesData.map((id: string) => (
+            <ProfileThreadMessage
+              key={id}
+              id={id}
+              canEdit={!messageEdit}
+              isEdit={messageEdit && messageEdit.messageId === id}
+            />
+          ))}
         </div>
       )
     }
@@ -173,7 +193,9 @@ const ProfileThreadStart = (props: ProfileThreadStartProps) => {
 /* PROFILE THREAD MESSAGE */
 
 interface ProfileThreadMessageProps {
-  id: string
+  id: string,
+  canEdit?: boolean,
+  isEdit?: boolean,
 }
 
 const ProfileThreadMessage = (props: ProfileThreadMessageProps) => {
@@ -205,6 +227,8 @@ const ProfileThreadMessage = (props: ProfileThreadMessageProps) => {
       return (
         <ProfileThreadMessageText
           id={props.id}
+          canEdit={props.canEdit}
+          isEdit={props.isEdit}
         />
       )
     }
@@ -222,13 +246,16 @@ const ProfileThreadMessage = (props: ProfileThreadMessageProps) => {
 /* PROFILE THREAD MESSAGE TEXT */
 
 interface ProfileThreadMessageTextProps {
-  id: string
+  id: string,
+  canEdit?: boolean,
+  isEdit?: boolean,
 }
 
 const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
   const dispatch = useDispatcher()
   const { t } = useTranslation()
   const currentUserId = useSelector(AuthSelectors.authUserSelector)
+  const { threadId } = useParams<ThreadRouteParamTypes>()
 
   const messageData = useSelector(MessagesSelectors.restMessageDataSelector(props.id))
 
@@ -242,14 +269,14 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
   })
 
   const onEditMessage = () => {
-
+    AppService.profile.messageEdit(dispatch, threadId, props.id)
   }
 
   const onDeleteMessage = () => {
     RestService.rest.messages.delete(dispatch, messageData)
   }
 
-  let className = 'ProfileThreadMessageText '
+  let className = 'ProfileThreadMessageText'
 
   switch (userStatus) {
     case RequestState.NEVER:
@@ -261,9 +288,15 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
       )
     }
     case RequestState.SUCCESS: {
+      if (props.isEdit) {
+        return (
+          <div className={className}>
+            edit
+          </div>
+        )
+      }
       const actions = []
-      if (currentUserId === messageData.userId) {
-        className += 'ProfileThreadMessageText-currentUser'
+      if (props.canEdit && currentUserId === messageData.userId) {
         actions.push({
           title: t('message.edit'),
           onClick: onEditMessage,
@@ -274,44 +307,18 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
           onClick: onDeleteMessage,
           icon: faTrashAlt,
         })
-      } else {
-        className += 'ProfileThreadMessageText-otherUser'
       }
       const date = new Date(messageData.date)
       const hours = date.getHours().toString().padStart(2, '0')
       const minutes = date.getMinutes().toString().padStart(2, '0')
       return (
-        <div className={className}>
-          <div className={`ProfileThreadMessageText-time`}>
-            {`${hours}:${minutes}`}
-          </div>
-          <div className={`ProfileThreadMessageText-separator`} />
-          <div className={`ProfileThreadMessageText-user`}>
-            {userData.name}
-          </div>
-          <div className={`ProfileThreadMessageText-separator`} />
-          <div className={`ProfileThreadMessageText-separator`} />
-          <div className={`ProfileThreadMessageText-text`}>
-            {messageData.text}
-          </div>
-          { actions.length ?
-            <div className={`ProfileThreadMessageText-actions`}>
-              {actions.map((action, index) => (
-                <Button
-                  key={index}
-                  className={`ProfileThreadMessageText-action`}
-                  title={action.title}
-                  onClick={action.onClick}
-                  icon={action.icon}
-                  color={'white'}
-                  size='1x'
-                />
-              ))}
-            </div>
-          :
-            ''
-          }
-        </div>
+        <Message
+          className={className}
+          time={`${hours}:${minutes}`}
+          user={userData.name}
+          text={messageData.text}
+          actions={actions}
+        />
       )
     }
     case RequestState.FAILURE:

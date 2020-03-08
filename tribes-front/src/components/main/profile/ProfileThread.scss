@@ -77,60 +77,18 @@
     }
 
     .ProfileThreadMessageText {
-      position: relative;
-
-      display: flex;
-      align-items: start;
-      padding: 0.25rem 0.5rem;
-
-      &:hover {
+      &.Message:hover {
         background: $layer3-color-highlight-background;
         color: $layer3-color-highlight-foreground;
-
-        .ProfileThreadMessageText-actions {
-          display: block;
-        }
       }
-
-      .ProfileThreadMessageText-time {
-        user-select: text;
-        text-transform: capitalize;
-        font-family: monospace;
-        font-size: 0.8rem;
-        line-height: 1.1rem;
-        flex-shrink: 0;
-      }
-      .ProfileThreadMessageText-separator {
-        width: 0.25rem;
-        flex-shrink: 0;
-      }
-      .ProfileThreadMessageText-user {
-        user-select: text;
-        font-weight: bold;
-        line-height: 1rem;
-        flex-shrink: 0;
-      }
-      .ProfileThreadMessageText-text {
-        user-select: text;
-        line-height: 1rem;
-        flex-shrink: 1;
-      }
-      .ProfileThreadMessageText-actions {
-        position: absolute;
-        bottom: 100%;
-        right: 0;
-
-        display: none;
-
-        border: 1px solid $layer2-color-foreground;
-        border-radius: 0.25rem;
-        padding: 0.25rem;
+      .Message-actions {
+        border-color: $layer2-color-foreground;
         background: $layer2-color-background;
         color: $layer2-color-foreground;
-        .ProfileThreadMessageText-action {
+        .Message-action {
           &:hover {
             path {
-              fill: red;
+              fill: green;
             }
           }
         }

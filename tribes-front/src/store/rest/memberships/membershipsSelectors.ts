@@ -1,4 +1,4 @@
-import { restSelector } from '../selectors'
+import { restSelector } from '../restSelectors'
 
 export const restMembershipsSelector = (state: any) => restSelector(state).memberships
 
