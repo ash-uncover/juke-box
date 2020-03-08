@@ -42,6 +42,9 @@ const Message = (props: MessageProps) => {
   const input = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
+    if (!props.isEdit) {
+      setText(props.text)
+    }
     if (input && input.current) {
       input.current.focus()
     }

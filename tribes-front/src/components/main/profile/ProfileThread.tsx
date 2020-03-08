@@ -283,8 +283,13 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
   }
 
   const onDoEditMessage = (text: string) => {
-    RestService.rest.messages.patch(dispatch, { id: props.id, text })
-      .then(() => AppService.profile.messageRelease(dispatch))
+    if (text.trim()) {
+      RestService.rest.messages.patch(dispatch, { id: props.id, text })
+        .then(() => AppService.profile.messageRelease(dispatch))
+    } else {
+      RestService.rest.messages.delete(dispatch, messageData)
+        .then(() => AppService.profile.messageRelease(dispatch))
+    }
   }
 
   const onDeleteMessage = () => {
