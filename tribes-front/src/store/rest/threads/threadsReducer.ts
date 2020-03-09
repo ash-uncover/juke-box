@@ -1,4 +1,5 @@
 import { Reducer } from 'redux'
+import produce from 'immer'
 
 import { ActionsTypes as ThreadsActionsTypes} from './threadsActions'
 import { ActionsTypes as AuthActionsTypes } from '../../auth/authActions'
@@ -51,7 +52,7 @@ const getThreadState = (state: ThreadsState, id: string) => {
   return state.data[id]
 }
 
-const reducer: Reducer<ThreadsState> = (state = initialState, action) => {
+const reducer: Reducer<ThreadsState> = (baseState = initialState, action) => {
   switch (action.type) {
 
     // GET /threads/{threadId}
@@ -59,31 +60,31 @@ const reducer: Reducer<ThreadsState> = (state = initialState, action) => {
     case ThreadsActionsTypes.REST_THREADS_GET_FETCH: {
       const { id } = action.payload
 
-      const threadState = getThreadState(state, id)
-      threadState.error = null
-      threadState.status = RequestState.FETCHING
-
-      return { ...state }
+      return produce(baseState, (state) => {
+        const threadState = getThreadState(state, id)
+        threadState.error = null
+        threadState.status = RequestState.FETCHING
+      })
     }
     case ThreadsActionsTypes.REST_THREADS_GET_SUCCESS: {
       const { id, thread } = action.payload
 
-      const threadState = getThreadState(state, id)
-      threadState.data = thread
-      threadState.error = null
-      threadState.status = RequestState.SUCCESS
-
-      return { ...state }
+      return produce(baseState, (state) => {
+        const threadState = getThreadState(state, id)
+        threadState.data = thread
+        threadState.error = null
+        threadState.status = RequestState.SUCCESS
+      })
     }
     case ThreadsActionsTypes.REST_THREADS_GET_FAILURE: {
       const { id, error } = action.payload
 
-      const threadState = getThreadState(state, id)
-      threadState.data = null
-      threadState.error = error
-      threadState.status = RequestState.FAILURE
-
-      return { ...state }
+      return produce(baseState, (state) => {
+        const threadState = getThreadState(state, id)
+        threadState.data = null
+        threadState.error = error
+        threadState.status = RequestState.FAILURE
+      })
     }
 
     // GET /threads/{threadId}/messages
@@ -91,31 +92,31 @@ const reducer: Reducer<ThreadsState> = (state = initialState, action) => {
     case ThreadsActionsTypes.REST_THREADS_MESSAGES_GETALL_FETCH: {
       const { id } = action.payload
 
-      const threadState = getThreadState(state, id)
-      threadState.messagesError = null
-      threadState.messagesStatus = threadState.messagesStatus === RequestState.NEVER ? RequestState.FETCHING_FIRST : RequestState.FETCHING
-
-      return { ...state }
+      return produce(baseState, (state) => {
+        const threadState = getThreadState(state, id)
+        threadState.messagesError = null
+        threadState.messagesStatus = threadState.messagesStatus === RequestState.NEVER ? RequestState.FETCHING_FIRST : RequestState.FETCHING
+      })
     }
     case ThreadsActionsTypes.REST_THREADS_MESSAGES_GETALL_SUCCESS: {
       const { id, messages } = action.payload
 
-      const threadState = getThreadState(state, id)
-      threadState.messagesData = messages.map((message: MessageData) => message.id)
-      threadState.messagesError = null
-      threadState.messagesStatus = RequestState.SUCCESS
-
-      return { ...state }
+      return produce(baseState, (state) => {
+        const threadState = getThreadState(state, id)
+        threadState.messagesData = messages.map((message: MessageData) => message.id)
+        threadState.messagesError = null
+        threadState.messagesStatus = RequestState.SUCCESS
+      })
     }
     case ThreadsActionsTypes.REST_THREADS_MESSAGES_GETALL_FAILURE: {
       const { id, error } = action.payload
 
-      const threadState = getThreadState(state, id)
-      threadState.messagesData = null
-      threadState.messagesError = error
-      threadState.messagesStatus = RequestState.FAILURE
-
-      return { ...state }
+      return produce(baseState, (state) => {
+        const threadState = getThreadState(baseState, id)
+        threadState.messagesData = null
+        threadState.messagesError = error
+        threadState.messagesStatus = RequestState.FAILURE
+      })
     }
 
     // GET /users/{userId}/threads
@@ -123,11 +124,11 @@ const reducer: Reducer<ThreadsState> = (state = initialState, action) => {
     case UsersActionsTypes.REST_USERS_THREADS_GETALL_SUCCESS: {
       const { threads } = action.payload
 
-      threads.forEach((thread: ThreadData) => {
-        getThreadState(state, thread.id)
+      return produce(baseState, (state) => {
+        threads.forEach((thread: ThreadData) => {
+          getThreadState(state, thread.id)
+        })
       })
-
-      return { ...state }
     }
 
     // SOCKET events
@@ -135,21 +136,21 @@ const reducer: Reducer<ThreadsState> = (state = initialState, action) => {
     case SocketActionsTypes.SERVER_THREAD_MESSAGE_POSTED: {
       const { threadId } = action.payload
 
-      state.data[threadId].messagesStatus = RequestState.OUTDATED
-
-      return { ...state }
+      return produce(baseState, (state) => {
+        state.data[threadId].messagesStatus = RequestState.OUTDATED
+      })
     }
 
     case SocketActionsTypes.SERVER_THREAD_MESSAGE_DELETED: {
       const { threadId, id } = action.payload.message
 
-      const messages = state.data[threadId].messagesData.slice()
-      const index = messages.indexOf(id)
-      messages.splice(index, 1)
+      return produce(baseState, (state) => {
+        const messages = state.data[threadId].messagesData.slice()
+        const index = messages.indexOf(id)
+        messages.splice(index, 1)
 
-      state.data[threadId].messagesData = messages
-
-      return { ...state }
+        state.data[threadId].messagesData = messages
+      })
     }
 
     // DELETE /auth
@@ -159,7 +160,7 @@ const reducer: Reducer<ThreadsState> = (state = initialState, action) => {
     }
 
     default: {
-      return state
+      return baseState
     }
   }
 }

@@ -1,4 +1,5 @@
 import { Reducer } from 'redux'
+import produce from 'immer'
 
 import { ActionsTypes } from './membershipsActions'
 import { ActionsTypes as AuthActionsTypes } from '../../auth/authActions'
@@ -44,7 +45,7 @@ const getMembershipState = (state: MembershipsState, id: string) => {
   return state.data[id]
 }
 
-const reducer: Reducer<MembershipsState> = (state = initialState, action) => {
+const reducer: Reducer<MembershipsState> = (baseState = initialState, action) => {
   switch (action.type) {
 
     // GET /tribes/{tribeId}/memberships
@@ -52,14 +53,14 @@ const reducer: Reducer<MembershipsState> = (state = initialState, action) => {
     case TribesActionsTypes.REST_TRIBES_MEMBERSHIPS_GETALL_SUCCESS: {
       const { memberships } = action.payload
 
-      memberships.forEach((membership: MembershipData) => {
-        const membershipState = getMembershipState(state, membership.id)
-        membershipState.data = membership
-        membershipState.error = null
-        membershipState.status = RequestState.SUCCESS
+      return produce(baseState, (state) => {
+        memberships.forEach((membership: MembershipData) => {
+          const membershipState = getMembershipState(state, membership.id)
+          membershipState.data = membership
+          membershipState.error = null
+          membershipState.status = RequestState.SUCCESS
+        })
       })
-
-      return { ...state }
     }
 
     // GET /users/{userId}/memberships
@@ -67,14 +68,14 @@ const reducer: Reducer<MembershipsState> = (state = initialState, action) => {
     case UsersActionsTypes.REST_USERS_MEMBERSHIPS_GETALL_SUCCESS: {
       const { memberships } = action.payload
 
-      memberships.forEach((membership: MembershipData) => {
-        const membershipState = getMembershipState(state, membership.id)
-        membershipState.data = membership
-        membershipState.error = null
-        membershipState.status = RequestState.SUCCESS
+      return produce(baseState, (state) => {
+        memberships.forEach((membership: MembershipData) => {
+          const membershipState = getMembershipState(state, membership.id)
+          membershipState.data = membership
+          membershipState.error = null
+          membershipState.status = RequestState.SUCCESS
+        })
       })
-
-      return { ...state }
     }
 
     // DELETE /auth
@@ -84,7 +85,7 @@ const reducer: Reducer<MembershipsState> = (state = initialState, action) => {
     }
 
     default: {
-      return state
+      return baseState
     }
   }
 }

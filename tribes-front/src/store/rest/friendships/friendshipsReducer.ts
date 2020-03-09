@@ -1,4 +1,5 @@
 import { Reducer } from 'redux'
+import produce from 'immer'
 
 import { ActionsTypes } from './friendshipsActions'
 import { ActionsTypes as AuthActionsTypes } from '../../auth/authActions'
@@ -43,7 +44,7 @@ const getFriendshipState = (state: FriendshipsState, id: string) => {
   return state.data[id]
 }
 
-const reducer: Reducer<FriendshipsState> = (state = initialState, action) => {
+const reducer: Reducer<FriendshipsState> = (baseState = initialState, action) => {
   switch (action.type) {
 
     // GET /uesrs/{userId}/friendships
@@ -51,14 +52,14 @@ const reducer: Reducer<FriendshipsState> = (state = initialState, action) => {
     case UsersActionsTypes.REST_USERS_FRIENDSHIPS_GETALL_SUCCESS: {
       const { friendships } = action.payload
 
-      friendships.forEach((friendship: FriendshipData) => {
-        const friendshipState = getFriendshipState(state, friendship.id)
-        friendshipState.data = friendship
-        friendshipState.error = null
-        friendshipState.status = RequestState.SUCCESS
+      return produce(baseState, (state) => {
+        friendships.forEach((friendship: FriendshipData) => {
+          const friendshipState = getFriendshipState(state, friendship.id)
+          friendshipState.data = friendship
+          friendshipState.error = null
+          friendshipState.status = RequestState.SUCCESS
+        })
       })
-
-      return { ...state }
     }
 
     // DELETE /auth
@@ -68,7 +69,7 @@ const reducer: Reducer<FriendshipsState> = (state = initialState, action) => {
     }
 
     default: {
-      return state
+      return baseState
     }
   }
 }

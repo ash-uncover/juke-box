@@ -10,18 +10,22 @@
   },
   "devDependencies": {
     "@types/express": "latest",
+    "@types/jest": "latest",
     "@types/node": "latest",
     "@types/ws": "latest",
     "eslint": "latest",
     "eslint-plugin-import": "latest",
+    "jest": "latest",
     "nodemon": "latest",
+    "ts-jest": "latest",
     "ts-node": "latest",
     "typescript": "latest"
   },
   "scripts": {
     "start": "node --inspect=5858 -r ts-node/register ./src/index.ts",
     "watch": "nodemon --inspect './src/index'",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest"
   },
   "nodemonConfig": {
     "ignore": [

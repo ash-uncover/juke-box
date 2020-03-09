@@ -1,4 +1,5 @@
 import { Reducer } from 'redux'
+import produce from 'immer'
 
 import { ActionsTypes as MessagesActionsTypes} from './messagesActions'
 import { ActionsTypes as AuthActionsTypes } from '../../auth/authActions'
@@ -43,7 +44,7 @@ const getMessageState = (state: MessagesState, id: string) => {
   return state.data[id]
 }
 
-const reducer: Reducer<MessagesState> = (state = initialState, action) => {
+const reducer: Reducer<MessagesState> = (baseState = initialState, action) => {
   switch (action.type) {
 
     // GET /messages/{messageId}
@@ -51,31 +52,31 @@ const reducer: Reducer<MessagesState> = (state = initialState, action) => {
     case MessagesActionsTypes.REST_MESSAGES_GET_FETCH: {
       const { id } = action.payload
 
-      const messageState = getMessageState(state, id)
-      messageState.error = null
-      messageState.status = messageState.status === RequestState.NEVER ? RequestState.FETCHING_FIRST : RequestState.FETCHING
-
-      return { ...state }
+      return produce(baseState, (state) => {
+        const messageState = getMessageState(state, id)
+        messageState.error = null
+        messageState.status = messageState.status === RequestState.NEVER ? RequestState.FETCHING_FIRST : RequestState.FETCHING
+      })
     }
     case MessagesActionsTypes.REST_MESSAGES_GET_SUCCESS: {
       const { id, message } = action.payload
 
-      const messageState = getMessageState(state, id)
-      messageState.data = message
-      messageState.error = null
-      messageState.status = RequestState.SUCCESS
-
-      return { ...state }
+      return produce(baseState, (state) => {
+        const messageState = getMessageState(state, id)
+        messageState.data = message
+        messageState.error = null
+        messageState.status = RequestState.SUCCESS
+      })
     }
     case MessagesActionsTypes.REST_MESSAGES_GET_FAILURE: {
       const { id, error } = action.payload
 
-      const messageState = getMessageState(state, id)
-      messageState.data = null
-      messageState.error = error
-      messageState.status = RequestState.FAILURE
-
-      return { ...state }
+      return produce(baseState, (state) => {
+        const messageState = getMessageState(state, id)
+        messageState.data = null
+        messageState.error = error
+        messageState.status = RequestState.FAILURE
+      })
     }
 
     // PUT /messages/{messageId}
@@ -84,10 +85,10 @@ const reducer: Reducer<MessagesState> = (state = initialState, action) => {
     case MessagesActionsTypes.REST_MESSAGES_PATCH_SUCCESS: {
       const { message } = action.payload
 
-      const messageState = getMessageState(state, message.id)
-      messageState.status = RequestState.OUTDATED
-
-      return { ...state }
+      return produce(baseState, (state) => {
+        const messageState = getMessageState(state, message.id)
+        messageState.status = RequestState.OUTDATED
+      })
     }
 
     // GET /threads/{threadId}/messages
@@ -95,15 +96,15 @@ const reducer: Reducer<MessagesState> = (state = initialState, action) => {
     case ThreadsActionsTypes.REST_THREADS_MESSAGES_GETALL_SUCCESS: {
       const { messages } = action.payload
 
-      messages.forEach((message: MessageData) => {
-        state.data[message.id] = {
-          data: message,
-          status: RequestState.SUCCESS,
-          error: null,
-        }
+      return produce(baseState, (state) => {
+        messages.forEach((message: MessageData) => {
+          state.data[message.id] = {
+            data: message,
+            status: RequestState.SUCCESS,
+            error: null,
+          }
+        })
       })
-
-      return { ...state }
     }
 
     // DELETE /auth
@@ -113,7 +114,7 @@ const reducer: Reducer<MessagesState> = (state = initialState, action) => {
     }
 
     default: {
-      return state
+      return baseState
     }
   }
 }

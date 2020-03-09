@@ -180,7 +180,6 @@ wss.on('connection', (ws: ExtWebSocket) => {
       }
 
       case '@@REST/MESSAGES/PATCH_SUCCESS': {
-        console.log(action.payload)
         const { threadId, id } = action.payload.message
         SCHEMAS.THREADS.model.findOne({ id: threadId }).exec((err, dataThread) => {
           if (err) {
@@ -188,7 +187,6 @@ wss.on('connection', (ws: ExtWebSocket) => {
           } else if (!dataThread) {
             LOGGER.error('@@REST/MESSAGES/PATCH_SUCCESS - Cannot retreive parent thread')
           } else {
-            console.log(dataThread)
             dataThread.userId.forEach((userId) => {
               DATA.users[userId].sessions.forEach((sessionId) => {
                 if (sessionId !== ws['_id']) {

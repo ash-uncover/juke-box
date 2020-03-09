@@ -1,4 +1,6 @@
 import { Reducer } from 'redux'
+import produce from 'immer'
+
 import { ActionsTypes } from './socketActions'
 import { ActionsTypes as AuthActionsTypes } from '../auth/authActions'
 
@@ -18,68 +20,47 @@ export const initialState: SocketState = {
   users: {},
 }
 
-const reducer: Reducer<SocketState> = (state = initialState, action) => {
+const reducer: Reducer<SocketState> = (baseState = initialState, action) => {
   switch (action.type) {
     case ActionsTypes.SOCKET_CONNECT_FETCH: {
-      return {
-        ...state,
-        status: SocketStatus.CONNECTING,
-      }
+      return produce(baseState, (state) => {
+        state.status = SocketStatus.CONNECTING
+      })
     }
     case ActionsTypes.SOCKET_CONNECT_SUCCESS: {
-      return {
-        ...state,
-        status: SocketStatus.CONNECTED,
-      }
+      return produce(baseState, (state) => {
+        state.status = SocketStatus.CONNECTED
+      })
     }
     case ActionsTypes.SOCKET_CONNECT_FAILURE: {
-      return {
-        ...state,
-        status: SocketStatus.CONNECTION_ERROR,
-      }
+      return produce(baseState, (state) => {
+        state.status = SocketStatus.CONNECTION_ERROR
+      })
     }
 
     case ActionsTypes.SERVER_USER_CONNECTED: {
       const id = action.payload.id
-      const users = Object.assign(
-        {},
-        state.users,
-        { [`${id}`]: UserStatus.ONLINE },
-      )
-      return {
-        ...state,
-        users,
-      }
+      return produce(baseState, (state) => {
+        state.users[`${id}`] = UserStatus.ONLINE
+      })
     }
 
     case ActionsTypes.SERVER_USER_DISCONNECTED: {
       const id = action.payload.id
-      const users = Object.assign(
-        {},
-        state.users,
-        { [`${id}`]: UserStatus.OFFLINE },
-      )
-      return {
-        ...state,
-        users,
-      }
+      return produce(baseState, (state) => {
+        state.users[`${id}`] = UserStatus.OFFLINE
+      })
     }
 
     case AuthActionsTypes.AUTH_GET_SUCCESS: {
       const { user } = action.payload
-      const users = Object.assign(
-        {},
-        state.users,
-        { [`${user.id}`]: UserStatus.ONLINE },
-      )
-      return {
-        ...state,
-        users,
-      }
+      return produce(baseState, (state) => {
+        state.users[`${user.id}`] = UserStatus.ONLINE
+      })
     }
 
     default: {
-      return state
+      return baseState
     }
   }
 }

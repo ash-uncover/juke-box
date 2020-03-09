@@ -4,7 +4,7 @@ import FriendshipsReducer from './friendships/friendshipsReducer'
 import MembershipsReducer from './memberships/membershipsReducer'
 import MessagesReducer from './messages/messagesReducer'
 import ThreadsReducer from './threads/threadsReducer'
-import TribesReducer from './tribes/tribeReducer'
+import TribesReducer from './tribes/tribesReducer'
 import UsersReducer from './users/usersReducer'
 
 const reducer = combineReducers({
