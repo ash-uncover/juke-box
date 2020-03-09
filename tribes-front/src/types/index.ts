@@ -22,7 +22,10 @@ export interface FriendshipPostData {
 }
 
 export interface FriendshipPatchData {
-  status: string,
+  id: string,
+  userId: string,
+  friendId: string,
+  status?: string,
 }
 
 // MEMBERSHIP
@@ -40,8 +43,8 @@ export interface MembershipPostData {
 
 export interface MembershipPatchData {
   id: string,
-  userId?: string,
-  tribeId?: string,
+  userId: string,
+  tribeId: string,
 }
 
 // MESSAGE
@@ -64,6 +67,8 @@ export interface MessagePostData {
 
 export interface MessagePatchData {
   id: string,
+  threadId: string,
+  userId: string,
   text?: string,
   readBy?: Array<string>,
 }

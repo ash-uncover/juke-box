@@ -179,6 +179,32 @@ wss.on('connection', (ws: ExtWebSocket) => {
         break
       }
 
+      case '@@REST/MESSAGES/PATCH_SUCCESS': {
+        console.log(action.payload)
+        const { threadId, id } = action.payload.message
+        SCHEMAS.THREADS.model.findOne({ id: threadId }).exec((err, dataThread) => {
+          if (err) {
+            LOGGER.error('@@REST/MESSAGES/PATCH_SUCCESS - Error retreiving parent thread')
+          } else if (!dataThread) {
+            LOGGER.error('@@REST/MESSAGES/PATCH_SUCCESS - Cannot retreive parent thread')
+          } else {
+            console.log(dataThread)
+            dataThread.userId.forEach((userId) => {
+              DATA.users[userId].sessions.forEach((sessionId) => {
+                if (sessionId !== ws['_id']) {
+                  send(
+                    DATA.sessions[sessionId],
+                    '@@REST/MESSAGES/PATCH_SUCCESS',
+                    { message: { id } }
+                  )
+                }
+              })
+            })
+          }
+        })
+        break
+      }
+
       case '@@REST/MESSAGES/DELETE_SUCCESS': {
         const { threadId } = action.payload.message
         SCHEMAS.THREADS.model.findOne({ id: threadId }).exec((err, dataThread) => {
