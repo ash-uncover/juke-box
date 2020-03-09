@@ -1,13 +1,13 @@
-export const toSet = (array) => {
+export const toSet = (array: any[]) => {
   return array.reduce((acc, element) => {
-    if (acc.includes(element)) {
+    if (!acc.includes(element)) {
       acc.push(element)
     }
     return acc
   }, [])
 }
 
-export const add = (set, ...elements) => {
+export const add = (set: any[], ...elements: any[]) => {
   elements.forEach((element) => {
     if (!set.includes(element)) {
       set.push(element)
@@ -16,7 +16,7 @@ export const add = (set, ...elements) => {
   return set
 }
 
-export const remove = (set, ...elements) => {
+export const remove = (set: any[], ...elements: any[]) => {
   elements.forEach((element) => {
     const index = set.indexOf(element)
     if (index !== -1) {

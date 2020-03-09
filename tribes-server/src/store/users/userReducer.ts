@@ -1,22 +1,24 @@
 import { Reducer } from 'redux'
+import produce from 'immer'
+
 import { ActionsTypes } from './userActions'
 
-export interface UserState {
+export interface SessionState {
 }
 
-export const initialState: UserState = {
+export const initialState: SessionState = {
 }
 
-const reducer: Reducer<UserState> = (state = initialState, action) => {
+const reducer: Reducer<SessionState> = (baseState = initialState, action) => {
   switch (action.type) {
     case ActionsTypes.SOCKET_CONNECT_FETCH: {
-      return {
-        ...state
-      }
+      return produce(baseState, (state) => {
+
+      })
     }
 
     default: {
-      return state
+      return baseState
     }
   }
 }

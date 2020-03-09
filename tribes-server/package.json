@@ -2,30 +2,36 @@
   "name": "tribes-server",
   "version": "1.0.0",
   "main": "index.ts",
+  "scripts": {
+    "start": "node --inspect=5858 -r ts-node/register ./src/index.ts",
+    "watch": "nodemon --inspect './src/index'",
+    "build": "tsc",
+    "test": "jest",
+    "test-coverage": "jest --coverage"
+  },
   "dependencies": {
     "ap-utils-logger": "latest",
     "express": "latest",
+    "immer": "latest",
     "mongoose": "latest",
+    "redux": "latest",
+    "typesafe-actions": "latest",
     "ws": "latest"
   },
   "devDependencies": {
     "@types/express": "latest",
     "@types/jest": "latest",
     "@types/node": "latest",
+    "@types/source-map-support": "^0.5.1",
     "@types/ws": "latest",
     "eslint": "latest",
     "eslint-plugin-import": "latest",
     "jest": "latest",
     "nodemon": "latest",
+    "source-map-support": "^0.5.16",
     "ts-jest": "latest",
     "ts-node": "latest",
     "typescript": "latest"
-  },
-  "scripts": {
-    "start": "node --inspect=5858 -r ts-node/register ./src/index.ts",
-    "watch": "nodemon --inspect './src/index'",
-    "build": "tsc",
-    "test": "jest"
   },
   "nodemonConfig": {
     "ignore": [
