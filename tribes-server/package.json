@@ -22,13 +22,11 @@
     "@types/express": "latest",
     "@types/jest": "latest",
     "@types/node": "latest",
-    "@types/source-map-support": "^0.5.1",
     "@types/ws": "latest",
     "eslint": "latest",
     "eslint-plugin-import": "latest",
     "jest": "latest",
     "nodemon": "latest",
-    "source-map-support": "^0.5.16",
     "ts-jest": "latest",
     "ts-node": "latest",
     "typescript": "latest"

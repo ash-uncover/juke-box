@@ -1,6 +1,5 @@
 import {
-  createStore ,
-  compose
+  createStore
 } from 'redux'
 
 import reducer from './reducer'

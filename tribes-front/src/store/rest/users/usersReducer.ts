@@ -60,10 +60,7 @@ export const initialUserState = () => ({
 const getUserState = (state: UsersState, id: string) => {
   if (!state.data[id]) {
     state.data[id] = initialUserState()
-  } else {
-    state.data[id] = Object.assign({}, state.data[id])
   }
-  state.data = Object.assign({}, state.data)
   return state.data[id]
 }
 

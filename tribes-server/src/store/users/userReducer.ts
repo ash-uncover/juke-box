@@ -1,19 +1,46 @@
 import { Reducer } from 'redux'
 import produce from 'immer'
 
-import { ActionsTypes } from './userActions'
+import { ActionsTypes as UserActionsTypes } from './userActions'
 
-export interface SessionState {
+import {
+  add,
+  remove,
+} from '../../utils/Sets'
+
+export interface UserState {
 }
 
-export const initialState: SessionState = {
+export const initialState: () => UserState = () => ({})
+
+const getUserState = (state: UserState, id: string) => {
+  if (!state[id]) {
+    state[id] = {
+      listeners: [],
+      sessions: [],
+    }
+  }
+  return state[id]
 }
 
-const reducer: Reducer<SessionState> = (baseState = initialState, action) => {
+const UserReducer: Reducer<UserState> = (baseState = initialState, action) => {
   switch (action.type) {
-    case ActionsTypes.SOCKET_CONNECT_FETCH: {
-      return produce(baseState, (state) => {
 
+    case UserActionsTypes.AUTH_GET_SUCCESS: {
+      const { session, user } = action.payload
+
+      return produce(baseState, (state) => {
+        const userState = getUserState(state, user.id)
+        add(userState.sessions, session.id)
+      })
+    }
+
+    case UserActionsTypes.AUTH_DELETE_SUCCESS: {
+      const { session, user } = action.payload
+
+      return produce(baseState, (state) => {
+        const userState = getUserState(state, user.id)
+        remove(userState.sessions, session.id)
       })
     }
 
@@ -23,4 +50,4 @@ const reducer: Reducer<SessionState> = (baseState = initialState, action) => {
   }
 }
 
-export default reducer
+export default UserReducer

@@ -4,7 +4,7 @@ import {
 
 import {
   HttpStatus
-} from '../utils'
+} from '../utils/HttpUtils'
 
 import Logger from 'ap-utils-logger'
 const LOGGER = new Logger('servlet-base')

@@ -1,14 +1,31 @@
-import { action } from 'typesafe-actions'
+import * as Types from '../../types'
 
 export const ActionsTypes = {
-  SOCKET_CONNECT_FETCH: '@@SOCKET/CONNECT_FETCH',
-  SOCKET_CONNECT_SUCCESS: '@@SOCKET/CONNECT_SUCCESS',
-  SOCKET_CONNECT_FAILURE: '@@SOCKET/CONNECT_FAILURE',
+  AUTH_GET_SUCCESS: '@@AUTH/GET_SUCCESS',
+  AUTH_DELETE_SUCCESS: '@@AUTH/DELETE_SUCCESS',
 }
 
 export const Actions = {
-  socketConnectFetch: () => action(ActionsTypes.SOCKET_CONNECT_FETCH),
-  socketConnectSuccess: () => action(ActionsTypes.SOCKET_CONNECT_SUCCESS),
-  socketConnectFailure: () => action(ActionsTypes.SOCKET_CONNECT_FAILURE),
 
+  authGetSuccess: (
+    session: Types.SessionModel,
+    user: Types.UserModel,
+  ) => ({
+    type: ActionsTypes.AUTH_GET_SUCCESS,
+    payload: {
+      session,
+      user,
+    },
+  }),
+
+  authDeleteSuccess: (
+    session: Types.SessionModel,
+    user: Types.UserModel,
+  ) => ({
+    type: ActionsTypes.AUTH_DELETE_SUCCESS,
+    payload: {
+      session,
+      user,
+    },
+  }),
 }

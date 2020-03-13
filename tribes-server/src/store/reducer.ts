@@ -2,11 +2,11 @@ import {
   combineReducers
 } from 'redux'
 
-import SessionReducer from './sessions/sessionReducer'
+import SocketReducer from './socket/socketReducer'
 import UserReducer from './users/userReducer'
 
 const reducer = combineReducers({
-  sessions: SessionReducer,
+  socket: SocketReducer,
   users: UserReducer,
 })
 

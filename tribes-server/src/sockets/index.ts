@@ -2,13 +2,18 @@ import * as express from 'express'
 import * as http from 'http'
 import * as WebSocket from 'ws'
 
+import store from '../store'
+
 import SCHEMAS from '../database/schemas'
 
 import {
   UUID,
+} from '../utils'
+
+import {
   dateString,
   nowString,
-} from '../utils'
+} from '../utils/DateUtils'
 
 import Logger from 'ap-utils-logger'
 const LOGGER = new Logger('SERVER - SOCKET')
@@ -99,6 +104,10 @@ const received = (ws: WebSocket, message: string) => {
   }
 }
 
+store.subscribe(() => {
+
+})
+
 wss.on('connection', (ws: ExtWebSocket) => {
   ws['_id'] = '#' + UUID.next()
   DATA.sessions[ws['_id']] = ws
@@ -122,7 +131,7 @@ wss.on('connection', (ws: ExtWebSocket) => {
         ws['_userId'] = id
         addUserSession(id, ws['_id'])
 
-        LOGGER.warn(`${ws['_id']} - ${ws['_userId']} - CONNCET`)
+        LOGGER.warn(`${ws['_id']} - ${ws['_userId']} - CONNECT`)
 
         wss.clients.forEach((client) => {
           const userId = client['_userId']
