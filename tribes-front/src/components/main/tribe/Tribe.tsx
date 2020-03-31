@@ -8,9 +8,13 @@ import {
 } from '../../../utils/hooks'
 
 import { selectors as SocketSelectors } from '../../../store/socket'
+import { selectors as EventsSelectors } from '../../../store/rest/events'
 import { selectors as MembershipsSelectors } from '../../../store/rest/memberships'
 import { selectors as TribesSelectors } from '../../../store/rest/tribes'
 import { selectors as UsersSelectors } from '../../../store/rest/users'
+
+
+import EventListItem from '../../commons/EventListItem'
 
 import FriendListItem from '../../commons/FriendListItem'
 
@@ -22,6 +26,10 @@ import {
 import RestService from '../../../services/RestService'
 
 import './Tribe.scss'
+import {
+  MembershipData,
+  EventData,
+} from '../../../types'
 
 interface TribeRouteParamTypes {
   tribeId: string
@@ -37,6 +45,7 @@ const Tribe = (props: TribeProps) => {
   const dispatch = useDispatcher()
   const tribeStatus = useSelector(TribesSelectors.restTribeStatusSelector(tribeId))
   const membershipsStatus = useSelector(TribesSelectors.restTribeMembershipsStatusSelector(tribeId))
+  const eventsStatus = useSelector(TribesSelectors.restTribeEventsStatusSelector(tribeId))
 
   useEffect(() => {
     if (tribeStatus === RequestState.NEVER) {
@@ -47,6 +56,12 @@ const Tribe = (props: TribeProps) => {
   useEffect(() => {
     if (membershipsStatus === RequestState.NEVER) {
       RestService.rest.tribes.memberships.getAll(dispatch, tribeId)
+    }
+  })
+
+  useEffect(() => {
+    if (eventsStatus === RequestState.NEVER) {
+      RestService.rest.tribes.events.getAll(dispatch, tribeId)
     }
   })
 
@@ -92,6 +107,7 @@ const TribeMenu = (props: TribeMenuProps) => {
       <div className='TribeMenu-header MainContent-menu-header'>
         {tribeData.name}
       </div>
+      <TribeEvents/>
     </div>
   )
 }
@@ -257,6 +273,106 @@ const TribeUser = (props: TribeUserProps) => {
           image={userData.image}
           status={userStatus || UserStatus.OFFLINE}
         />
+      )
+    }
+    case RequestState.FAILURE:
+    default: {
+      return (
+        <div>
+          Error
+        </div>
+      )
+    }
+  }
+}
+
+/* TRIBE EVENTS */
+
+const TribeEvents = () => {
+
+  const { tribeId } = useParams<TribeRouteParamTypes>()
+  const dispatch = useDispatcher()
+  const eventsData = useSelector(TribesSelectors.restTribeEventsDataSelector(tribeId))
+  const eventDataStatus = useSelector(TribesSelectors.restTribeEventsStatusSelector(tribeId))
+
+  useEffect(() => {
+    if (eventDataStatus === RequestState.NEVER) {
+      RestService.rest.tribes.events.getAll(dispatch, tribeId)
+    }
+  })
+
+  switch (eventDataStatus) {
+    case RequestState.NEVER: {
+      return (
+        <div>
+          Not Loaded
+        </div>
+      )
+    }
+    case RequestState.FETCHING: {
+      return (
+        <div>
+          Loading...
+        </div>
+      )
+    }
+    case RequestState.SUCCESS: {
+      return (
+        <div className='TribeEvents'>
+         { eventsData.map((eventId: string) => <TribeEvent key={eventId} id={eventId} />) }
+      </div>
+      )
+    }
+    case RequestState.FAILURE:
+    default: {
+      return (
+        <div>
+          Error
+        </div>
+      )
+    }
+  }
+}
+
+/* TRIBE EVENT */
+
+interface TribeEventProps {
+  id: string
+}
+
+const TribeEvent = (props: TribeEventProps) => {
+  const dispatch = useDispatcher()
+  const eventData = useSelector(EventsSelectors.restEventDataSelector(props.id))
+  const eventStatus = useSelector(EventsSelectors.restEventStatusSelector(props.id))
+
+  useEffect(() => {
+    if (eventStatus === RequestState.NEVER) {
+      RestService.rest.events.get(dispatch, props.id)
+    }
+  })
+
+  switch (eventStatus) {
+    case RequestState.NEVER: {
+      return (
+        <div>
+          Not Loaded
+        </div>
+      )
+    }
+    case RequestState.FETCHING: {
+      return (
+        <div>
+          Loading...
+        </div>
+      )
+    }
+    case RequestState.SUCCESS: {
+      return (
+        <EventListItem
+          name={eventData.name}
+          startDate={eventData.dateStart}
+          endDate={eventData.dateEnd}
+      />
       )
     }
     case RequestState.FAILURE:

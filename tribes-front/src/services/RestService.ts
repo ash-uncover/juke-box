@@ -1,10 +1,12 @@
 import store from '../store'
 
 import { Actions as AuthActions } from '../store/auth/authActions'
+import { Actions as RestEventsActions } from '../store/rest/events/eventsActions'
 import { Actions as RestMessagesActions } from '../store/rest/messages/messagesActions'
 import { Actions as RestThreadsActions } from '../store/rest/threads/threadsActions'
 import { Actions as RestTribesActions } from '../store/rest/tribes/tribesActions'
 import { Actions as RestUsersActions } from '../store/rest/users/usersActions'
+
 
 import {
   ErrorData,
@@ -26,6 +28,9 @@ import {
   UserData,
   UserPostData,
   UserPatchData,
+  EventData,
+  EventPostData,
+  EventPatchData,
 } from '../types'
 
 import request from 'request'
@@ -197,6 +202,19 @@ const RestService = {
             })
         },
       },
+
+      events: {
+        getAll: (dispatch: any, id: string) => {
+          dispatch(RestTribesActions.restTribesEventsGetAllFetch(id))
+          delayedPromise(_request({ url: `/rest/tribes/${id}/events` }))
+            .then((result: Array<EventData>) => {
+              dispatch(RestTribesActions.restTribesEventsGetAllSuccess(id, result))
+            })
+            .catch((error: ErrorData) => {
+              dispatch(RestTribesActions.restTribesEventsGetAllFailure(id, error))
+            })
+        },
+      },
     },
 
     users: {
@@ -260,6 +278,14 @@ const RestService = {
         },
       },
     },
+
+    events: {
+      get: (dispatch: any, id: string) => {},
+      post: (dispatch: any, event: EventPostData) => {},
+      put: (dispatch: any, event: EventData) => {},
+      patch: (dispatch: any, event: EventPatchData) => {},
+      delete: (dispatch: any, id: string) => {},
+    }
   }
 }
 

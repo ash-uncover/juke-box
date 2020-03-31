@@ -9,6 +9,7 @@ import {
   ErrorData,
   MembershipData,
   TribeData,
+  EventData,
 } from '../../../types'
 
 import { RequestState } from '../../../utils/constants'
@@ -33,6 +34,9 @@ export interface TribeState {
   membershipsData: Array<string> | null,
   membershipsStatus: RequestState,
   membershipsError: ErrorData | null,
+  eventsData: Array<string> | null,
+  eventsStatus: RequestState,
+  eventsError: ErrorData | null,
 }
 
 export const initialTribeState = () => ({
@@ -42,6 +46,9 @@ export const initialTribeState = () => ({
   membershipsData: null,
   membershipsStatus: RequestState.NEVER,
   membershipsError: null,
+  eventsData: null,
+  eventsStatus: RequestState.NEVER,
+  eventsError: null,
 })
 
 const getTribeState = (state: TribesState, id: string) => {
@@ -117,6 +124,39 @@ const reducer: Reducer<TribesState> = (baseState = initialState, action) => {
         tribeState.membershipsStatus = RequestState.FAILURE
       })
     }
+
+    // EVENTS
+
+    case TribesActionsTypes.REST_TRIBES_EVENTS_GETALL_FETCH: {
+      const { id } = action.payload
+
+      return produce(baseState, (state) => {
+        const tribeState = getTribeState(state, id)
+        tribeState.eventsError = null
+        tribeState.eventsStatus = RequestState.FETCHING
+      })
+    }
+    case TribesActionsTypes.REST_TRIBES_EVENTS_GETALL_SUCCESS: {
+      const { id, events } = action.payload
+
+      return produce(baseState, (state) => {
+        const tribeState = getTribeState(state, id)
+        tribeState.eventsData = events.filter((event: EventData) => event.tribeId === id).map((event: EventData) => event.id)
+        tribeState.eventsError = null
+        tribeState.eventsStatus = RequestState.SUCCESS
+      })
+    }
+    case TribesActionsTypes.REST_TRIBES_EVENTS_GETALL_FAILURE: {
+      const { id, error } = action.payload
+
+      return produce(baseState, (state) => {
+        const tribeState = getTribeState(state, id)
+        tribeState.eventsData = null
+        tribeState.eventsError = error
+        tribeState.eventsStatus = RequestState.FAILURE
+      })
+    }
+
 
     // GET /users/{userId}/memberships
 
