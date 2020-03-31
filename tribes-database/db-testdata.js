@@ -228,6 +228,13 @@ db.events.insert({
   "dateEnd": new Date("2020-04-05T17:30:00Z")
 })
 db.events.insert({
+  "id":"eventmapo2",
+  "name":"eventmapo2",
+  "tribeId": "tribemapo",
+  "dateStart": new Date("2020-05-05T10:30:00Z"),
+  "dateEnd": new Date("2020-05-05T17:30:00Z")
+})
+db.events.insert({
   "id":"eventbanana",
   "name":"eventbanana",
   "tribeId": "tribebanana",

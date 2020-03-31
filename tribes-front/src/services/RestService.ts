@@ -2,6 +2,7 @@ import store from '../store'
 import { Actions as AuthActions } from '../store/auth/actions'
 import { Actions as RestTribesActions } from '../store/rest/tribes/actions'
 import { Actions as RestUsersActions } from '../store/rest/users/actions'
+import { Actions as RestEventsActions } from '../store/rest/events/actions'
 
 import {
   ErrorData,
@@ -17,6 +18,9 @@ import {
   UserData,
   UserPostData,
   UserPatchData,
+  EventData,
+  EventPostData,
+  EventPatchData,
 } from '../types'
 
 import request from 'request'
@@ -76,6 +80,19 @@ const RestService = {
             })
         },
       },
+
+      events: {
+        getAll: (dispatch: any, id: string) => {
+          dispatch(RestTribesActions.restTribesEventsGetAllFetch(id))
+          delayedPromise(_request({ url: `/rest/tribes/${id}/events` }))
+            .then((result: Array<EventData>) => {
+              dispatch(RestTribesActions.restTribesEventsGetAllSuccess(id, result))
+            })
+            .catch((error: ErrorData) => {
+              dispatch(RestTribesActions.restTribesEventsGetAllFailure(id, error))
+            })
+        },
+      },
     },
 
     users: {
@@ -132,6 +149,14 @@ const RestService = {
       post: (dispatch: any, friendship: FriendshipPostData) => {},
       put: (dispatch: any, friendship: FriendshipData) => {},
       patch: (dispatch: any, friendship: FriendshipPatchData) => {},
+      delete: (dispatch: any, id: string) => {},
+    },
+
+    events: {
+      get: (dispatch: any, id: string) => {},
+      post: (dispatch: any, event: EventPostData) => {},
+      put: (dispatch: any, event: EventData) => {},
+      patch: (dispatch: any, event: EventPatchData) => {},
       delete: (dispatch: any, id: string) => {},
     }
   }

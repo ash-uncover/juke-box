@@ -83,3 +83,26 @@ export interface UserPatchData {
   name?: string,
   image?: string,
 }
+
+// EVENT
+
+export interface EventData {
+  id: string,
+  name: string,
+  tribeId: string,
+  startDate: string,
+  endDate: string,
+}
+
+export interface EventPostData {
+  name: string,
+  startDate: string,
+  endDate: string,
+}
+
+export interface EventPatchData {
+  id: string,
+  name?: string,
+  startDate?: string,
+  endDate?: string,
+}

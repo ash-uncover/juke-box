@@ -10,7 +10,7 @@ const {
   DB_PORT = 4242,
   DB_NAME = 'tribes'
 } = process.env
-let urlmongo = connectionString //'mongodb://' + (DB_HOST) + ':' + (DB_PORT) + '/' + (DB_NAME)
+let urlmongo = 'mongodb://' + (DB_HOST) + ':' + (DB_PORT) + '/' + (DB_NAME)
 
 const connection = {
   open: (callback) => {

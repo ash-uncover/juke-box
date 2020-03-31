@@ -15,3 +15,8 @@ export const restTribeErrorSelector = (id: string) => ((state: any) => restTr
 export const restTribeMembershipsDataSelector = (id: string) => ((state: any) => restTribeSelector(id)(state).membershipsData)
 export const restTribeMembershipsStatusSelector = (id: string) => ((state: any) => restTribeSelector(id)(state).membershipsStatus)
 export const restTribeMembershipsErrorSelector = (id: string) => ((state: any) => restTribeSelector(id)(state).membershipsError)
+
+
+export const restTribeEventsDataSelector = (id: string) => ((state: any) => restTribeSelector(id)(state).eventsData)
+export const restTribeEventsStatusSelector = (id: string) => ((state: any) => restTribeSelector(id)(state).eventsStatus)
+export const restTribeEventsErrorSelector = (id: string) => ((state: any) => restTribeSelector(id)(state).eventsError)

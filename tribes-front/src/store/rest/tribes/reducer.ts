@@ -3,11 +3,13 @@ import { Reducer } from 'redux'
 import { ActionsTypes as TribesActionsTypes} from './actions'
 import { ActionsTypes as AuthActionsTypes } from '../../auth/actions'
 import { ActionsTypes as UsersActionsTypes } from '../users/actions'
+import { ActionsTypes as EventActionsTypes } from '../events/actions'
 
 import {
   ErrorData,
   MembershipData,
   TribeData,
+  EventData,
 } from '../../../types'
 
 import { RequestState } from '../../../utils/constants'
@@ -32,6 +34,9 @@ export interface TribeState {
   membershipsData: Array<string> | null,
   membershipsStatus: RequestState,
   membershipsError: ErrorData | null,
+  eventsData: Array<string> | null,
+  eventsStatus: RequestState,
+  eventsError: ErrorData | null,
 }
 
 export const initialTribeState = () => ({
@@ -41,6 +46,9 @@ export const initialTribeState = () => ({
   membershipsData: null,
   membershipsStatus: RequestState.NEVER,
   membershipsError: null,
+  eventsData: null,
+  eventsStatus: RequestState.NEVER,
+  eventsError: null,
 })
 
 const getTribeState = (state: TribesState, id: string) => {
@@ -116,6 +124,39 @@ const reducer: Reducer<TribesState> = (state = initialState, action) => {
 
       return { ...state }
     }
+
+    // EVENTS
+
+    case TribesActionsTypes.REST_TRIBES_EVENTS_GETALL_FETCH: {
+      const { id } = action.payload
+
+      const tribeState = getTribeState(state, id)
+      tribeState.eventsError = null
+      tribeState.eventsStatus = RequestState.FETCHING
+
+      return { ...state }
+    }
+    case TribesActionsTypes.REST_TRIBES_EVENTS_GETALL_SUCCESS: {
+      const { id, events } = action.payload
+
+      const tribeState = getTribeState(state, id)
+      tribeState.eventsData = events.filter((event: EventData) => event.tribeId === id).map((event: EventData) => event.id)
+      tribeState.eventsError = null
+      tribeState.eventsStatus = RequestState.SUCCESS
+
+      return { ...state }
+    }
+    case TribesActionsTypes.REST_TRIBES_EVENTS_GETALL_FAILURE: {
+      const { id, error } = action.payload
+
+      const tribeState = getTribeState(state, id)
+      tribeState.eventsData = null
+      tribeState.eventsError = error
+      tribeState.eventsStatus = RequestState.FAILURE
+
+      return { ...state }
+    }
+
 
     // GET /users/{userId}/memberships
 
