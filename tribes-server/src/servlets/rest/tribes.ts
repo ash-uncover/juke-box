@@ -43,6 +43,12 @@ export const getTribeMemberships = function(req, res, next) {
   defaultGetDeep(SCHEMAS.MEMBERSHIPS, req, res, next, null)
 }
 
+export const getTribeEvents = function(req, res, next) {
+  LOGGER.debug('GET ' + req.url)
+  LOGGER.debug(JSON.stringify(req.param))
+  defaultGetDeep(SCHEMAS.EVENTS, req, res, next, null)
+}
+
 const addRoutes = (app) => {
   app.post('/rest/tribes/', postTribe)
   app.get('/rest/tribes/:tribeId', getTribe)
@@ -51,5 +57,7 @@ const addRoutes = (app) => {
   app.delete('/rest/tribes/:tribeId', deleteTribe)
 
   app.get('/rest/tribes/:tribeId/memberships', getTribeMemberships)
+
+  app.get('/rest/tribes/:tribeId/events', getTribeEvents)
 }
 export default addRoutes

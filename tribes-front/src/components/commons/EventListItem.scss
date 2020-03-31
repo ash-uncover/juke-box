@@ -1,0 +1,23 @@
+.EventListItem {
+  display: inline-block;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  margin: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+
+  &:hover {
+    background: white;
+    color: black;
+  }
+
+  .EventListItem-name {
+
+  }
+
+  .EventListItem-date{
+    margin-left: 0.5rem;
+  }
+}
