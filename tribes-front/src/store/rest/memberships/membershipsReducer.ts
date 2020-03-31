@@ -1,7 +1,6 @@
 import { Reducer } from 'redux'
 import produce from 'immer'
 
-import { ActionsTypes } from './membershipsActions'
 import { ActionsTypes as AuthActionsTypes } from '../../auth/authActions'
 import { ActionsTypes as TribesActionsTypes } from '../tribes/tribesActions'
 import { ActionsTypes as UsersActionsTypes } from '../users/usersActions'

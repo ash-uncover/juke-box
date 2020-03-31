@@ -1,6 +1,6 @@
 import {
   Actions as UserActions
-} from '../../../src/store/users/userActions'
+} from '../../../src/store/users/usersActions'
 
 describe('UserActions', () => {
   test('authGetSuccess', () => {

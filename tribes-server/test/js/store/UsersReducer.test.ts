@@ -1,15 +1,15 @@
 import {
   ActionsTypes as UserActionsTypes
-} from '../../../src/store/users/userActions'
+} from '../../../src/store/users/usersActions'
 
 import UserReducer, {
   initialState,
-} from '../../../src/store/users/userReducer'
+} from '../../../src/store/users/usersReducer'
 
 describe('UserReducer', () => {
   describe('default action', () => {
     test('When receiving an unsupported action', () => {
-      const paramState = null
+      const paramState = undefined
       const paramAction = { type: 'UNKNOWN' }
 
       const result = UserReducer(paramState, paramAction)

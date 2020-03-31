@@ -1,19 +1,25 @@
 import { Reducer } from 'redux'
 import produce from 'immer'
 
-import { ActionsTypes as UserActionsTypes } from './userActions'
+import {
+  ActionsTypes as SocketActionsTypes
+} from '../socket/socketActions'
+
+import {
+  ActionsTypes as UsersActionsTypes
+} from './usersActions'
 
 import {
   add,
   remove,
 } from '../../utils/Sets'
 
-export interface UserState {
+export interface UsersState {
 }
 
-export const initialState: () => UserState = () => ({})
+export const initialState: () => UsersState = () => ({})
 
-const getUserState = (state: UserState, id: string) => {
+const getUserState = (state: UsersState, id: string) => {
   if (!state[id]) {
     state[id] = {
       listeners: [],
@@ -23,10 +29,10 @@ const getUserState = (state: UserState, id: string) => {
   return state[id]
 }
 
-const UserReducer: Reducer<UserState> = (baseState = initialState, action) => {
+const UsersReducer: Reducer<UsersState> = (baseState = initialState(), action) => {
   switch (action.type) {
 
-    case UserActionsTypes.AUTH_GET_SUCCESS: {
+    case UsersActionsTypes.AUTH_GET_SUCCESS: {
       const { session, user } = action.payload
 
       return produce(baseState, (state) => {
@@ -35,12 +41,20 @@ const UserReducer: Reducer<UserState> = (baseState = initialState, action) => {
       })
     }
 
-    case UserActionsTypes.AUTH_DELETE_SUCCESS: {
+    case UsersActionsTypes.AUTH_DELETE_SUCCESS: {
       const { session, user } = action.payload
 
       return produce(baseState, (state) => {
         const userState = getUserState(state, user.id)
         remove(userState.sessions, session.id)
+      })
+    }
+
+    case SocketActionsTypes.SOCKET_CLOSE_SUCCESS: {
+      const { session } = action.payload
+
+      return produce(baseState, (state) => {
+        delete state[session.id]
       })
     }
 
@@ -50,4 +64,4 @@ const UserReducer: Reducer<UserState> = (baseState = initialState, action) => {
   }
 }
 
-export default UserReducer
+export default UsersReducer

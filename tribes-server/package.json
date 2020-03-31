@@ -15,7 +15,7 @@
     "immer": "latest",
     "mongoose": "latest",
     "redux": "latest",
-    "typesafe-actions": "latest",
+    "redux-watch": "latest",
     "ws": "latest"
   },
   "devDependencies": {

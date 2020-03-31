@@ -1,8 +1,5 @@
 import { Actions as ProfileActions } from '../store/app/profile/profileActions'
 
-import Logger from 'ap-utils-logger'
-const LOGGER = new Logger('AppService')
-
 const AppService = {
 
   profile: {

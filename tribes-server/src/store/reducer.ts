@@ -3,11 +3,11 @@ import {
 } from 'redux'
 
 import SocketReducer from './socket/socketReducer'
-import UserReducer from './users/userReducer'
+import UsersReducer from './users/usersReducer'
 
 const reducer = combineReducers({
   socket: SocketReducer,
-  users: UserReducer,
+  users: UsersReducer,
 })
 
 export default reducer

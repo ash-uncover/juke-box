@@ -5,12 +5,11 @@ import {
   ActionsTypes as SocketActionsTypes
 } from '../store/socket/socketActions'
 
-import { faHeartbeat } from '@fortawesome/free-solid-svg-icons'
-
 import Logger from 'ap-utils-logger'
 const LOGGER = new Logger('SocketService')
 
-const CONN_TIMEOUT = 1000
+const CONN_TIMEOUT = 30000
+const CONN_TIMEOUT_DELAY = 10000
 
 let _socket: WebSocket
 let _pingTimeout: any
@@ -52,7 +51,7 @@ const SocketService = {
     clearTimeout(_pingTimeout)
     _pingTimeout = setTimeout(() => {
       SocketService.close(dispatch)
-    }, 30000 + 10000)
+    }, CONN_TIMEOUT + CONN_TIMEOUT_DELAY)
   },
 
   send: (dispatch: any, data: any) => {

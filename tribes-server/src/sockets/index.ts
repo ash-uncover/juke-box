@@ -3,6 +3,21 @@ import * as http from 'http'
 import * as WebSocket from 'ws'
 
 import store from '../store'
+import * as StoreUtils from '../utils/StoreUtils'
+
+import {
+  Actions as SocketActions,
+  ActionsTypes as SocketActionsTypes
+} from '../store/socket/socketActions'
+
+import {
+  selectors as SocketSelectiors
+} from '../store/socket'
+
+import {
+  Actions as UsersActions,
+  ActionsTypes as UsersActionsTypes
+} from '../store/users/usersActions'
 
 import SCHEMAS from '../database/schemas'
 
@@ -87,7 +102,6 @@ const removeSession = (sessionId) => {
   }
 }
 
-
 const send = (ws, type = '@@UNKNOWN', payload = {}) => {
   LOGGER.debug(`${ws['_id'].substring(0, 4)} - ${nowString()} - ${ws['_userId']} - TO - ${type}`)
   ws.send(JSON.stringify({ type, payload }))
@@ -104,34 +118,45 @@ const received = (ws: WebSocket, message: string) => {
   }
 }
 
-store.subscribe(() => {
-
-})
-
 wss.on('connection', (ws: ExtWebSocket) => {
-  ws['_id'] = '#' + UUID.next()
-  DATA.sessions[ws['_id']] = ws
+  const sessionId = `#${UUID.next()}`
+  ws['_id'] = sessionId
+
+  store.dispatch(
+    SocketActions.socketConnectSuccess(
+      { id: sessionId }
+    )
+  )
 
   ws.on('close', (message: string) => {
-    removeSession(ws['_id'])
+    const session = SocketSelectiors.socketSessionSelector(sessionId)(store.getState())
+    if (session.userId) {
+      store.dispatch(
+        UsersActions.authDeleteSuccess(
+          session,
+          { id: session.userId }
+        )
+      )
+    }
+    store.dispatch(
+      SocketActions.socketCloseSuccess(
+        session
+      )
+    )
   })
 
   ws.on('message', (message: string) => {
     const action = received(ws, message)
+    store.dispatch(action)
 
     switch (action.type) {
 
-      case '@@SOCKET/CONNECTION_CHECK': {
-        ws.isAlive = true
-        break
-      }
-
-      case '@@AUTH/GET_SUCCESS': {
+      case UsersActionsTypes.AUTH_GET_SUCCESS: {
         const id = action.payload.user.id
         ws['_userId'] = id
-        addUserSession(id, ws['_id'])
+        addUserSession(id, sessionId)
 
-        LOGGER.warn(`${ws['_id']} - ${ws['_userId']} - CONNECT`)
+        LOGGER.warn(`${sessionId} - ${ws['_userId']} - CONNECT`)
 
         wss.clients.forEach((client) => {
           const userId = client['_userId']
@@ -143,8 +168,8 @@ wss.on('connection', (ws: ExtWebSocket) => {
         break
       }
 
-      case '@@AUTH/DELETE_SUCCESS': {
-        const remaningConn = removeUserSession(ws['_userId'], ws['_id'])
+      case UsersActionsTypes.AUTH_DELETE_SUCCESS: {
+        const remaningConn = removeUserSession(ws['_userId'], sessionId)
         if (remaningConn.length === 0) {
           const id = ws['_userId']
           wss.clients.forEach((client) => {
@@ -158,7 +183,7 @@ wss.on('connection', (ws: ExtWebSocket) => {
         break
       }
 
-      case '@@REST/USERS/GET_SUCCESS': {
+      case UsersActionsTypes.REST_USERS_GET_SUCCESS: {
         const id = action.payload.user.id
         addUserListener(id, ws['_userId'])
         if (hasSessions(id)) {
@@ -167,7 +192,7 @@ wss.on('connection', (ws: ExtWebSocket) => {
         break
       }
 
-      case '@@REST/MESSAGES/POST_SUCCESS': {
+      case UsersActionsTypes.REST_MESSAGES_POST_SUCCESS: {
         const id = action.payload.message.id
         SCHEMAS.MESSAGES.model.findOne({ id }).exec((err, dataMessage) => {
           err ?
@@ -188,20 +213,20 @@ wss.on('connection', (ws: ExtWebSocket) => {
         break
       }
 
-      case '@@REST/MESSAGES/PATCH_SUCCESS': {
+      case UsersActionsTypes.REST_MESSAGES_PATCH_SUCCESS: {
         const { threadId, id } = action.payload.message
         SCHEMAS.THREADS.model.findOne({ id: threadId }).exec((err, dataThread) => {
           if (err) {
-            LOGGER.error('@@REST/MESSAGES/PATCH_SUCCESS - Error retreiving parent thread')
+            LOGGER.error(`${UsersActionsTypes.REST_MESSAGES_PATCH_SUCCESS} - Error retreiving parent thread`)
           } else if (!dataThread) {
-            LOGGER.error('@@REST/MESSAGES/PATCH_SUCCESS - Cannot retreive parent thread')
+            LOGGER.error(`${UsersActionsTypes.REST_MESSAGES_PATCH_SUCCESS} - Cannot retreive parent thread`)
           } else {
             dataThread.userId.forEach((userId) => {
-              DATA.users[userId].sessions.forEach((sessionId) => {
-                if (sessionId !== ws['_id']) {
+              DATA.users[userId].sessions.forEach((sesId) => {
+                if (sesId !== sessionId) {
                   send(
-                    DATA.sessions[sessionId],
-                    '@@REST/MESSAGES/PATCH_SUCCESS',
+                    DATA.sessions[sesId],
+                    UsersActionsTypes.REST_MESSAGES_PATCH_SUCCESS,
                     { message: { id } }
                   )
                 }
@@ -219,8 +244,8 @@ wss.on('connection', (ws: ExtWebSocket) => {
             LOGGER.error('@@REST/MESSAGES/DELETE_SUCCESS - Cannot retreive parent thread')
           :
             dataThread.userId.forEach((userId) => {
-              DATA.users[userId].sessions.forEach((sessionId) => {
-                const session = DATA.sessions[sessionId]
+              DATA.users[userId].sessions.forEach((sesId) => {
+                const session = DATA.sessions[sesId]
                 send(session, '@@SERVER/THREAD/MESSAGE_DELETED', action.payload)
               })
             })
@@ -231,13 +256,11 @@ wss.on('connection', (ws: ExtWebSocket) => {
 
   })
 
-  LOGGER.info('Connected to WS server ' + ws['_id'])
+  LOGGER.info('Connected to WS server ' + sessionId)
 })
 
 setInterval(() => {
   LOGGER.info('-------------- INTERVAL ----------------------')
-  console.log(DATA.users)
-  console.log(Object.keys(DATA.sessions))
   wss.clients.forEach((ws: ExtWebSocket) => {
     if (ws.isAlive === false) {
       LOGGER.warn(`${ws['_id']} - ${ws['_userId']} - CONNECTION LOST`)

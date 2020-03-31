@@ -4,16 +4,16 @@ import {
 
 import {
   ActionsTypes as UserActionsTypes
-} from '../../../src/store/users/userActions'
+} from '../../../src/store/users/usersActions'
 
 import SocketReducer, {
   initialState,
 } from '../../../src/store/socket/socketReducer'
 
-describe('SessionReducer', () => {
+describe('SocketReducer', () => {
   describe('default action', () => {
     test('When receiving an unsupported action', () => {
-      const paramState = null
+      const paramState = undefined
       const paramAction = { type: 'UNKNOWN' }
 
       const result = SocketReducer(paramState, paramAction)

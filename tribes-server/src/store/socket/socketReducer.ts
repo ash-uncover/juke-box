@@ -1,8 +1,7 @@
-import { Reducer } from 'redux'
 import produce from 'immer'
 
 import { ActionsTypes as SessionActionsTypes } from './socketActions'
-import { ActionsTypes as UserActionsTypes } from '../users/userActions'
+import { ActionsTypes as UserActionsTypes } from '../users/usersActions'
 
 export interface SocketState {}
 
@@ -11,6 +10,7 @@ export const initialState: () => SocketState = () => ({})
 
 export const initialSessionState = (id: string) => ({
   id,
+  isAlive: true,
   userId: null
 })
 
@@ -25,12 +25,37 @@ const SocketReducer: (baseState: SocketState, action: any) => SocketState = (
   baseState: SocketState = initialState(),
   action: any
 ) => {
+
   switch (action.type) {
     case SessionActionsTypes.SOCKET_CONNECT_SUCCESS: {
       const { session } = action.payload
 
       return produce(baseState, (state) => {
         getSessionState(state, session.id)
+      })
+    }
+
+    case SessionActionsTypes.SOCKET_CHECK_FETCH: {
+      const { session } = action.payload
+
+      return produce(baseState, (state) => {
+        getSessionState(state, session.id).isAlive = false
+      })
+    }
+
+    case SessionActionsTypes.SOCKET_CHECK_SUCCESS: {
+      const { session } = action.payload
+
+      return produce(baseState, (state) => {
+        getSessionState(state, session.id).isAlive = true
+      })
+    }
+
+    case SessionActionsTypes.SOCKET_CLOSE_SUCCESS: {
+      const { session } = action.payload
+
+      return produce(baseState, (state) => {
+        delete state[session.id]
       })
     }
 
@@ -44,7 +69,7 @@ const SocketReducer: (baseState: SocketState, action: any) => SocketState = (
     }
 
     case UserActionsTypes.AUTH_DELETE_SUCCESS: {
-      const { session, user } = action.payload
+      const { session } = action.payload
 
       return produce(baseState, (state) => {
         const sessionState = getSessionState(state, session.id)

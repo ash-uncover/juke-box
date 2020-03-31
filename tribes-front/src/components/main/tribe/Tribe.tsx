@@ -103,7 +103,7 @@ interface TribeContentProps {}
 const TribeContent = (props: TribeContentProps) => {
   const { tribeId } = useParams<TribeRouteParamTypes>()
 
-  const tribeData = useSelector(TribesSelectors.restTribeDataSelector(tribeId))
+  // const tribeData = useSelector(TribesSelectors.restTribeDataSelector(tribeId))
 
   return (
     <div className='TribeContent'>

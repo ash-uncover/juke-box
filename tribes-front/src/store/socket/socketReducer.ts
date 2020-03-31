@@ -5,7 +5,6 @@ import { ActionsTypes } from './socketActions'
 import { ActionsTypes as AuthActionsTypes } from '../auth/authActions'
 
 import {
-  AuthStatus,
   SocketStatus,
   UserStatus,
 } from '../../utils/constants'
