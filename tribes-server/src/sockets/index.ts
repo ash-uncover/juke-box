@@ -127,6 +127,23 @@ wss.on('connection', (ws: ExtWebSocket) => {
         break
       }
 
+      case SessionsActionsTypes.AUTH_DELETE_SUCCESS: {
+        LOGGER.warn(`${sessionId} - ${userId} - DISCONNECT`)
+        const listeners = store.getState().data.users[userId] || []
+        const sessions = store.getState().sessions
+        const userSessions = Object.values(sessions).filter((session) => session.userId === userId)
+
+        if (userSessions.length === 0) {
+          wss.clients.forEach((client) => {
+            const session = sessions[client['_id']]
+            if (session.id !== sessionId && listeners.includes(session.userId)) {
+              send(client, '@@SERVER/USER_DISCONNECTED', { id: userId })
+            }
+          })
+          break
+        }
+      }
+
       // Users
 
       case UsersActionsTypes.REST_USERS_GET_SUCCESS: {
