@@ -21,17 +21,17 @@ export const initialState: SocketState = {
 
 const reducer: Reducer<SocketState> = (baseState = initialState, action) => {
   switch (action.type) {
-    case ActionsTypes.SOCKET_CONNECT_FETCH: {
+    case ActionsTypes.SESSION_CONNECT_FETCH: {
       return produce(baseState, (state) => {
         state.status = SocketStatus.CONNECTING
       })
     }
-    case ActionsTypes.SOCKET_CONNECT_SUCCESS: {
+    case ActionsTypes.SESSION_CONNECT_SUCCESS: {
       return produce(baseState, (state) => {
         state.status = SocketStatus.CONNECTED
       })
     }
-    case ActionsTypes.SOCKET_CONNECT_FAILURE: {
+    case ActionsTypes.SESSION_CONNECT_FAILURE: {
       return produce(baseState, (state) => {
         state.status = SocketStatus.CONNECTION_ERROR
       })

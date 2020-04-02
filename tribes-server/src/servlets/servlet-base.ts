@@ -21,7 +21,7 @@ export const defaultPost = (schema, req, res, next, onError) => {
     err ?
       (onError ? onError(err) : res.status(HttpStatus.ERROR).send(err))
     :
-      res.status(HttpStatus.CREATED).send({ id: data.id })
+      res.status(HttpStatus.CREATED).send(data)
   })
 }
 
@@ -65,7 +65,7 @@ export const defaultPatch = (schema, req, res, next, onError) => {
 }
 
 export const defaultDelete = (schema, req, res, next, onError) => {
-  schema.model.remove({ id: req.params[`${schema.name}Id`] }, (err, data) => {
+  schema.model.deleteOne({ id: req.params[`${schema.name}Id`] }, (err, data) => {
     err ? (onError ? onError(err) : res.status(HttpStatus.ERROR).send(err)) : res.sendStatus(HttpStatus.REMOVED)
   })
 }

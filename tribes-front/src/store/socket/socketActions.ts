@@ -1,27 +1,34 @@
 import { action } from 'typesafe-actions'
 
 export const ActionsTypes = {
-  SOCKET_CONNECT_FETCH: '@@SOCKET/CONNECT_FETCH',
-  SOCKET_CONNECT_SUCCESS: '@@SOCKET/CONNECT_SUCCESS',
-  SOCKET_CONNECT_FAILURE: '@@SOCKET/CONNECT_FAILURE',
+  SESSION_CONNECT_FETCH: '@@SESSION/CONNECT_FETCH',
+  SESSION_CONNECT_SUCCESS: '@@SESSION/CONNECT_SUCCESS',
+  SESSION_CONNECT_FAILURE: '@@SESSION/CONNECT_FAILURE',
 
-  SOCKET_CONNECTION_CHECK: '@@SOCKET/CONNECTION_CHECK',
-  SOCKET_CONNECTION_LOST: '@@SOCKET/CONNECTION_LOST',
+  SESSION_CHECK_FETCH: '@@SESSION/CHECK_FETCH',
+  SESSION_CHECK_SUCCESS: '@@SESSION/CHECK_SUCCESS',
+  SESSION_CHECK_FAILURE: '@@SESSION/CHECK_FAILURE',
+
+  SESSION_LOST: '@@SESSION/LOST',
 
   SERVER_USER_CONNECTED: '@@SERVER/USER_CONNECTED',
   SERVER_USER_DISCONNECTED: '@@SERVER/USER_DISCONNECTED',
 
-  SERVER_THREAD_MESSAGE_POSTED: '@@SERVER/THREAD/MESSAGE_POSTED',
+  SERVER_THREAD_MESSAGE_CREATED: '@@SERVER/THREAD/MESSAGE_CREATED',
+  SERVER_THREAD_MESSAGE_UPDATED: '@@SERVER/THREAD/MESSAGE_UPDATED',
   SERVER_THREAD_MESSAGE_DELETED: '@@SERVER/THREAD/MESSAGE_DELETED',
 }
 
 export const Actions = {
-  socketConnectFetch: () => action(ActionsTypes.SOCKET_CONNECT_FETCH),
-  socketConnectSuccess: () => action(ActionsTypes.SOCKET_CONNECT_SUCCESS),
-  socketConnectFailure: () => action(ActionsTypes.SOCKET_CONNECT_FAILURE),
+  sessionConnectFetch: () => action(ActionsTypes.SESSION_CONNECT_FETCH),
+  sessionConnectSuccess: () => action(ActionsTypes.SESSION_CONNECT_SUCCESS),
+  sessionConnectFailure: () => action(ActionsTypes.SESSION_CONNECT_FAILURE),
 
-  socketConnectionCheck: () => action(ActionsTypes.SOCKET_CONNECTION_CHECK),
-  socketConnectionLost: () => action(ActionsTypes.SOCKET_CONNECTION_LOST),
+  sessionCheckFetch: () => action(ActionsTypes.SESSION_CHECK_FETCH),
+  sessionCheckSuccess: () => action(ActionsTypes.SESSION_CHECK_SUCCESS),
+  sessionCheckFailure: () => action(ActionsTypes.SESSION_CHECK_FAILURE),
+
+  sessionLost: () => action(ActionsTypes.SESSION_LOST),
 
   serverUserConnected: () => action(ActionsTypes.SERVER_USER_CONNECTED),
   serverUserDisconnected: () => action(ActionsTypes.SERVER_USER_DISCONNECTED),

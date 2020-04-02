@@ -133,7 +133,7 @@ const reducer: Reducer<ThreadsState> = (baseState = initialState, action) => {
 
     // SOCKET events
 
-    case SocketActionsTypes.SERVER_THREAD_MESSAGE_POSTED: {
+    case SocketActionsTypes.SERVER_THREAD_MESSAGE_CREATED: {
       const { threadId } = action.payload
 
       return produce(baseState, (state) => {

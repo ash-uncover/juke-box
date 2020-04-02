@@ -3,16 +3,15 @@ import * as http from 'http'
 import * as WebSocket from 'ws'
 
 import store from '../store'
-import * as StoreUtils from '../utils/StoreUtils'
 
 import {
   Actions as Actions,
-  ActionsTypes as ActionsTypes
+  ActionsTypes as SessionsActionsTypes
 } from '../store/sessions/sessionsActions'
 
 import {
   Actions as UsersActions,
-  UsersActionsTypes as UsersActionsTypes
+  ActionsTypes as UsersActionsTypes
 } from '../store/data/users/usersActions'
 
 import {
@@ -61,11 +60,15 @@ const send = (ws, type = '@@UNKNOWN', payload = {}) => {
 const received = (session: SessionModel, message: string) => {
   try {
     const action = JSON.parse(message)
-    Object.assign(action, { session })
+    action.payload = Object.assign(
+      action.payload || {},
+      { session }
+    )
     LOGGER.debug(`${session.id} - ${nowString()} - ${session.userId} - FROM - ${action.type}`)
     return action
   } catch (error) {
     LOGGER.error(`Failed to parse: ${message}`)
+    LOGGER.error(error)
     return {}
   }
 }
@@ -107,17 +110,18 @@ wss.on('connection', (ws: ExtWebSocket) => {
 
       // Authentication (user online)
 
-      case ActionsTypes.AUTH_GET_SUCCESS: {
-        LOGGER.warn(`${sessionId} - ${session.userId} - CONNECT`)
-        const listeners = store.getState().data.users[userId]
+      case SessionsActionsTypes.AUTH_GET_SUCCESS: {
+        const sessionUpdated = store.getState().sessions[sessionId]
+        LOGGER.warn(`${sessionId} - ${sessionUpdated.userId} - CONNECT`)
+        const listeners = store.getState().data.users[sessionUpdated.userId] || []
         const sessions = store.getState().sessions
 
-        send(ws, '@@SERVER/USER_CONNECTED', { id: userId })
+        send(ws, '@@SERVER/USER_CONNECTED', { id: sessionUpdated.userId })
 
         wss.clients.forEach((client) => {
           const session = sessions[client['_id']]
           if (session.id !== sessionId && listeners.includes(session.userId)) {
-            send(client, '@@SERVER/USER_CONNECTED', { id: userId })
+            send(client, '@@SERVER/USER_CONNECTED', { id: sessionUpdated.userId })
           }
         })
         break
@@ -132,24 +136,29 @@ wss.on('connection', (ws: ExtWebSocket) => {
 
         wss.clients.forEach((client) => {
           const session = sessions[client['_id']]
-          if (session.id !== sessionId && listeners.includes(session.userId)) {
-            send(client, '@@SERVER/THREAD/MESSAGE_POSTED', { threadId })
+          if (listeners.includes(session.userId)) {
+            send(
+              client,
+              '@@SERVER/THREAD/MESSAGE_CREATED',
+              { threadId },
+            )
           }
         })
         break
       }
 
+      case MessagesActionsTypes.REST_MESSAGES_PUT_SUCCESS:
       case MessagesActionsTypes.REST_MESSAGES_PATCH_SUCCESS: {
-        const messageId = action.payload.message.id
-        const listeners = store.getState().data.messages[messageId]
+        const { threadId } = action.payload.message
+        const listeners = store.getState().data.threads[threadId]
         const sessions = store.getState().sessions
 
         wss.clients.forEach((client) => {
           const session = sessions[client['_id']]
-          if (session.id !== sessionId && listeners.includes(session.userId)) {
+          if (listeners.includes(session.userId)) {
             send(
               client,
-              MessagesActionsTypes.REST_MESSAGES_PATCH_SUCCESS,
+              '@@SERVER/THREAD/MESSAGE_UPDATED',
               action.payload,
             )
           }
@@ -157,14 +166,14 @@ wss.on('connection', (ws: ExtWebSocket) => {
         break
       }
 
-      case '@@REST/MESSAGES/DELETE_SUCCESS': {
-        const messageId = action.payload.message.id
-        const listeners = store.getState().data.messages[messageId]
+      case MessagesActionsTypes.REST_MESSAGES_DELETE_SUCCESS: {
+        const { threadId } = action.payload.message
+        const listeners = store.getState().data.threads[threadId]
         const sessions = store.getState().sessions
 
         wss.clients.forEach((client) => {
           const session = sessions[client['_id']]
-          if (session.id !== sessionId && listeners.includes(session.userId)) {
+          if (listeners.includes(session.userId)) {
             send(
               client,
               '@@SERVER/THREAD/MESSAGE_DELETED',
@@ -175,22 +184,19 @@ wss.on('connection', (ws: ExtWebSocket) => {
         break
       }
     }
-
   })
 
   LOGGER.info('Connected to WS server ' + sessionId)
 })
 
 setInterval(() => {
-  LOGGER.info('-------------- INTERVAL ----------------------')
   wss.clients.forEach((ws: ExtWebSocket) => {
-    if (ws.isAlive === false) {
-      LOGGER.warn(`${ws['_id']} - ${ws['_userId']} - CONNECTION LOST`)
+    const session = store.getState().sessions[ws['_id']]
+    if (session.isAlive === false) {
+      console.log('WE WILLLL KILL YOUUUUU')
       return ws.terminate()
     }
-    LOGGER.warn(`${ws['_id']} - ${ws['_userId']} - STILL ALIVE`)
-    ws.isAlive = false
-    send(ws, '@@SOCKET/CONNECTION_CHECK')
+    send(ws, SessionsActionsTypes.SESSION_CHECK_FETCH)
   })
 }, PING_INTERVAL)
 

@@ -4,6 +4,7 @@ import produce from 'immer'
 import { ActionsTypes as MessagesActionsTypes} from './messagesActions'
 import { ActionsTypes as AuthActionsTypes } from '../../auth/authActions'
 import { ActionsTypes as ThreadsActionsTypes } from '../threads/threadsActions'
+import { ActionsTypes as ServerActionsTypes } from '../../socket/socketActions'
 
 import {
   ErrorData,
@@ -82,12 +83,22 @@ const reducer: Reducer<MessagesState> = (baseState = initialState, action) => {
     // PUT /messages/{messageId}
     // PATCH /messages/{messageId}
 
-    case MessagesActionsTypes.REST_MESSAGES_PATCH_SUCCESS: {
+    case ServerActionsTypes.SERVER_THREAD_MESSAGE_UPDATED: {
       const { message } = action.payload
 
       return produce(baseState, (state) => {
         const messageState = getMessageState(state, message.id)
         messageState.status = RequestState.OUTDATED
+      })
+    }
+
+    // DELETE /messages/{messageId}
+
+    case ServerActionsTypes.SERVER_THREAD_MESSAGE_DELETED: {
+      const { message } = action.payload
+
+      return produce(baseState, (state) => {
+        delete state.data[message.id]
       })
     }
 

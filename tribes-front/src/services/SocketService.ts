@@ -1,8 +1,8 @@
 import { action } from 'typesafe-actions'
 
 import {
-  Actions as SocketActions,
-  ActionsTypes as SocketActionsTypes
+  Actions as SessionsActions,
+  ActionsTypes as SessionsActionsTypes
 } from '../store/socket/socketActions'
 
 import Logger from 'ap-utils-logger'
@@ -17,20 +17,20 @@ let _pingTimeout: any
 const SocketService = {
 
   connect(dispatch: any, url: string) {
-    dispatch(SocketActions.socketConnectFetch())
+    dispatch(SessionsActions.sessionConnectFetch())
 
     _socket = new WebSocket(url)
 
     _socket.onopen = function() {
-      dispatch(SocketActions.socketConnectSuccess())
+      dispatch(SessionsActions.sessionConnectSuccess())
 
       this.onmessage = (event: any) => {
         const actionData = JSON.parse(event.data)
         LOGGER.info(actionData)
         switch (actionData.type) {
-          case SocketActionsTypes.SOCKET_CONNECTION_CHECK: {
+          case SessionsActionsTypes.SESSION_CHECK_FETCH: {
             SocketService.heartbeat(dispatch)
-            _socket.send(event.data)
+            _socket.send(JSON.stringify({ type: SessionsActionsTypes.SESSION_CHECK_SUCCESS }))
             break
           }
           default: {
@@ -42,7 +42,7 @@ const SocketService = {
     }
 
     _socket.onerror = (error) => {
-      dispatch(SocketActions.socketConnectFailure())
+      dispatch(SessionsActions.sessionConnectFailure())
     }
   },
 
@@ -65,7 +65,7 @@ const SocketService = {
   close: (dispatch: any) => {
     clearTimeout(_pingTimeout)
     _socket.close()
-    dispatch(SocketActions.socketConnectionLost())
+    dispatch(SessionsActions.sessionLost())
   }
 }
 
