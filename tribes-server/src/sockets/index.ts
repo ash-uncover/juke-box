@@ -127,6 +127,20 @@ wss.on('connection', (ws: ExtWebSocket) => {
         break
       }
 
+      // Users
+
+      case UsersActionsTypes.REST_USERS_GET_SUCCESS: {
+        const userId = action.payload.user.id
+
+        const sessions = store.getState().sessions
+        const isOnline = Object.values(sessions).some((session) => session.userId === userId)
+
+        if (isOnline) {
+          send(ws, '@@SERVER/USER_CONNECTED', { id: userId })
+        }
+        break
+      }
+
       // Messages
 
       case MessagesActionsTypes.REST_MESSAGES_POST_SUCCESS: {
@@ -193,7 +207,6 @@ setInterval(() => {
   wss.clients.forEach((ws: ExtWebSocket) => {
     const session = store.getState().sessions[ws['_id']]
     if (session.isAlive === false) {
-      console.log('WE WILLLL KILL YOUUUUU')
       return ws.terminate()
     }
     send(ws, SessionsActionsTypes.SESSION_CHECK_FETCH)
