@@ -6,20 +6,30 @@ import store from '../store'
 import * as StoreUtils from '../utils/StoreUtils'
 
 import {
-  Actions as SocketActions,
-  ActionsTypes as SocketActionsTypes
-} from '../store/socket/socketActions'
-
-import {
-  selectors as SocketSelectiors
-} from '../store/socket'
+  Actions as Actions,
+  ActionsTypes as ActionsTypes
+} from '../store/sessions/sessionsActions'
 
 import {
   Actions as UsersActions,
-  ActionsTypes as UsersActionsTypes
-} from '../store/users/usersActions'
+  UsersActionsTypes as UsersActionsTypes
+} from '../store/data/users/usersActions'
+
+import {
+  Actions as ThreadsActions,
+  ActionsTypes as ThreadsActionsTypes
+} from '../store/data/threads/threadsActions'
+
+import {
+  Actions as MessagesActions,
+  ActionsTypes as MessagesActionsTypes
+} from '../store/data/messages/messagesActions'
 
 import SCHEMAS from '../database/schemas'
+
+import {
+  SessionModel
+} from '../types'
 
 import {
   UUID,
@@ -43,74 +53,16 @@ const app = express()
 const server = http.createServer(app)
 const wss = new WebSocket.Server({ server })
 
-const DATA = {
-  users: {},
-  sessions: {}
-}
-
-const getOrInitUser = (userId) => {
-  DATA.users[userId] = DATA.users[userId] || {
-    listeners: [],
-    sessions: []
-  }
-  return DATA.users[userId]
-}
-
-const addUserSession = (userId, connId) => {
-  getOrInitUser(userId)
-  DATA.users[userId].sessions.push(connId)
-}
-
-const removeUserSession = (userId, connId) => {
-  getOrInitUser(userId)
-  const index = DATA.users[userId].sessions.indexOf(connId)
-  if (index > -1) {
-    DATA.users[userId].sessions.splice(index, 1)
-  }
-  delete DATA.sessions[connId]
-  return DATA.users[userId].sessions
-}
-
-const hasSessions = (userId) => {
-  getOrInitUser(userId)
-  return DATA.users[userId].sessions.length > 0
-}
-
-const addUserListener = (userId, listenerId) => {
-  getOrInitUser(userId)
-  DATA.users[userId].listeners.push(listenerId)
-}
-
-const removeUserListener = (userId, listenerId) => {
-  getOrInitUser(userId)
-  const index = DATA.users[userId].listeners.indexOf(listenerId)
-  DATA.users[userId].listeners.splice(index, 1)
-  return DATA.users[userId].listeners
-}
-
-const hasListeners = (userId) => {
-  getOrInitUser(userId)
-  return DATA.users[userId].listeners.length > 0
-}
-
-const removeSession = (sessionId) => {
-  const session = DATA.sessions[sessionId]
-  if (session && session['_userId']) {
-    removeUserSession(session['_userId'], sessionId)
-  } else {
-    delete DATA.sessions[sessionId]
-  }
-}
-
 const send = (ws, type = '@@UNKNOWN', payload = {}) => {
   LOGGER.debug(`${ws['_id'].substring(0, 4)} - ${nowString()} - ${ws['_userId']} - TO - ${type}`)
   ws.send(JSON.stringify({ type, payload }))
 }
 
-const received = (ws: WebSocket, message: string) => {
+const received = (session: SessionModel, message: string) => {
   try {
     const action = JSON.parse(message)
-    LOGGER.debug(`${ws['_id'].substring(0, 4)} - ${nowString()} - ${ws['_userId']} - FROM - ${action.type}`)
+    Object.assign(action, { session })
+    LOGGER.debug(`${session.id} - ${nowString()} - ${session.userId} - FROM - ${action.type}`)
     return action
   } catch (error) {
     LOGGER.error(`Failed to parse: ${message}`)
@@ -123,132 +75,102 @@ wss.on('connection', (ws: ExtWebSocket) => {
   ws['_id'] = sessionId
 
   store.dispatch(
-    SocketActions.socketConnectSuccess(
+    Actions.sessionConnectSuccess(
       { id: sessionId }
     )
   )
 
   ws.on('close', (message: string) => {
-    const session = SocketSelectiors.socketSessionSelector(sessionId)(store.getState())
+    const session = store.getState().sessions[sessionId]
     if (session.userId) {
       store.dispatch(
-        UsersActions.authDeleteSuccess(
+        Actions.authDeleteSuccess(
           session,
           { id: session.userId }
         )
       )
     }
     store.dispatch(
-      SocketActions.socketCloseSuccess(
+      Actions.sessionCloseSuccess(
         session
       )
     )
   })
 
   ws.on('message', (message: string) => {
-    const action = received(ws, message)
+    const session = store.getState().sessions[sessionId]
+    const { userId } = session
+    const action = received(session, message)
     store.dispatch(action)
 
     switch (action.type) {
 
-      case UsersActionsTypes.AUTH_GET_SUCCESS: {
-        const id = action.payload.user.id
-        ws['_userId'] = id
-        addUserSession(id, sessionId)
+      // Authentication (user online)
 
-        LOGGER.warn(`${sessionId} - ${ws['_userId']} - CONNECT`)
+      case ActionsTypes.AUTH_GET_SUCCESS: {
+        LOGGER.warn(`${sessionId} - ${session.userId} - CONNECT`)
+        const listeners = store.getState().data.users[userId]
+        const sessions = store.getState().sessions
+
+        send(ws, '@@SERVER/USER_CONNECTED', { id: userId })
 
         wss.clients.forEach((client) => {
-          const userId = client['_userId']
-          if (userId && userId !== id) {
-            send(ws, '@@SERVER/USER_CONNECTED', { id: userId })
-            send(client, '@@SERVER/USER_CONNECTED', { id })
+          const session = sessions[client['_id']]
+          if (session.id !== sessionId && listeners.includes(session.userId)) {
+            send(client, '@@SERVER/USER_CONNECTED', { id: userId })
           }
         })
         break
       }
 
-      case UsersActionsTypes.AUTH_DELETE_SUCCESS: {
-        const remaningConn = removeUserSession(ws['_userId'], sessionId)
-        if (remaningConn.length === 0) {
-          const id = ws['_userId']
-          wss.clients.forEach((client) => {
-            LOGGER.warn(client['_id'])
-            if (client['_userId'] !== id) {
-              send(client, '@@SERVER/USER_DISCONNECTED', { id })
-            }
-          })
-        }
-        delete ws['_userId']
-        break
-      }
+      // Messages
 
-      case UsersActionsTypes.REST_USERS_GET_SUCCESS: {
-        const id = action.payload.user.id
-        addUserListener(id, ws['_userId'])
-        if (hasSessions(id)) {
-          send(ws, '@@SERVER/USER_CONNECTED', { id })
-        }
-        break
-      }
+      case MessagesActionsTypes.REST_MESSAGES_POST_SUCCESS: {
+        const threadId = action.payload.message.threadId
+        const listeners = store.getState().data.threads[threadId]
+        const sessions = store.getState().sessions
 
-      case UsersActionsTypes.REST_MESSAGES_POST_SUCCESS: {
-        const id = action.payload.message.id
-        SCHEMAS.MESSAGES.model.findOne({ id }).exec((err, dataMessage) => {
-          err ?
-            LOGGER.error('@@REST/MESSAGES/POST_SUCCESS - Cannot retreive created message')
-          :
-            SCHEMAS.THREADS.model.findOne({ id: dataMessage.threadId }).exec((err, dataThread) => {
-              err ?
-                LOGGER.error('@@REST/MESSAGES/POST_SUCCESS - Cannot retreive parent thread')
-              :
-                dataThread.userId.forEach((userId) => {
-                  DATA.users[userId].sessions.forEach((sessionId) => {
-                    const session = DATA.sessions[sessionId]
-                    send(session, '@@SERVER/THREAD/MESSAGE_POSTED', { threadId: dataMessage.threadId })
-                  })
-                })
-            })
+        wss.clients.forEach((client) => {
+          const session = sessions[client['_id']]
+          if (session.id !== sessionId && listeners.includes(session.userId)) {
+            send(client, '@@SERVER/THREAD/MESSAGE_POSTED', { threadId })
+          }
         })
         break
       }
 
-      case UsersActionsTypes.REST_MESSAGES_PATCH_SUCCESS: {
-        const { threadId, id } = action.payload.message
-        SCHEMAS.THREADS.model.findOne({ id: threadId }).exec((err, dataThread) => {
-          if (err) {
-            LOGGER.error(`${UsersActionsTypes.REST_MESSAGES_PATCH_SUCCESS} - Error retreiving parent thread`)
-          } else if (!dataThread) {
-            LOGGER.error(`${UsersActionsTypes.REST_MESSAGES_PATCH_SUCCESS} - Cannot retreive parent thread`)
-          } else {
-            dataThread.userId.forEach((userId) => {
-              DATA.users[userId].sessions.forEach((sesId) => {
-                if (sesId !== sessionId) {
-                  send(
-                    DATA.sessions[sesId],
-                    UsersActionsTypes.REST_MESSAGES_PATCH_SUCCESS,
-                    { message: { id } }
-                  )
-                }
-              })
-            })
+      case MessagesActionsTypes.REST_MESSAGES_PATCH_SUCCESS: {
+        const messageId = action.payload.message.id
+        const listeners = store.getState().data.messages[messageId]
+        const sessions = store.getState().sessions
+
+        wss.clients.forEach((client) => {
+          const session = sessions[client['_id']]
+          if (session.id !== sessionId && listeners.includes(session.userId)) {
+            send(
+              client,
+              MessagesActionsTypes.REST_MESSAGES_PATCH_SUCCESS,
+              action.payload,
+            )
           }
         })
         break
       }
 
       case '@@REST/MESSAGES/DELETE_SUCCESS': {
-        const { threadId } = action.payload.message
-        SCHEMAS.THREADS.model.findOne({ id: threadId }).exec((err, dataThread) => {
-          err ?
-            LOGGER.error('@@REST/MESSAGES/DELETE_SUCCESS - Cannot retreive parent thread')
-          :
-            dataThread.userId.forEach((userId) => {
-              DATA.users[userId].sessions.forEach((sesId) => {
-                const session = DATA.sessions[sesId]
-                send(session, '@@SERVER/THREAD/MESSAGE_DELETED', action.payload)
-              })
-            })
+        const messageId = action.payload.message.id
+        const listeners = store.getState().data.messages[messageId]
+        const sessions = store.getState().sessions
+
+        wss.clients.forEach((client) => {
+          const session = sessions[client['_id']]
+          if (session.id !== sessionId && listeners.includes(session.userId)) {
+            send(
+              client,
+              '@@SERVER/THREAD/MESSAGE_DELETED',
+              action.payload,
+            )
+          }
         })
         break
       }
@@ -264,7 +186,6 @@ setInterval(() => {
   wss.clients.forEach((ws: ExtWebSocket) => {
     if (ws.isAlive === false) {
       LOGGER.warn(`${ws['_id']} - ${ws['_userId']} - CONNECTION LOST`)
-      removeUserSession(ws['_userId'], ws['_id'])
       return ws.terminate()
     }
     LOGGER.warn(`${ws['_id']} - ${ws['_userId']} - STILL ALIVE`)

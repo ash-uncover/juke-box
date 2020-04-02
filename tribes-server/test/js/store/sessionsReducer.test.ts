@@ -1,22 +1,18 @@
 import {
-  ActionsTypes as SessionActionsTypes,
-} from '../../../src/store/socket/socketActions'
+  ActionsTypes as SessionsActionsTypes,
+} from '../../../src/store/sessions/sessionsActions'
 
-import {
-  ActionsTypes as UserActionsTypes
-} from '../../../src/store/users/usersActions'
-
-import SocketReducer, {
+import SessionsReducer, {
   initialState,
-} from '../../../src/store/socket/socketReducer'
+} from '../../../src/store/sessions/sessionsReducer'
 
-describe('SocketReducer', () => {
+describe('sessionsReducer', () => {
   describe('default action', () => {
     test('When receiving an unsupported action', () => {
       const paramState = undefined
       const paramAction = { type: 'UNKNOWN' }
 
-      const result = SocketReducer(paramState, paramAction)
+      const result = SessionsReducer(paramState, paramAction)
 
       const expected = initialState()
 
@@ -28,18 +24,19 @@ describe('SocketReducer', () => {
     test('when session was not defined', () => {
       const paramState = initialState()
       const paramAction = {
-        type: SessionActionsTypes.SOCKET_CONNECT_SUCCESS,
+        type: SessionsActionsTypes.SESSION_CONNECT_SUCCESS,
         payload: {
           session: { id: 'sessionId' },
         }
       }
 
-      const result = SocketReducer(paramState, paramAction)
+      const result = SessionsReducer(paramState, paramAction)
 
       const expected = {
         sessionId: {
           id: paramAction.payload.session.id,
-          userId: null
+          isAlive: true,
+          userId: null,
         }
       }
 
@@ -61,14 +58,14 @@ describe('SocketReducer', () => {
       }
 
       const paramAction = {
-        type: UserActionsTypes.AUTH_GET_SUCCESS,
+        type: SessionsActionsTypes.AUTH_GET_SUCCESS,
         payload: {
           session: { id: 'sessionId' },
           user: { id: 'userId' },
         }
       }
 
-      const result = SocketReducer(paramState, paramAction)
+      const result = SessionsReducer(paramState, paramAction)
 
       const expected = {
         sessionId: {
@@ -99,14 +96,14 @@ describe('SocketReducer', () => {
       }
 
       const paramAction = {
-        type: UserActionsTypes.AUTH_DELETE_SUCCESS,
+        type: SessionsActionsTypes.AUTH_DELETE_SUCCESS,
         payload: {
           session: { id: 'sessionId' },
           user: { id: 'userId' },
         },
       }
 
-      const result = SocketReducer(paramState, paramAction)
+      const result = SessionsReducer(paramState, paramAction)
 
       const expected = {
         sessionId: {

@@ -1,5 +1,4 @@
-export const dateString = (dateToConvert: Date) => {
-  const date = dateToConvert.toISOString()
+export const dateString = (date: Date) => {
   const year = new String(date.getFullYear()).padStart(2, '0')
   const month = new String(date.getMonth()).padStart(2, '0')
   const day = new String(date.getDate()).padStart(2, '0')

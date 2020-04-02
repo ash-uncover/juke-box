@@ -1,6 +1,6 @@
 export interface SessionModel {
   id: string,
-  userId?: string,
+  userId?: string | null,
 }
 
 export interface UserModel {

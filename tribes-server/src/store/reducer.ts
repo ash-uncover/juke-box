@@ -2,12 +2,12 @@ import {
   combineReducers
 } from 'redux'
 
-import SocketReducer from './socket/socketReducer'
-import UsersReducer from './users/usersReducer'
+import DataReducer from './data/dataReducer'
+import SessionsReducer from './sessions/sessionsReducer'
 
 const reducer = combineReducers({
-  socket: SocketReducer,
-  users: UsersReducer,
+  data: DataReducer,
+  sessions: SessionsReducer,
 })
 
 export default reducer

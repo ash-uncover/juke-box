@@ -1,12 +1,11 @@
 import reducer from '../../../src/store/reducer'
 
-import {
-  initialState as socketInitialState,
-} from '../../../src/store/socket/socketReducer'
+import { initialState as sessionsInitialState } from '../../../src/store/sessions/sessionsReducer'
 
-import {
-  initialState as userInitialState,
-} from '../../../src/store/users/usersReducer'
+import { initialState as messagesInitialState } from '../../../src/store/data/messages/messagesReducer'
+import { initialState as threadsInitialState } from '../../../src/store/data/threads/threadsReducer'
+import { initialState as tribesInitialState } from '../../../src/store/data/tribes/tribesReducer'
+import { initialState as usersInitialState } from '../../../src/store/data/users/usersReducer'
 
 describe('Reducer', () => {
   describe('default action', () => {
@@ -17,8 +16,13 @@ describe('Reducer', () => {
       const result = reducer(paramState, paramAction)
 
       const expected = {
-        socket: socketInitialState(),
-        users: userInitialState(),
+        sessions: sessionsInitialState(),
+        data: {
+          messages: messagesInitialState(),
+          threads: threadsInitialState(),
+          tribes: tribesInitialState(),
+          users: usersInitialState(),
+        }
       }
 
       expect(result).toEqual(expected)

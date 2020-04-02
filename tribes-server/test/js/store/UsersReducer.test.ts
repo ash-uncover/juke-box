@@ -1,10 +1,10 @@
 import {
-  ActionsTypes as UserActionsTypes
-} from '../../../src/store/users/usersActions'
+  ActionsTypes as UsersActionsTypes
+} from '../../../src/store/data/users/usersActions'
 
 import UserReducer, {
   initialState,
-} from '../../../src/store/users/usersReducer'
+} from '../../../src/store/data/users/usersReducer'
 
 describe('UserReducer', () => {
   describe('default action', () => {
@@ -20,67 +20,28 @@ describe('UserReducer', () => {
     })
   })
 
-  describe('When receiving user authentication success event', () => {
-    test('properly creates the user entry with the session', () => {
+  describe('When receiving user request success event', () => {
+    test('properly creates the user listener with the session user', () => {
       const paramState = {}
 
       const paramAction = {
-        type: UserActionsTypes.AUTH_GET_SUCCESS,
+        type: UsersActionsTypes.REST_USERS_GET_SUCCESS,
         payload: {
-          session: { id: 'sessionId' },
-          user: { id: 'userId' },
+          session: {
+            id: 'sessionId',
+            userId: 'sessionUserId'
+          },
+          id: 'userId',
         }
       }
 
       const result = UserReducer(paramState, paramAction)
 
       const expected = {
-        userId: {
-          listeners: [],
-          sessions: ['sessionId'],
-        },
+        userId: [ 'sessionUserId' ],
       }
 
       expect(result).toEqual(expected)
     })
   })
-
-  describe('When receiving user disconnetion success event', () => {
-    test('properly removed only the sessions and only to the user', () => {
-      const paramState = {
-        userId: {
-          listeners: [],
-          sessions: ['sessionId', 'sessionId2'],
-        },
-        userId2: {
-          listeners: [],
-          sessions: ['sessionId'],
-        },
-      }
-
-      const paramAction = {
-        type: UserActionsTypes.AUTH_DELETE_SUCCESS,
-        payload: {
-          session: { id: 'sessionId' },
-          user: { id: 'userId' },
-        },
-      }
-
-      const result = UserReducer(paramState, paramAction)
-
-      const expected = {
-        userId: {
-          listeners: [],
-          sessions: ['sessionId2'],
-        },
-        userId2: {
-          listeners: [],
-          sessions: ['sessionId'],
-        },
-      }
-
-      expect(result).toEqual(expected)
-    })
-  })
-
 })
