@@ -2,6 +2,14 @@ import { Reducer } from 'redux'
 import produce from 'immer'
 
 import {
+  ActionsTypes as SessionsActionsTypes
+} from '../../sessions/sessionsActions'
+
+import {
+  selectors as SessionsSelectors
+} from '../../sessions'
+
+import {
   ActionsTypes as MessagesActionsTypes
 } from '../messages/messagesActions'
 
@@ -13,6 +21,7 @@ import {
   add,
   remove,
 } from '../../../utils/Sets'
+import { Session } from 'inspector'
 
 export interface ThreadsState {
 }
@@ -26,7 +35,11 @@ const getThreadState = (state: ThreadsState, id: string) => {
   return state[id]
 }
 
-const ThreadsReducer: Reducer<ThreadsState> = (baseState = initialState(), action) => {
+const ThreadsReducer = (
+  baseState = initialState(),
+  action,
+  rootState
+) => {
   switch (action.type) {
 
     case ThreadsActionsTypes.REST_THREADS_GET_SUCCESS: {
@@ -43,6 +56,19 @@ const ThreadsReducer: Reducer<ThreadsState> = (baseState = initialState(), actio
 
       return produce(baseState, (state) => {
         delete state[id]
+      })
+    }
+
+    case SessionsActionsTypes.AUTH_DELETE_SUCCESS: {
+      const { id, userId } = action.payload.session
+
+      return produce(baseState, (state) => {
+        const isLastSession = SessionsSelectors.isLastSession(rootState, userId, id)
+        if (isLastSession) {
+          Object.values(state).forEach((listeners: string[]) => {
+            remove(listeners, userId)
+          })
+        }
       })
     }
 

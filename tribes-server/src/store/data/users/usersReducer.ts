@@ -6,6 +6,14 @@ import {
 } from './usersActions'
 
 import {
+  ActionsTypes as SessionsActionsTypes
+} from '../../sessions/sessionsActions'
+
+import {
+  selectors as SessionsSelectors
+} from '../../sessions'
+
+import {
   add,
   remove,
 } from '../../../utils/Sets'
@@ -22,7 +30,11 @@ const getUserState = (state: UsersState, id: string) => {
   return state[id]
 }
 
-const UsersReducer: Reducer<UsersState> = (baseState = initialState(), action) => {
+const UsersReducer = (
+  baseState = initialState(),
+  action,
+  rootState
+) => {
   switch (action.type) {
 
     // Users
@@ -33,6 +45,19 @@ const UsersReducer: Reducer<UsersState> = (baseState = initialState(), action) =
       return produce(baseState, (state) => {
         const userState = getUserState(state, id)
         add(userState, session.userId)
+      })
+    }
+
+    case SessionsActionsTypes.AUTH_DELETE_SUCCESS: {
+      const { id, userId } = action.payload.session
+
+      return produce(baseState, (state) => {
+        const isLastSession = SessionsSelectors.isLastSession(rootState, userId, id)
+        if (isLastSession) {
+          Object.values(state).forEach((listeners: string[]) => {
+            remove(listeners, userId)
+          })
+        }
       })
     }
 

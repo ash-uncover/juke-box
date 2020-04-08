@@ -40,6 +40,7 @@ import {
 } from '../utils/DateUtils'
 
 import Logger from 'ap-utils-logger'
+import { remove } from '../utils/Sets'
 const LOGGER = new Logger('SERVER - SOCKET')
 
 interface ExtWebSocket extends WebSocket {
@@ -131,7 +132,7 @@ wss.on('connection', (ws: ExtWebSocket) => {
         LOGGER.warn(`${sessionId} - ${userId} - DISCONNECT`)
         const listeners = store.getState().data.users[userId] || []
         const sessions = store.getState().sessions
-        const userSessions = Object.values(sessions).filter((session) => session.userId === userId)
+        const userSessions = Object.values(sessions).filter((session: SessionModel) => session.userId === userId)
 
         if (userSessions.length === 0) {
           wss.clients.forEach((client) => {
@@ -140,8 +141,8 @@ wss.on('connection', (ws: ExtWebSocket) => {
               send(client, '@@SERVER/USER_DISCONNECTED', { id: userId })
             }
           })
-          break
         }
+        break
       }
 
       // Users
@@ -150,7 +151,7 @@ wss.on('connection', (ws: ExtWebSocket) => {
         const userId = action.payload.user.id
 
         const sessions = store.getState().sessions
-        const isOnline = Object.values(sessions).some((session) => session.userId === userId)
+        const isOnline = Object.values(sessions).some((session: SessionModel) => session.userId === userId)
 
         if (isOnline) {
           send(ws, '@@SERVER/USER_CONNECTED', { id: userId })

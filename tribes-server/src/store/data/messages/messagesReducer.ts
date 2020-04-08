@@ -6,6 +6,14 @@ import {
 } from './messagesActions'
 
 import {
+  ActionsTypes as SessionsActionsTypes
+} from '../../sessions/sessionsActions'
+
+import {
+  selectors as SessionsSelectors
+} from '../../sessions'
+
+import {
   add,
   remove,
 } from '../../../utils/Sets'
@@ -22,7 +30,11 @@ const getMessageState = (state: MessagesState, id: string) => {
   return state[id]
 }
 
-const MessagesReducer: Reducer<MessagesState> = (baseState = initialState(), action) => {
+const MessagesReducer = (
+  baseState = initialState(),
+  action,
+  rootState: any
+) => {
   switch (action.type) {
 
     case MessagesActionsTypes.REST_MESSAGES_GET_SUCCESS: {
@@ -41,6 +53,20 @@ const MessagesReducer: Reducer<MessagesState> = (baseState = initialState(), act
         delete state[id]
       })
     }
+
+    case SessionsActionsTypes.AUTH_DELETE_SUCCESS: {
+      const { id, userId } = action.payload.session
+
+      return produce(baseState, (state) => {
+        const isLastSession = SessionsSelectors.isLastSession(rootState, userId, id)
+        if (isLastSession) {
+          Object.values(state).forEach((listeners: string[]) => {
+            remove(listeners, userId)
+          })
+        }
+      })
+    }
+
 
     default: {
       return baseState

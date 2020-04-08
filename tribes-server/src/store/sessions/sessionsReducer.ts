@@ -20,7 +20,7 @@ const getSessionState = (state: SessionState, id: string) => {
   return state[id]
 }
 
-const SessionsReducer: (baseState: SessionState, action: any) => SessionState = (
+const SessionsReducer: (baseState: SessionState, action: any, rootState) => SessionState = (
   baseState: SessionState = initialState(),
   action: any
 ) => {
