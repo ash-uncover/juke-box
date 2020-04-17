@@ -248,8 +248,8 @@ db.events.insert({
   "dateEnd": new Date("2025-02-25T17:30:00Z")
 })
 db.events.insert({
-  "id":"eventbanana",
-  "name":"eventbanana",
+  "id":"eventbanana2",
+  "name":"eventbanana2",
   "tribeId": "tribebanana",
   "userId": "useralexandra",
   "type": "faHiking",
@@ -257,8 +257,8 @@ db.events.insert({
   "dateEnd": new Date("2025-04-25T17:30:00Z")
 })
 db.events.insert({
-  "id":"eventbanana",
-  "name":"eventbanana",
+  "id":"eventbanana3",
+  "name":"eventbanana3",
   "tribeId": "tribebanana",
   "userId": "useralexandra",
   "type": "faHiking",
@@ -266,8 +266,8 @@ db.events.insert({
   "dateEnd": new Date("2020-07-25T17:30:00Z")
 })
 db.events.insert({
-  "id":"eventbanana",
-  "name":"eventbanana",
+  "id":"eventbanana4",
+  "name":"eventbanana4",
   "tribeId": "tribebanana",
   "userId": "useralexandra",
   "type": "faHiking",
