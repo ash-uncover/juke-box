@@ -13,6 +13,8 @@ export enum SocketStatus {
   CONNECTING = 'CONNECTING',
   CONNECTED = 'CONNECTED',
   CONNECTION_ERROR = 'CONNECTION_ERROR',
+
+  CONNECTION_WAIT = 'CONNECTION_WAIT',
   CONNECTION_LOST = 'CONNECTION_LOST',
 }
 
@@ -22,11 +24,19 @@ export enum SortDirections {
   DESCENDING = 'DESCENDING',
 }
 
+export enum ThreadType {
+  DIRECT = 'DIRECT',
+  GROUP = 'GROUP',
+  CHANNEL = 'CHANNEL',
+}
+
 export enum RequestState {
   NEVER = 'NEVER',
+  FETCHING_FIRST = 'FETCHING_FIRST',
   FETCHING = 'FETCHING',
   SUCCESS = 'SUCCESS',
   FAILURE = 'FAILURE',
+  OUTDATED = 'OUTDATED',
 }
 
 export enum UserStatus {

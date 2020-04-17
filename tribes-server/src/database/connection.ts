@@ -11,6 +11,7 @@ const {
   DB_NAME = 'tribes'
 } = process.env
 let urlmongo = 'mongodb://' + (DB_HOST) + ':' + (DB_PORT) + '/' + (DB_NAME)
+//let urlmongo = connectionString
 
 const connection = {
   open: (callback) => {

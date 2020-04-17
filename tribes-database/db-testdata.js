@@ -224,6 +224,8 @@ db.events.insert({
   "id":"eventmapo",
   "name":"eventmapo",
   "tribeId": "tribemapo",
+  "userId": "userantoine",
+  "type": "faBiking",
   "dateStart": new Date("2020-04-05T10:30:00Z"),
   "dateEnd": new Date("2020-04-05T17:30:00Z")
 })
@@ -231,6 +233,8 @@ db.events.insert({
   "id":"eventmapo2",
   "name":"eventmapo2",
   "tribeId": "tribemapo",
+  "userId": "userantoine",
+  "type": "faHiking",
   "dateStart": new Date("2020-05-05T10:30:00Z"),
   "dateEnd": new Date("2020-05-05T17:30:00Z")
 })
@@ -238,8 +242,37 @@ db.events.insert({
   "id":"eventbanana",
   "name":"eventbanana",
   "tribeId": "tribebanana",
-  "dateStart": new Date("2020-02-25T10:30:00Z"),
-  "dateEnd": new Date("2020-02-25T17:30:00Z")
+  "userId": "useralexandra",
+  "type": "faHiking",
+  "dateStart": new Date("2025-02-25T10:30:00Z"),
+  "dateEnd": new Date("2025-02-25T17:30:00Z")
+})
+db.events.insert({
+  "id":"eventbanana",
+  "name":"eventbanana",
+  "tribeId": "tribebanana",
+  "userId": "useralexandra",
+  "type": "faHiking",
+  "dateStart": new Date("2025-04-25T10:30:00Z"),
+  "dateEnd": new Date("2025-04-25T17:30:00Z")
+})
+db.events.insert({
+  "id":"eventbanana",
+  "name":"eventbanana",
+  "tribeId": "tribebanana",
+  "userId": "useralexandra",
+  "type": "faHiking",
+  "dateStart": new Date("2020-07-25T10:30:00Z"),
+  "dateEnd": new Date("2020-07-25T17:30:00Z")
+})
+db.events.insert({
+  "id":"eventbanana",
+  "name":"eventbanana",
+  "tribeId": "tribebanana",
+  "userId": "useralexandra",
+  "type": "faHiking",
+  "dateStart": new Date("2020-06-25T10:30:00Z"),
+  "dateEnd": new Date("2020-06-25T17:30:00Z")
 })
 
 // FRIENDSHIPS //
@@ -338,45 +371,67 @@ db.friendships.insert({
 // THREADS //
 
 db.threads.insert({
-  "id":"threadantoinekarima",
+  "id":"threadantoinemya",
   "name":"",
   "type":"DIRECT",
-  "users":["userantoine","userkarima"]
+  "userId":["userantoine","usermya"]
 })
 
+db.threads.insert({
+  "id":"threadantoinejin",
+  "name":"",
+  "type":"DIRECT",
+  "userId":["userantoine","userjin"]
+})
 
 db.threads.insert({
   "id":"threadantoinebulle",
   "name":"",
   "type":"DIRECT",
-  "users":["userantoine","userbulle"]
+  "userId":["userantoine","userbulle"]
+})
+
+db.threads.insert({
+  "id":"threadkarimaenea",
+  "name":"",
+  "type":"DIRECT",
+  "userId":["userkarima","userenea"]
 })
 
 // MESSAGES //
 
 db.messages.insert({
-  "id":"messageantoinekarima1",
-  "threadId":"threadantoinekarima",
+  "id":"messageantoinemya1",
+  "threadId":"threadantoinemya",
   "userId":"userantoine",
   "date":new Date("2020-02-2711:50:23Z"),
-  "text":"Hello",
-  "readBy":["userkarima"]
+  "text":"Sois sage ma fille",
+  "readBy":[]
 })
 
 db.messages.insert({
-  "id":"messageantoinekarima2",
-  "threadId":"threadantoinekarima",
-  "userId":"userkarima",
+  "id":"messageantoinejin1",
+  "threadId":"threadantoinejin",
+  "userId":"userantoine",
   "date":new Date("2020-02-2711:51:45Z"),
-  "text":"Coucou :)",
+  "text":"Sois sage mon fils",
   "readBy":[]
 })
 
 db.messages.insert({
   "id":"messageantoinebulle1",
   "threadId":"threadantoinebulle",
-  "userId":"userbulle",
+  "userId":"userantoine",
   "date":new Date("2020-01-2710:50:23Z"),
-  "text":"Coucou Antoine",
+  "text":"plop",
+  "readBy":[]
+})
+
+db.messages.insert({
+  "id":"messagekarimaenea1",
+  "threadId":"threadkarimaenea",
+  "userId":"userkarima",
+  "date":new Date("2020-01-2710:50:23Z"),
+  "text":"Coucou Enéa",
   "readBy":[]
 })

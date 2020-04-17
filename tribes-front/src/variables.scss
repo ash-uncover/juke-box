@@ -3,15 +3,25 @@ $screen-size-medium: 768px;
 $screen-size-large: 992px;
 $screen-size-xlarge: 1200px;
 
-$color-main-background: #1E1E1E;
-$color-main-foreground: #858585;
-$color-main-active-background: #4dabf7;
-$color-main-active-foreground: #ffffff;
-$color-main-highlight-background: #333333;
-$color-main-highlight-foreground: #E5E5E5;
+$active-color-background: #4dabf7;
+$active-color-foreground: #ffffff;
 
-$color-secondary-background: #252526;
-$color-secondary-foreground: #A3A3A3;
+$layer1-color-background: #1E1E1E;
+$layer1-color-foreground: #858585;
+$layer1-color-highlight-background: #333333;
+$layer1-color-highlight-foreground: #E5E5E5;
 
-$color-third-background: #333333;
-$color-third-foreground: #E5E5E5;
+$layer2-color-background: #252526;
+$layer2-color-foreground: #A3A3A3;
+$layer2-color-highlight-background: #3A3A3A;
+$layer2-color-highlight-foreground: #F3F3F3;
+
+$layer3-color-background: #333333;
+$layer3-color-foreground: #E5E5E5;
+$layer3-color-highlight-background: #404040;
+$layer3-color-highlight-foreground: #F9F9F9;
+
+$layer4-color-background: #3F3F3F;
+$layer4-color-foreground: #FCFCFC;
+$layer4-color-highlight-background: #494949;
+$layer4-color-highlight-foreground: #FFFFFF;

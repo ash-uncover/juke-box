@@ -4,7 +4,7 @@
 
   .TribeContent {
     flex-grow: 1;
-    background: $color-third-background;
+    background: $layer3-color-background;
     display: flex;
     flex-direction: column;
 
@@ -14,7 +14,7 @@
       display: flex;
       align-items: center;
       padding: 0 1rem;
-      border-bottom: 1px solid $color-main-background;
+      border-bottom: 1px solid $layer1-color-background;
     }
 
     .TribeContent-main {
@@ -24,18 +24,18 @@
         flex-grow: 1;
       }
       .TribeContent-users {
-        background: $color-secondary-background;
+        background: $layer2-color-background;
         width: 12rem;
 
         .FriendListItem {
           .FriendListItem-image-area:after {
-            border-color: $color-secondary-background;
+            border-color: $layer2-color-background;
           }
           &:hover {
-            background: $color-third-background;
-            color: $color-third-foreground;
+            background: $layer3-color-background;
+            color: $layer3-color-foreground;
             .FriendListItem-image-area:after {
-              border-color: $color-third-background;
+              border-color: $layer3-color-background;
             }
           }
         }

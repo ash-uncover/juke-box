@@ -1,17 +1,26 @@
 import store from '../store'
-import { Actions as AuthActions } from '../store/auth/actions'
-import { Actions as RestTribesActions } from '../store/rest/tribes/actions'
-import { Actions as RestUsersActions } from '../store/rest/users/actions'
-import { Actions as RestEventsActions } from '../store/rest/events/actions'
+
+import { Actions as AuthActions } from '../store/auth/authActions'
+import { Actions as RestEventsActions } from '../store/rest/events/eventsActions'
+import { Actions as RestMessagesActions } from '../store/rest/messages/messagesActions'
+import { Actions as RestThreadsActions } from '../store/rest/threads/threadsActions'
+import { Actions as RestTribesActions } from '../store/rest/tribes/tribesActions'
+import { Actions as RestUsersActions } from '../store/rest/users/usersActions'
 
 import {
   ErrorData,
   FriendshipData,
   FriendshipPostData,
   FriendshipPatchData,
+  MessageData,
+  MessagePostData,
+  MessagePatchData,
   MembershipData,
   MembershipPostData,
   MembershipPatchData,
+  ThreadData,
+  ThreadPostData,
+  ThreadPatchData,
   TribeData,
   TribePostData,
   TribePatchData,
@@ -34,7 +43,9 @@ const RestService = {
   auth: {
     get: (dispatch: any, username: string, password: string) => {
       dispatch(AuthActions.authGetFetch(username, password))
-      delayedPromise(_request({ url: `/auth` }))
+      return delayedPromise(_request({
+        url: `/auth`,
+      }))
         .then((result: UserData) => {
           dispatch(AuthActions.authGetSuccess(result))
         })
@@ -52,10 +63,118 @@ const RestService = {
   },
 
   rest: {
+    messages: {
+      get: (dispatch: any, id: string) => {
+        dispatch(RestMessagesActions.restMessagesGetFetch(id))
+        return delayedPromise(_request({
+          url: `/rest/messages/${id}`,
+        }))
+          .then((result: MessageData) => {
+            dispatch(RestMessagesActions.restMessagesGetSuccess(id, result))
+          })
+          .catch((error: ErrorData) => {
+            dispatch(RestMessagesActions.restMessagesGetFailure(id, error))
+          })
+      },
+      post: (dispatch: any, message: MessagePostData) => {
+        dispatch(RestMessagesActions.restMessagesPostFetch(message))
+        return delayedPromise(_request({
+          url: `/rest/messages`,
+          method: 'POST',
+          body: message
+        }))
+          .then((result: MessageData) => {
+            dispatch(RestMessagesActions.restMessagesPostSuccess(result))
+          })
+          .catch((error: ErrorData) => {
+            dispatch(RestMessagesActions.restMessagesPostFailure(message, error))
+          })
+      },
+      patch: (dispatch: any, message: MessagePatchData) => {
+        dispatch(RestMessagesActions.restMessagesPatchFetch(message))
+        return delayedPromise(_request({
+          url: `/rest/messages/${message.id}`,
+          method: 'PATCH',
+          body: message,
+        }))
+          .then((result: MessageData) => {
+            dispatch(RestMessagesActions.restMessagesPatchSuccess(message))
+          })
+          .catch((error: ErrorData) => {
+            dispatch(RestMessagesActions.restMessagesPatchFailure(message, error))
+          })
+      },
+      delete: (dispatch: any, message: MessageData) => {
+        dispatch(RestMessagesActions.restMessagesDeleteFetch(message))
+        return delayedPromise(_request({
+          url: `/rest/messages/${message.id}`,
+          method: 'DELETE'
+        }))
+          .then(() => {
+            dispatch(RestMessagesActions.restMessagesDeleteSuccess(message))
+          })
+          .catch((error: ErrorData) => {
+            dispatch(RestMessagesActions.restMessagesDeleteFailure(message, error))
+          })
+      },
+    },
+
+    memberships: {
+      get: (dispatch: any, id: string) => {},
+      post: (dispatch: any, membership: MembershipPostData) => {},
+      put: (dispatch: any, membership: MembershipData) => {},
+      patch: (dispatch: any, membership: MembershipPatchData) => {},
+      delete: (dispatch: any, id: string) => {},
+    },
+
+    friendships: {
+      get: (dispatch: any, id: string) => {},
+      post: (dispatch: any, friendship: FriendshipPostData) => {},
+      put: (dispatch: any, friendship: FriendshipData) => {},
+      patch: (dispatch: any, friendship: FriendshipPatchData) => {},
+      delete: (dispatch: any, id: string) => {},
+    },
+
+    threads: {
+      get: (dispatch: any, id: string) => {
+        dispatch(RestThreadsActions.restThreadsGetFetch(id))
+        return delayedPromise(_request({
+          url: `/rest/threads/${id}`,
+        }))
+          .then((result: ThreadData) => {
+            dispatch(RestThreadsActions.restThreadsGetSuccess(id, result))
+          })
+          .catch((error: ErrorData) => {
+            dispatch(RestThreadsActions.restThreadsGetFailure(id, error))
+          })
+      },
+      post: (dispatch: any, friendship: FriendshipPostData) => {},
+      put: (dispatch: any, friendship: FriendshipData) => {},
+      patch: (dispatch: any, friendship: FriendshipPatchData) => {},
+      delete: (dispatch: any, id: string) => {},
+
+      messages: {
+        getAll: (dispatch: any, id: string) => {
+          dispatch(RestThreadsActions.restThreadsMessagesGetAllFetch(id))
+          return delayedPromise(_request({
+            url: `/rest/threads/${id}/messages`,
+          }))
+            .then((result: Array<MessageData>) => {
+              dispatch(RestThreadsActions.restThreadsMessagesGetAllSuccess(id, result))
+            })
+            .catch((error: ErrorData) => {
+              dispatch(RestThreadsActions.restThreadsMessagesGetAllFailure(id, error))
+            })
+        },
+      }
+    },
+
     tribes: {
       get: (dispatch: any, id: string) => {
         dispatch(RestTribesActions.restTribesGetFetch(id))
-        delayedPromise(_request({ url: `/rest/tribes/${id}` }))
+        return delayedPromise(_request({
+          url: `/rest/tribes/${id}`,
+        }))
           .then((result: TribeData) => {
             dispatch(RestTribesActions.restTribesGetSuccess(id, result))
           })
@@ -71,7 +190,9 @@ const RestService = {
       memberships: {
         getAll: (dispatch: any, id: string) => {
           dispatch(RestTribesActions.restTribesMembershipsGetAllFetch(id))
-          delayedPromise(_request({ url: `/rest/tribes/${id}/memberships` }))
+          return delayedPromise(_request({
+            url: `/rest/tribes/${id}/memberships`,
+          }))
             .then((result: Array<MembershipData>) => {
               dispatch(RestTribesActions.restTribesMembershipsGetAllSuccess(id, result))
             })
@@ -98,7 +219,9 @@ const RestService = {
     users: {
       get: (dispatch: any, id: string) => {
         dispatch(RestUsersActions.restUsersGetFetch(id))
-        delayedPromise(_request({ url: `/rest/users/${id}` }))
+        return delayedPromise(_request({
+          url: `/rest/users/${id}`,
+        }))
           .then((result: UserData) => {
             dispatch(RestUsersActions.restUsersGetSuccess(id, result))
           })
@@ -112,7 +235,9 @@ const RestService = {
       friendships: {
         getAll: (dispatch: any, id: string) => {
           dispatch(RestUsersActions.restUsersFriendshipsGetAllFetch(id))
-          delayedPromise(_request({ url: `/rest/users/${id}/friendships` }))
+          return delayedPromise(_request({
+            url: `/rest/users/${id}/friendships`,
+          }))
             .then((result: Array<FriendshipData>) => {
               dispatch(RestUsersActions.restUsersFriendshipsGetAllSuccess(id, result))
             })
@@ -125,7 +250,9 @@ const RestService = {
       memberships: {
         getAll: (dispatch: any, id: string) => {
           dispatch(RestUsersActions.restUsersMembershipsGetAllFetch(id))
-          delayedPromise(_request({ url: `/rest/users/${id}/memberships` }))
+          return delayedPromise(_request({
+            url: `/rest/users/${id}/memberships`,
+          }))
             .then((result: Array<MembershipData>) => {
               dispatch(RestUsersActions.restUsersMembershipsGetAllSuccess(id, result))
             })
@@ -134,22 +261,21 @@ const RestService = {
             })
         },
       },
-    },
 
-    memberships: {
-      get: (dispatch: any, id: string) => {},
-      post: (dispatch: any, membership: MembershipPostData) => {},
-      put: (dispatch: any, membership: MembershipData) => {},
-      patch: (dispatch: any, membership: MembershipPatchData) => {},
-      delete: (dispatch: any, id: string) => {},
-    },
-
-    friendships: {
-      get: (dispatch: any, id: string) => {},
-      post: (dispatch: any, friendship: FriendshipPostData) => {},
-      put: (dispatch: any, friendship: FriendshipData) => {},
-      patch: (dispatch: any, friendship: FriendshipPatchData) => {},
-      delete: (dispatch: any, id: string) => {},
+      threads: {
+        getAll: (dispatch: any, id: string) => {
+          dispatch(RestUsersActions.restUsersThreadsGetAllFetch(id))
+          return delayedPromise(_request({
+            url: `/rest/users/${id}/threads`,
+          }))
+            .then((result: Array<ThreadData>) => {
+              dispatch(RestUsersActions.restUsersThreadsGetAllSuccess(id, result))
+            })
+            .catch((error: ErrorData) => {
+              dispatch(RestUsersActions.restUsersThreadsGetAllFailure(id, error))
+            })
+        },
+      },
     },
 
     events: {
@@ -158,7 +284,7 @@ const RestService = {
       put: (dispatch: any, event: EventData) => {},
       patch: (dispatch: any, event: EventPatchData) => {},
       delete: (dispatch: any, id: string) => {},
-    }
+    },
   }
 }
 
@@ -172,6 +298,10 @@ const _request = (reqParam: any) => {
       reqParam,
       { url: `${URL_BASE}${reqParam.url}` }
     )
+
+    if (params.body) {
+      params.json = true
+    }
 
     const auth = store.getState().auth
 

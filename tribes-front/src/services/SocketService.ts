@@ -1,12 +1,15 @@
 import { action } from 'typesafe-actions'
 
 import {
-  Actions as SocketActions,
-  ActionsTypes as SocketActionsTypes
-} from '../store/socket/actions'
-import { faHeartbeat } from '@fortawesome/free-solid-svg-icons'
+  Actions as SessionsActions,
+  ActionsTypes as SessionsActionsTypes
+} from '../store/socket/socketActions'
 
-const CONN_TIMEOUT = 1000
+import Logger from 'ap-utils-logger'
+const LOGGER = new Logger('SocketService')
+
+const CONN_TIMEOUT = 30000
+const CONN_TIMEOUT_DELAY = 10000
 
 let _socket: WebSocket
 let _pingTimeout: any
@@ -14,19 +17,20 @@ let _pingTimeout: any
 const SocketService = {
 
   connect(dispatch: any, url: string) {
-    dispatch(SocketActions.socketConnectFetch())
+    dispatch(SessionsActions.sessionConnectFetch())
 
     _socket = new WebSocket(url)
 
     _socket.onopen = function() {
-      dispatch(SocketActions.socketConnectSuccess())
+      dispatch(SessionsActions.sessionConnectSuccess())
 
       this.onmessage = (event: any) => {
         const actionData = JSON.parse(event.data)
+        LOGGER.info(actionData)
         switch (actionData.type) {
-          case SocketActionsTypes.SOCKECT_CONNECTION_CHECK: {
+          case SessionsActionsTypes.SESSION_CHECK_FETCH: {
             SocketService.heartbeat(dispatch)
-            _socket.send(event.data)
+            _socket.send(JSON.stringify({ type: SessionsActionsTypes.SESSION_CHECK_SUCCESS }))
             break
           }
           default: {
@@ -38,15 +42,16 @@ const SocketService = {
     }
 
     _socket.onerror = (error) => {
-      dispatch(SocketActions.socketConnectFailure())
+      dispatch(SessionsActions.sessionConnectFailure())
     }
   },
 
   heartbeat: (dispatch: any) => {
+    LOGGER.info('heartbeat')
     clearTimeout(_pingTimeout)
     _pingTimeout = setTimeout(() => {
       SocketService.close(dispatch)
-    }, 30000 + 10000)
+    }, CONN_TIMEOUT + CONN_TIMEOUT_DELAY)
   },
 
   send: (dispatch: any, data: any) => {
@@ -60,7 +65,7 @@ const SocketService = {
   close: (dispatch: any) => {
     clearTimeout(_pingTimeout)
     _socket.close()
-    dispatch(SocketActions.socketConnectionLost())
+    dispatch(SessionsActions.sessionLost())
   }
 }
 

@@ -9,7 +9,7 @@ $main-menu-width: 4rem;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: $color-main-background;
+  background-color: $layer1-color-background;
 
   .MainToolbar {
     position: absolute;
@@ -22,7 +22,7 @@ $main-menu-width: 4rem;
     display: flex;
     align-items: center;
 
-    color: $color-main-foreground;
+    color: $layer1-color-foreground;
 
     .MainToolbar-title {
       flex-grow: 1;
@@ -46,47 +46,56 @@ $main-menu-width: 4rem;
     flex-direction: column;
     align-items: center;
 
-    color: $color-main-foreground;
+    color: $layer1-color-foreground;
 
     .MainMenu-separator {
       width: 2.5rem;
-      border-bottom: 1px solid $color-third-background;
-      margin: 1rem 0;
+      border-bottom: 1px solid $layer3-color-background;
+      margin: 0.5rem 0;
     }
 
     .MainMenuItem {
-      height: 3rem;
-      width: 3rem;
-      line-height: 3rem;
-      overflow: hidden;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      text-decoration: none;
-
-      background-color: $color-main-highlight-background;
-      color: $color-main-highlight-foreground;
-
-      border-radius: 50%;
-      cursor: pointer;
-      transition: border-radius 0.15s ease-in-out, background-color 0.15s ease-in-out, color 0.15s ease-in-out;
-
-      +.MainMenuItem {
-        margin-top: 1rem;
-      }
-
+      padding: 0.5rem;
       &:hover {
-        border-radius: 0.5rem;
-        background-color: $color-main-active-background;
-        color: $color-main-active-foreground;
+        background: $layer2-color-background;
+        border-top-left-radius: 0.75rem;
+        border-bottom-left-radius: 0.75rem;
       }
 
-      .Image {
+      .MainMenuItem-inner {
         height: 3rem;
         width: 3rem;
-        object-fit: cover;
+        line-height: 3rem;
+        overflow: hidden;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        text-decoration: none;
+
+        background-color: $layer1-color-highlight-background;
+        color: $layer1-color-highlight-foreground;
+
+        border-radius: 50%;
+        cursor: pointer;
+        transition: border-radius 0.15s ease-in-out, background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+
+        +.MainMenuItem {
+          margin-top: 0.5rem;
+        }
+
+        &:hover {
+          border-radius: 0.5rem;
+          background-color: $active-color-background;
+          color: $active-color-foreground;
+        }
+
+        .Image {
+          height: 3rem;
+          width: 3rem;
+          object-fit: cover;
+        }
       }
     }
   }
@@ -100,8 +109,8 @@ $main-menu-width: 4rem;
 
     border-top-left-radius: 0.75rem;
 
-    background-color: $color-secondary-background;
-    color: $color-secondary-foreground;
+    background-color: $layer2-color-background;
+    color: $layer2-color-foreground;
 
     .MainContent-area {
       height: 100%;
@@ -112,8 +121,9 @@ $main-menu-width: 4rem;
 
 
       .MainContent-menu {
-        border-right: 2px solid $color-main-background;
+        border-right: 2px solid $layer1-color-background;
         width: 14rem;
+        flex-shrink: 0;
 
         .MainContent-menu-header {
           height: 2.5rem;
@@ -121,7 +131,7 @@ $main-menu-width: 4rem;
           display: flex;
           align-items: center;
           padding: 0 1rem;
-          border-bottom: 1px solid $color-main-background;
+          border-bottom: 1px solid $layer1-color-background;
         }
 
         .MainContent-menu-section {

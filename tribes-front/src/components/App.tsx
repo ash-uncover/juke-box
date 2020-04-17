@@ -1,20 +1,15 @@
 import React, {
   Suspense,
-  useEffect,
 } from 'react'
 
 import {
   useDispatch,
+  useEffect,
   useSelector,
-} from 'react-redux'
+} from '../utils/hooks'
 
-import {
-  authStateSelector,
-} from '../store/auth/selectors'
-
-import {
-  socketStatusSelector,
-} from '../store/socket/selectors'
+import { selectors as AuthSelectors } from '../store/auth'
+import { selectors as SocketSelectors } from '../store/socket'
 
 import {
   BrowserRouter as Router,
@@ -37,11 +32,13 @@ import './App.scss'
 
 interface AppProps {}
 
+let socketInterval: any
+
 const App = (props: AppProps) => {
   const dispatch = useDispatch()
 
-  const authState = useSelector(authStateSelector)
-  const socketStatus = useSelector(socketStatusSelector)
+  const authState = useSelector(AuthSelectors.authStateSelector)
+  const socketStatus = useSelector(SocketSelectors.socketStatusSelector)
 
   useEffect(() => {
     if (socketStatus === SocketStatus.NOT_CONNECTED) {

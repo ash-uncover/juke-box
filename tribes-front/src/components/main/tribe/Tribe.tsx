@@ -1,46 +1,24 @@
-import React, {
-  useEffect,
-} from 'react'
-
-import {
-  useParams,
-} from 'react-router-dom'
-
-import {
-  useSelector,
-} from 'react-redux'
+import React from 'react'
 
 import {
   useDispatcher,
+  useEffect,
+  useSelector,
+  useParams,
+  useRouteMatch,
 } from '../../../utils/hooks'
 
-import {
-  serverUserStatusSelector,
-} from '../../../store/socket/selectors'
+import { selectors as SocketSelectors } from '../../../store/socket'
+import { selectors as EventsSelectors } from '../../../store/rest/events'
+import { selectors as MembershipsSelectors } from '../../../store/rest/memberships'
+import { selectors as TribesSelectors } from '../../../store/rest/tribes'
+import { selectors as UsersSelectors } from '../../../store/rest/users'
 
 import {
-  restMembershipDataSelector,
-  restMembershipStatusSelector,
-  restMembershipErrorSelector,
-} from '../../../store/rest/memberships/selectors'
-
-import {
-  restTribeDataSelector,
-  restTribeStatusSelector,
-  restTribeErrorSelector,
-  restTribeMembershipsDataSelector,
-  restTribeMembershipsStatusSelector,
-  restTribeMembershipsErrorSelector,
-  restTribeEventsDataSelector,
-  restTribeEventsStatusSelector,
-  restTribeEventsErrorSelector
-} from '../../../store/rest/tribes/selectors'
-
-import {
-  restUserDataSelector,
-  restUserStatusSelector,
-  restUserErrorSelector,
-} from '../../../store/rest/users/selectors'
+  Switch,
+  Route,
+  Link,
+} from 'react-router-dom'
 
 import {
   restEventDataSelector,
@@ -49,9 +27,9 @@ import {
 } from '../../../store/rest/events/selectors'
 
 import EventListItem from '../../commons/EventListItem'
-
 import FriendListItem from '../../commons/FriendListItem'
-import Image from '../../commons/Image'
+
+import Event from '../events/Event'
 
 import {
   RequestState,
@@ -62,7 +40,8 @@ import RestService from '../../../services/RestService'
 
 import './Tribe.scss'
 import {
-  MembershipData, EventData,
+  MembershipData,
+  EventData,
 } from '../../../types'
 
 interface TribeRouteParamTypes {
@@ -77,9 +56,9 @@ const Tribe = (props: TribeProps) => {
   const { tribeId } = useParams<TribeRouteParamTypes>()
 
   const dispatch = useDispatcher()
-  const tribeStatus = useSelector(restTribeStatusSelector(tribeId))
-  const membershipsStatus = useSelector(restTribeMembershipsStatusSelector(tribeId))
-  const eventsStatus = useSelector(restTribeEventsStatusSelector(tribeId))
+  const tribeStatus = useSelector(TribesSelectors.restTribeStatusSelector(tribeId))
+  const membershipsStatus = useSelector(TribesSelectors.restTribeMembershipsStatusSelector(tribeId))
+  const eventsStatus = useSelector(TribesSelectors.restTribeEventsStatusSelector(tribeId))
 
   useEffect(() => {
     if (tribeStatus === RequestState.NEVER) {
@@ -134,14 +113,14 @@ interface TribeMenuProps {}
 const TribeMenu = (props: TribeMenuProps) => {
   const { tribeId } = useParams<TribeRouteParamTypes>()
 
-  const tribeData = useSelector(restTribeDataSelector(tribeId))
+  const tribeData = useSelector(TribesSelectors.restTribeDataSelector(tribeId))
 
   return (
     <div className='TribeMenu MainContent-menu'>
       <div className='TribeMenu-header MainContent-menu-header'>
         {tribeData.name}
       </div>
-      <TribeEvents/>
+      <TribeMenuEvents />
     </div>
   )
 }
@@ -152,8 +131,7 @@ interface TribeContentProps {}
 
 const TribeContent = (props: TribeContentProps) => {
   const { tribeId } = useParams<TribeRouteParamTypes>()
-
-  const tribeData = useSelector(restTribeDataSelector(tribeId))
+  const { path, url } = useRouteMatch()
 
   return (
     <div className='TribeContent'>
@@ -162,7 +140,14 @@ const TribeContent = (props: TribeContentProps) => {
       </div>
       <div className='TribeContent-main'>
         <div className='TribeContent-content'>
-          content
+          <Switch>
+            <Route path={`${path}/events/:eventId`}>
+              <Event />
+            </Route>
+            <Route path='*'>
+              content
+            </Route>
+        </Switch>
         </div>
         <div className='TribeContent-users'>
           <TribeMemberships />
@@ -178,8 +163,8 @@ const TribeContent = (props: TribeContentProps) => {
 const TribeMemberships = () => {
   const { tribeId } = useParams<TribeRouteParamTypes>()
 
-  const membershipsData = useSelector(restTribeMembershipsDataSelector(tribeId))
-  const membershipsStatus = useSelector(restTribeMembershipsStatusSelector(tribeId))
+  const membershipsData = useSelector(TribesSelectors.restTribeMembershipsDataSelector(tribeId))
+  const membershipsStatus = useSelector(TribesSelectors.restTribeMembershipsStatusSelector(tribeId))
 
   switch (membershipsStatus) {
     case RequestState.NEVER: {
@@ -223,8 +208,8 @@ interface TribeMembershipProps {
 
 const TribeMembership = (props: TribeMembershipProps) => {
   const dispatch = useDispatcher()
-  const membershipData = useSelector(restMembershipDataSelector(props.id))
-  const membershipStatus = useSelector(restMembershipStatusSelector(props.id))
+  const membershipData = useSelector(MembershipsSelectors.restMembershipDataSelector(props.id))
+  const membershipStatus = useSelector(MembershipsSelectors.restMembershipStatusSelector(props.id))
 
   useEffect(() => {
     if (membershipStatus === RequestState.NEVER) {
@@ -274,10 +259,10 @@ interface TribeUserProps {
 const TribeUser = (props: TribeUserProps) => {
   const dispatch = useDispatcher()
 
-  const userData = useSelector(restUserDataSelector(props.id))
-  const userDataStatus = useSelector(restUserStatusSelector(props.id))
+  const userData = useSelector(UsersSelectors.restUserDataSelector(props.id))
+  const userDataStatus = useSelector(UsersSelectors.restUserStatusSelector(props.id))
 
-  const userStatus = useSelector(serverUserStatusSelector(props.id))
+  const userStatus = useSelector(SocketSelectors.serverUserStatusSelector(props.id))
 
   useEffect(() => {
     if (userDataStatus === RequestState.NEVER) {
@@ -322,16 +307,16 @@ const TribeUser = (props: TribeUserProps) => {
 
 /* TRIBE EVENTS */
 
-const TribeEvents = () => {
+const TribeMenuEvents = () => {
 
   const { tribeId } = useParams<TribeRouteParamTypes>()
   const dispatch = useDispatcher()
-  const eventsData = useSelector(restTribeEventsDataSelector(tribeId))
-  const eventDataStatus = useSelector(restTribeEventsStatusSelector(tribeId))
+  const eventsData = useSelector(TribesSelectors.restTribeEventsDataSelector(tribeId))
+  const eventDataStatus = useSelector(TribesSelectors.restTribeEventsStatusSelector(tribeId))
 
   useEffect(() => {
     if (eventDataStatus === RequestState.NEVER) {
-      RestService.rest.events.get(dispatch, tribeId)
+      RestService.rest.tribes.events.getAll(dispatch, tribeId)
     }
   })
 
@@ -352,8 +337,8 @@ const TribeEvents = () => {
     }
     case RequestState.SUCCESS: {
       return (
-        <div className='TribeEvents'>
-         { eventsData.map((eventId: string) => <TribeEvent key={eventId} id={eventId} />) }
+        <div className='TribeMenuEvents'>
+         { eventsData.map((eventId: string) => <TribeMenuEvent key={eventId} id={eventId} />) }
       </div>
       )
     }
@@ -370,15 +355,15 @@ const TribeEvents = () => {
 
 /* TRIBE EVENT */
 
-interface TribeEventProps {
+interface TribeMenuEventProps {
   id: string
 }
 
-const TribeEvent = (props: TribeEventProps) => {
+const TribeMenuEvent = (props: TribeMenuEventProps) => {
   const dispatch = useDispatcher()
-  const eventData = useSelector(restEventDataSelector(props.id))
-  const eventStatus = useSelector(restEventStatusSelector(props.id))
-
+  const eventData = useSelector(EventsSelectors.restEventDataSelector(props.id))
+  const eventStatus = useSelector(EventsSelectors.restEventStatusSelector(props.id))
+  const { url } = useRouteMatch()
   useEffect(() => {
     if (eventStatus === RequestState.NEVER) {
       RestService.rest.events.get(dispatch, props.id)
@@ -402,11 +387,13 @@ const TribeEvent = (props: TribeEventProps) => {
     }
     case RequestState.SUCCESS: {
       return (
-        <EventListItem
-          name={eventData.name}
-          startDate={eventData.dateStart}
-          endDate={eventData.dateEnd}
-      />
+        <Link
+          to={`${url}/events/${props.id}`}
+        >
+          <EventListItem
+            name={eventData.name}
+          />
+        </Link>
       )
     }
     case RequestState.FAILURE:

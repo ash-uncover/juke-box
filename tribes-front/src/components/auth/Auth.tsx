@@ -1,14 +1,12 @@
-import React, {
-  useState,
-} from 'react'
+import React from 'react'
 
 import {
   useSelector,
-} from "react-redux"
+} from '../../utils/hooks'
 
 import {
   authStateSelector,
-} from '../../store/auth/selectors'
+} from '../../store/auth/authSelectors'
 
 import {
   Redirect,

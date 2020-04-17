@@ -1,41 +1,16 @@
-import React, {
-  useEffect,
-} from 'react'
-
-import {
-  useSelector,
-} from 'react-redux'
+import React from 'react'
 
 import {
   useDispatcher,
+  useEffect,
+  useSelector,
+  useTranslation,
 } from '../../utils/hooks'
 
-import {
-  useTranslation,
-} from 'react-i18next'
-
-import {
-  authUserSelector,
-} from '../../store/auth/selectors'
-
-import {
-  restUserDataSelector,
-  restUserMembershipsDataSelector,
-  restUserMembershipsStatusSelector,
-  restUserMembershipsErrorSelector,
-} from '../../store/rest/users/selectors'
-
-import {
-  restMembershipDataSelector,
-  restMembershipStatusSelector,
-  restMembershipErrorSelector,
-} from '../../store/rest/memberships/selectors'
-
-import {
-  restTribeDataSelector,
-  restTribeStatusSelector,
-  restTribeErrorSelector,
-} from '../../store/rest/tribes/selectors'
+import { selectors as AuthSelectors } from '../../store/auth'
+import { selectors as UsersSelectors } from '../../store/rest/users'
+import { selectors as MembershipsSelectors } from '../../store/rest/memberships'
+import { selectors as TribesSelectors } from '../../store/rest/tribes'
 
 import {
   RequestState,
@@ -89,8 +64,8 @@ interface MainToolbarProps {}
 const MainToolbar = (props: MainToolbarProps) => {
   const { t } = useTranslation()
 
-  const userId = useSelector(authUserSelector)
-  const userData = useSelector(restUserDataSelector(userId))
+  const userId = useSelector(AuthSelectors.authUserSelector)
+  const userData = useSelector(UsersSelectors.restUserDataSelector(userId))
 
   return (
     <div className='MainToolbar'>
@@ -122,17 +97,23 @@ export interface MainMenuProps {}
 
 export const MainMenu = (props: MainMenuProps) => {
   return (
-    <div className='MainMenu'>
-      <Link
+    <div
+      className='MainMenu'
+    >
+      <div
         className='MainMenuItem'
-        to='/profile'
       >
-        <FontAwesomeIcon
-          icon={faHiking}
-          color='white'
-          size='2x'
-        />
-      </Link>
+        <Link
+          className='MainMenuItem-inner'
+          to='/profile'
+        >
+          <FontAwesomeIcon
+            icon={faHiking}
+            color='white'
+            size='2x'
+          />
+        </Link>
+      </div>
       <div
         className='MainMenu-separator'
       />
@@ -143,11 +124,15 @@ export const MainMenu = (props: MainMenuProps) => {
       <div
         className='MainMenuItem'
       >
-        <FontAwesomeIcon
-          icon={faPlusCircle}
-          color='white'
-          size='3x'
-        />
+        <div
+          className='MainMenuItem-inner'
+        >
+          <FontAwesomeIcon
+            icon={faPlusCircle}
+            color='white'
+            size='3x'
+          />
+        </div>
       </div>
     </div>
   )
@@ -160,9 +145,9 @@ export interface MainMenuMembershipsProps {}
 export const MainMenuMemberships = (props: MainMenuMembershipsProps) => {
   const dispatch = useDispatcher()
 
-  const userId = useSelector(authUserSelector)
-  const membershipsData = useSelector(restUserMembershipsDataSelector(userId))
-  const membershipsStatus = useSelector(restUserMembershipsStatusSelector(userId))
+  const userId = useSelector(AuthSelectors.authUserSelector)
+  const membershipsData = useSelector(UsersSelectors.restUserMembershipsDataSelector(userId))
+  const membershipsStatus = useSelector(UsersSelectors.restUserMembershipsStatusSelector(userId))
 
   useEffect(() => {
     if (membershipsStatus === RequestState.NEVER) {
@@ -204,8 +189,8 @@ export interface MainMenuMembershipProps {
 export const MainMenuMembership = (props: MainMenuMembershipProps) => {
   const dispatch = useDispatcher()
 
-  const membershipData = useSelector(restMembershipDataSelector(props.id))
-  const membershipStatus = useSelector(restMembershipStatusSelector(props.id))
+  const membershipData = useSelector(MembershipsSelectors.restMembershipDataSelector(props.id))
+  const membershipStatus = useSelector(MembershipsSelectors.restMembershipStatusSelector(props.id))
 
   useEffect(() => {
     if (membershipStatus === RequestState.NEVER) {
@@ -249,8 +234,8 @@ export interface MainMenuTribeProps {
 export const MainMenuTribe = (props: MainMenuTribeProps) => {
   const dispatch = useDispatcher()
 
-  const tribeData = useSelector(restTribeDataSelector(props.id))
-  const tribeStatus = useSelector(restTribeStatusSelector(props.id))
+  const tribeData = useSelector(TribesSelectors.restTribeDataSelector(props.id))
+  const tribeStatus = useSelector(TribesSelectors.restTribeStatusSelector(props.id))
 
   useEffect(() => {
     if (tribeStatus === RequestState.NEVER) {
@@ -298,20 +283,24 @@ export interface MainMenuItemProps {
 export const MainMenuItem = (props: MainMenuItemProps) => {
   if (props.to) {
     return (
-      <Link
+      <div
         className='MainMenuItem'
-        to={props.to}
       >
-        {props.image
-        ?
-          <Image
-            src={props.image}
-            title={props.name}
-          />
-        :
-          props.name
-        }
-      </Link>
+        <Link
+          className='MainMenuItem-inner'
+          to={props.to}
+        >
+          {props.image
+          ?
+            <Image
+              src={props.image}
+              title={props.name}
+            />
+          :
+            props.name
+          }
+        </Link>
+      </div>
     )
   }
   return (

@@ -1,0 +1,133 @@
+@import '../../../variables.scss';
+
+.ProfileThread {
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: column;
+  background: $layer3-color-background;
+
+  .ProfileThread-header {
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    height: 2.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    border-bottom: 1px solid $layer1-color-background;
+  }
+
+  .ProfileThreadMessages {
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    margin-top: 0.25rem;
+    margin-right: 0.25rem;
+    padding: 0;
+
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+      // addresses the background of the bar itself. It is usually covered by the other elements
+      background: $layer3-color-background;
+      width: 0.5rem;
+    }
+    &::-webkit-scrollbar-button {
+      // addresses the directional buttons on the scrollbar
+      display: none;
+    }
+    &::-webkit-scrollbar-track {
+      // addresses the empty space “below” the progress bar
+      display: none;
+    }
+    &::-webkit-scrollbar-track-piece {
+      // is the top-most layer of the the progress bar not covered by the draggable scrolling element (thumb)
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      // addresses the draggable scrolling element that resizes depending on the size of the scrollable element
+      background: $layer1-color-background;
+      border-radius: 0.5rem;
+    }
+    &::-webkit-scrollbar-corner {
+      // addresses the (usually) bottom corner of the scrollable element, where two scrollbars might meet
+      display: none;
+    }
+    &::-webkit-resizer {
+      // addresses the draggable resizing handle that appears above the scrollbar-corner at the bottom corner of some elements
+      display: none;
+    }
+
+    .ProfileThreadStart {
+      position: relative;
+      border-bottom: 1px solid #444;
+
+      height: 15rem;
+
+      .ProfileThreadStart-image {
+        width: 12rem;
+        height: 12rem;
+
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.5rem;
+      }
+    }
+
+    .ProfileThreadMessageText {
+      &.Message:hover {
+        background: $layer3-color-highlight-background;
+        color: $layer3-color-highlight-foreground;
+      }
+      .Message-actions {
+        border-color: $layer2-color-foreground;
+        background: $layer2-color-background;
+        color: $layer2-color-foreground;
+        .Message-action {
+          &:hover {
+            path {
+              fill: green;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .ProfileThreadInput {
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    margin: 0.5rem;
+    margin-right: 1.25rem;
+
+    background-color: lightgrey;
+    border-radius: 0.5rem;
+
+    .ProfileThreadInput-input {
+      flex-grow: 1;
+      height: 2rem;
+      border: 0;
+      padding: 0;
+      margin-left: 0.5rem;
+      outline: none;
+      background: transparent;
+    }
+
+    .ProfileThreadInput-action {
+      height: 2rem;
+      padding: 0;
+      width: 1.75rem;
+      border: 0;
+      background: transparent;
+    }
+
+    .ProfileThreadInput-action:last-child {
+      margin-right: 0.25rem;
+    }
+  }
+}

@@ -10,10 +10,13 @@ import {
 
 import {
   decodeBasicHeader,
+} from '../utils'
+
+import {
   HttpHeader,
   HttpMethod,
   HttpStatus,
-} from '../utils'
+} from '../utils/HttpUtils'
 
 import addEventsRoutes from './rest/events'
 import addFriendshipsRoutes from './rest/friendships'

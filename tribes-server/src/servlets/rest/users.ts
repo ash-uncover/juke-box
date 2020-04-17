@@ -133,6 +133,15 @@ export const getUserFriendships = function(req, res, next) {
   }
 }
 
+export const getUserThreads = function(req, res, next) {
+  LOGGER.debug('GET ' + req.url)
+  try {
+    defaultGetDeep(SCHEMAS.THREADS, req, res, next, null)
+  } catch (error) {
+    res.send(500, error)
+  }
+}
+
 const addRoutes = (app) => {
   app.post('/rest/users/', postUser)
   app.get('/rest/users/:userId', getUser)
@@ -142,5 +151,6 @@ const addRoutes = (app) => {
 
   app.get('/rest/users/:userId/memberships', getUserMemberships)
   app.get('/rest/users/:userId/friendships', getUserFriendships)
+  app.get('/rest/users/:userId/threads', getUserThreads)
 }
 export default addRoutes

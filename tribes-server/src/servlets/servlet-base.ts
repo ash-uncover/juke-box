@@ -4,7 +4,10 @@ import {
 
 import {
   HttpStatus
-} from '../utils'
+} from '../utils/HttpUtils'
+
+import Logger from 'ap-utils-logger'
+const LOGGER = new Logger('servlet-base')
 
 export const defaultGetAll = (schema, req, res, next) => {
   schema.model.find().select('-_id -__v').exec((err, data) => {
@@ -18,7 +21,7 @@ export const defaultPost = (schema, req, res, next, onError) => {
     err ?
       (onError ? onError(err) : res.status(HttpStatus.ERROR).send(err))
     :
-      res.status(HttpStatus.CREATED).send({ id: data.id })
+      res.status(HttpStatus.CREATED).send(data)
   })
 }
 
@@ -38,7 +41,7 @@ export const defaultPut = (schema, req, res, next, onError) => {
     } else if (data) {
       Object.assign(data, removeReserved(req.body))
       data.save((err) => {
-        err ? (onError ? onError(err) : res.status(HttpStatus.ERROR).send(err)) : res.sendStatus(HttpStatus.REMOVED)
+        err ? (onError ? onError(err) : res.status(HttpStatus.ERROR).send(err)) : res.sendStatus(HttpStatus.OK)
       })
     } else {
       res.sendStatus(HttpStatus.NOT_FOUND)
@@ -53,7 +56,7 @@ export const defaultPatch = (schema, req, res, next, onError) => {
     } else if (data) {
       Object.assign(data, removeReserved(req.body))
       data.save((err) => {
-        err ? (onError ? onError(err) : res.status(HttpStatus.ERROR).send(err)) : res.sendStatus(HttpStatus.REMOVED)
+        err ? (onError ? onError(err) : res.status(HttpStatus.ERROR).send(err)) : res.sendStatus(HttpStatus.OK)
       })
     } else {
       res.sendStatus(HttpStatus.NOT_FOUND)
@@ -62,7 +65,7 @@ export const defaultPatch = (schema, req, res, next, onError) => {
 }
 
 export const defaultDelete = (schema, req, res, next, onError) => {
-  schema.model.remove({ id: req.params[`${schema.name}Id`] }, (err, data) => {
+  schema.model.deleteOne({ id: req.params[`${schema.name}Id`] }, (err, data) => {
     err ? (onError ? onError(err) : res.status(HttpStatus.ERROR).send(err)) : res.sendStatus(HttpStatus.REMOVED)
   })
 }

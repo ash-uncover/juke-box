@@ -1,37 +1,16 @@
-import React, {
-  useEffect
-} from 'react'
-
-import {
-  useSelector,
-} from 'react-redux'
+import React from 'react'
 
 import {
   useDispatcher,
+  useEffect,
+  useSelector,
+  useTranslation,
 } from '../../../utils/hooks'
 
-import {
-  useTranslation,
-} from 'react-i18next'
-
-import {
-  authUserSelector,
-} from '../../../store/auth/selectors'
-
-import {
-  restUserDataSelector,
-  restUserStatusSelector,
-  restUserErrorSelector,
-  restUserFriendshipsDataSelector,
-  restUserFriendshipsStatusSelector,
-  restUserFriendshipsErrorSelector,
-} from '../../../store/rest/users/selectors'
-
-import {
-  restFriendshipDataSelector,
-  restFriendshipStatusSelector,
-  restFriendshipErrorSelector,
-} from '../../../store/rest/friendships/selectors'
+import { selectors as AuthSelectors } from '../../../store/auth'
+import { selectors as UsersSelectors } from '../../../store/rest/users'
+import { selectors as FriendshipsSelectors } from '../../../store/rest/friendships'
+import { selectors as ThreadsSelectors } from '../../../store/rest/threads'
 
 import {
   RequestState,
@@ -40,6 +19,15 @@ import {
 
 import RestService from '../../../services/RestService'
 
+import {
+  Link,
+  Redirect,
+  Switch,
+  Route,
+} from 'react-router-dom'
+
+import ProfileFriends from './ProfileFriends'
+import ProfileThreadContent from './ProfileThread'
 import FriendListItem from '../../commons/FriendListItem'
 
 import './Profile.scss'
@@ -53,6 +41,20 @@ const Profile = (props: ProfileProps) => {
   return (
     <div className='Profile MainContent-area'>
       <ProfileMenu />
+      <Switch>
+        <Route path='/profile/friends'>
+          <ProfileFriends />
+        </Route>
+        <Route path='/profile/threads/:threadId'>
+          <ProfileThreadContent />
+        </Route>
+        <Route path='/profile'>
+          Profile
+        </Route>
+        <Route path='*'>
+          <Redirect to='/profile' />
+        </Route>
+      </Switch>
     </div>
   )
 }
@@ -71,41 +73,45 @@ const ProfileMenu = (props: ProfileMenuProps) => {
       </div>
       <div className='ProfileMenu-content MainContent-menu-section'>
         <div className='MainContent-menu-section-title'>
-          {t('main.profile.menu.section.friends')}
-        </div>
-        <div className='MainContent-menu-section-content'>
-          <ProfileFriendsMenu />
+          <Link
+            to={`/profile/friends`}
+          >
+            {t('main.profile.menu.section.friends')}
+          </Link>
         </div>
       </div>
       <div className='ProfileMenu-content MainContent-menu-section'>
         <div className='MainContent-menu-section-title'>
           {t('main.profile.menu.section.conversations')}
         </div>
+        <div className='MainContent-menu-section-content'>
+          <ProfileThreads />
+        </div>
       </div>
     </div>
   )
 }
 
-/* PROFILE MENU FRIENDS */
+/* PROFILE THREADS */
 
-interface ProfileMenuFriendsProps {}
+interface ProfileThreadsProps {}
 
-const ProfileFriendsMenu = (props: ProfileMenuFriendsProps) => {
+const ProfileThreads = (props: ProfileThreadsProps) => {
   const { t } = useTranslation()
 
   const dispatch = useDispatcher()
 
-  const userId = useSelector(authUserSelector)
-  const friendshipsData = useSelector(restUserFriendshipsDataSelector(userId))
-  const friendshipsStatus = useSelector(restUserFriendshipsStatusSelector(userId))
+  const userId = useSelector(AuthSelectors.authUserSelector)
+  const threadsData = useSelector(UsersSelectors.restUserThreadsDataSelector(userId))
+  const threadsStatus = useSelector(UsersSelectors.restUserThreadsStatusSelector(userId))
 
   useEffect(() => {
-    if (friendshipsStatus === RequestState.NEVER) {
-      RestService.rest.users.friendships.getAll(dispatch, userId)
+    if (threadsStatus === RequestState.NEVER) {
+      RestService.rest.users.threads.getAll(dispatch, userId)
     }
   })
 
-  switch (friendshipsStatus) {
+  switch (threadsStatus) {
     case RequestState.NEVER:
     case RequestState.FETCHING: {
       return (
@@ -115,8 +121,8 @@ const ProfileFriendsMenu = (props: ProfileMenuFriendsProps) => {
       )
     }
     case RequestState.SUCCESS: {
-      return friendshipsData.map(
-        (id: string) => <ProfileFriendship key={id} id={id} />
+      return threadsData.map(
+        (id: string) => <ProfileThread key={id} id={id} />
       )
     }
     case RequestState.FAILURE:
@@ -130,37 +136,41 @@ const ProfileFriendsMenu = (props: ProfileMenuFriendsProps) => {
   }
 }
 
-/* PROFILE FRIENDSHIP */
+/* PROFILE THREAD */
 
-export interface ProfileFriendshipProps {
+interface ProfileThreadProps {
   id: string
 }
 
-export const ProfileFriendship = (props: ProfileFriendshipProps) => {
+const ProfileThread = (props: ProfileThreadProps) => {
+  const { t } = useTranslation()
+
   const dispatch = useDispatcher()
 
-  const friendshipData = useSelector(restFriendshipDataSelector(props.id))
-  const friendshipStatus = useSelector(restFriendshipStatusSelector(props.id))
+  const currentUserId = useSelector(AuthSelectors.authUserSelector)
+  const threadData = useSelector(ThreadsSelectors.restThreadDataSelector(props.id))
+  const threadStatus = useSelector(ThreadsSelectors.restThreadStatusSelector(props.id))
 
   useEffect(() => {
-    if (friendshipStatus === RequestState.NEVER) {
-      RestService.rest.friendships.get(dispatch, props.id)
+    if (threadStatus === RequestState.NEVER) {
+      RestService.rest.threads.get(dispatch, props.id)
     }
   })
 
-  switch (friendshipStatus) {
+  switch (threadStatus) {
     case RequestState.NEVER:
     case RequestState.FETCHING: {
       return (
         <div>
-          Loading...
+          Loading thread...
         </div>
       )
     }
     case RequestState.SUCCESS: {
       return (
-        <ProfileFriend
-          id={friendshipData.friendId}
+        <ProfileThreadDirect
+          id={props.id}
+          userId={threadData.userId.find((userId: string) => userId != currentUserId)}
         />
       )
     }
@@ -176,46 +186,48 @@ export const ProfileFriendship = (props: ProfileFriendshipProps) => {
 }
 
 
-/* PROFILE FRIEND */
+/* PROFILE THREAD */
 
-export interface ProfileFriendProps {
-  id: string
+interface ProfileThreadDirectProps {
+  id: string,
+  userId: string
 }
 
-export const ProfileFriend = (props: ProfileFriendProps) => {
+const ProfileThreadDirect = (props: ProfileThreadDirectProps) => {
+  const { t } = useTranslation()
+
   const dispatch = useDispatcher()
 
-  const userData = useSelector(restUserDataSelector(props.id))
-  const userStatus = useSelector(restUserStatusSelector(props.id))
+  const threadData = useSelector(ThreadsSelectors.restThreadDataSelector(props.id))
+
+  const userData = useSelector(UsersSelectors.restUserDataSelector(props.userId))
+  const userStatus = useSelector(UsersSelectors.restUserStatusSelector(props.userId))
 
   useEffect(() => {
     if (userStatus === RequestState.NEVER) {
-      RestService.rest.users.get(dispatch, props.id)
+      RestService.rest.users.get(dispatch, props.userId)
     }
   })
 
   switch (userStatus) {
-    case RequestState.NEVER: {
-      return (
-        <div>
-          Not Loaded
-        </div>
-      )
-    }
+    case RequestState.NEVER:
     case RequestState.FETCHING: {
       return (
         <div>
-          Loading...
+          Loading user...
         </div>
       )
     }
     case RequestState.SUCCESS: {
       return (
-        <FriendListItem
-          name={userData.name}
-          image={userData.image}
-          status={userStatus || UserStatus.OFFLINE}
-        />
+        <Link
+          to={`/profile/threads/${props.id}`}
+        >
+          <FriendListItem
+            name={userData.name}
+            image={userData.image}
+          />
+        </Link>
       )
     }
     case RequestState.FAILURE:
