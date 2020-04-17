@@ -20,12 +20,6 @@ import {
   Link,
 } from 'react-router-dom'
 
-import {
-  restEventDataSelector,
-  restEventStatusSelector,
-  restEventErrorSelector,
-} from '../../../store/rest/events/selectors'
-
 import EventListItem from '../../commons/EventListItem'
 import FriendListItem from '../../commons/FriendListItem'
 
