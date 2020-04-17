@@ -53,51 +53,6 @@ $main-menu-width: 4rem;
       border-bottom: 1px solid $layer3-color-background;
       margin: 0.5rem 0;
     }
-
-    .MainMenuItem {
-      padding: 0.5rem;
-      &:hover {
-        background: $layer2-color-background;
-        border-top-left-radius: 0.75rem;
-        border-bottom-left-radius: 0.75rem;
-      }
-
-      .MainMenuItem-inner {
-        height: 3rem;
-        width: 3rem;
-        line-height: 3rem;
-        overflow: hidden;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        text-decoration: none;
-
-        background-color: $layer1-color-highlight-background;
-        color: $layer1-color-highlight-foreground;
-
-        border-radius: 50%;
-        cursor: pointer;
-        transition: border-radius 0.15s ease-in-out, background-color 0.15s ease-in-out, color 0.15s ease-in-out;
-
-        +.MainMenuItem {
-          margin-top: 0.5rem;
-        }
-
-        &:hover {
-          border-radius: 0.5rem;
-          background-color: $active-color-background;
-          color: $active-color-foreground;
-        }
-
-        .Image {
-          height: 3rem;
-          width: 3rem;
-          object-fit: cover;
-        }
-      }
-    }
   }
 
   .MainContent {

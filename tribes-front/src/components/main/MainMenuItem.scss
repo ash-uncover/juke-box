@@ -1,0 +1,47 @@
+@import '../../variables.scss';
+
+.MainMenuItem {
+  padding: 0.5rem;
+
+  &.MainMenuItem-selected {
+    background: $layer2-color-background;
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  +.MainMenuItem {
+    margin-top: 0.5rem;
+  }
+
+  .MainMenuItem-inner {
+    height: 3rem;
+    width: 3rem;
+    line-height: 3rem;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+
+    background-color: $layer1-color-highlight-background;
+    color: $layer1-color-highlight-foreground;
+
+    border-radius: 50%;
+    cursor: pointer;
+    transition: border-radius 0.15s ease-in-out, background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+
+    .Image {
+      height: 3rem;
+      width: 3rem;
+      object-fit: cover;
+    }
+
+    &:hover {
+      border-radius: 0.5rem;
+      background-color: $active-color-background;
+      color: $active-color-foreground;
+    }
+  }
+}

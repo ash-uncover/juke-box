@@ -4,7 +4,9 @@ import {
   useDispatcher,
   useEffect,
   useSelector,
+  useRouteMatch,
   useTranslation,
+  useParams,
 } from '../../utils/hooks'
 
 import { selectors as AuthSelectors } from '../../store/auth'
@@ -39,6 +41,7 @@ import {
 import Profile from './profile/Profile'
 import Tribe from './tribe/Tribe'
 import Image from '../commons/Image'
+import MainMenuItem from './MainMenuItem'
 
 import './Main.scss'
 
@@ -96,24 +99,21 @@ const MainToolbar = (props: MainToolbarProps) => {
 export interface MainMenuProps {}
 
 export const MainMenu = (props: MainMenuProps) => {
+  const { url } = useRouteMatch()
   return (
     <div
       className='MainMenu'
     >
-      <div
-        className='MainMenuItem'
+      <MainMenuItem
+        to='/profile'
+        selected={url === '/profile'}
       >
-        <Link
-          className='MainMenuItem-inner'
-          to='/profile'
-        >
-          <FontAwesomeIcon
-            icon={faHiking}
-            color='white'
-            size='2x'
-          />
-        </Link>
-      </div>
+        <FontAwesomeIcon
+          icon={faHiking}
+          color='white'
+          size='2x'
+        />
+      </MainMenuItem>
       <div
         className='MainMenu-separator'
       />
@@ -121,19 +121,13 @@ export const MainMenu = (props: MainMenuProps) => {
       <div
         className='MainMenu-separator'
       />
-      <div
-        className='MainMenuItem'
-      >
-        <div
-          className='MainMenuItem-inner'
-        >
-          <FontAwesomeIcon
-            icon={faPlusCircle}
-            color='white'
-            size='3x'
-          />
-        </div>
-      </div>
+      <MainMenuItem>
+        <FontAwesomeIcon
+          icon={faPlusCircle}
+          color='white'
+          size='3x'
+        />
+      </MainMenuItem>
     </div>
   )
 }
@@ -159,9 +153,9 @@ export const MainMenuMemberships = (props: MainMenuMembershipsProps) => {
     case RequestState.NEVER:
     case RequestState.FETCHING: {
       return (
-        <MainMenuItem
-          name='Loading...'
-        />
+        <MainMenuItem>
+          Loading...
+        </MainMenuItem>
       )
     }
     case RequestState.SUCCESS: {
@@ -172,9 +166,9 @@ export const MainMenuMemberships = (props: MainMenuMembershipsProps) => {
     case RequestState.FAILURE:
     default: {
       return (
-        <MainMenuItem
-          name='Error'
-        />
+        <MainMenuItem>
+          Error
+        </MainMenuItem>
       )
     }
   }
@@ -202,9 +196,9 @@ export const MainMenuMembership = (props: MainMenuMembershipProps) => {
     case RequestState.NEVER:
     case RequestState.FETCHING: {
       return (
-        <MainMenuItem
-          name='Loading...'
-        />
+        <MainMenuItem>
+          Loading...
+        </MainMenuItem>
       )
     }
     case RequestState.SUCCESS: {
@@ -217,9 +211,9 @@ export const MainMenuMembership = (props: MainMenuMembershipProps) => {
     case RequestState.FAILURE:
     default: {
       return (
-        <MainMenuItem
-          name='Error'
-        />
+        <MainMenuItem>
+          Error
+        </MainMenuItem>
       )
     }
   }
@@ -230,12 +224,21 @@ export const MainMenuMembership = (props: MainMenuMembershipProps) => {
 export interface MainMenuTribeProps {
   id: string
 }
+interface TribeRouteParamTypes {
+  tribeId: string
+}
 
 export const MainMenuTribe = (props: MainMenuTribeProps) => {
   const dispatch = useDispatcher()
 
   const tribeData = useSelector(TribesSelectors.restTribeDataSelector(props.id))
   const tribeStatus = useSelector(TribesSelectors.restTribeStatusSelector(props.id))
+
+  const { url, path } = useRouteMatch()
+  console.log(`url: ${url}`)
+  console.log(`path: ${path}`)
+  const { tribeId } = useParams<TribeRouteParamTypes>()
+  console.log(`tribeId: ${tribeId}`)
 
   useEffect(() => {
     if (tribeStatus === RequestState.NEVER) {
@@ -247,69 +250,33 @@ export const MainMenuTribe = (props: MainMenuTribeProps) => {
     case RequestState.NEVER:
     case RequestState.FETCHING: {
       return (
-        <MainMenuItem
-          name='Loading...'
-        />
+        <MainMenuItem>
+          Loading...
+        </MainMenuItem>
       )
     }
     case RequestState.SUCCESS: {
       return (
         <MainMenuItem
           to={`/tribes/${tribeData.id}`}
-          name={tribeData.name}
-          image={tribeData.image}
-        />
+          selected={url.includes(`/tribes/${tribeData.id}`)}
+        >
+          <Image
+            src={tribeData.image}
+            title={tribeData.name}
+          />
+        </MainMenuItem>
       )
     }
     case RequestState.FAILURE:
     default: {
       return (
-        <MainMenuItem
-          name='Error'
-        />
+        <MainMenuItem>
+          Error
+        </MainMenuItem>
       )
     }
   }
-}
-
-/* MainMenuItem */
-
-export interface MainMenuItemProps {
-  name: string,
-  to?: string,
-  image?: string
-}
-
-export const MainMenuItem = (props: MainMenuItemProps) => {
-  if (props.to) {
-    return (
-      <div
-        className='MainMenuItem'
-      >
-        <Link
-          className='MainMenuItem-inner'
-          to={props.to}
-        >
-          {props.image
-          ?
-            <Image
-              src={props.image}
-              title={props.name}
-            />
-          :
-            props.name
-          }
-        </Link>
-      </div>
-    )
-  }
-  return (
-    <div
-      className='MainMenuItem'
-    >
-      {props.name}
-    </div>
-  )
 }
 
 /* MainContent */
