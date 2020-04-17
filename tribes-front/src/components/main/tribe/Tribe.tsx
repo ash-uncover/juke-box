@@ -5,6 +5,7 @@ import {
   useEffect,
   useSelector,
   useParams,
+  useRouteMatch,
 } from '../../../utils/hooks'
 
 import { selectors as SocketSelectors } from '../../../store/socket'
@@ -13,10 +14,17 @@ import { selectors as MembershipsSelectors } from '../../../store/rest/membershi
 import { selectors as TribesSelectors } from '../../../store/rest/tribes'
 import { selectors as UsersSelectors } from '../../../store/rest/users'
 
+import {
+  Switch,
+  Route,
+  Link,
+} from 'react-router-dom'
 
 import EventListItem from '../../commons/EventListItem'
 
 import FriendListItem from '../../commons/FriendListItem'
+
+import Event from '../events/Event'
 
 import {
   RequestState,
@@ -107,7 +115,7 @@ const TribeMenu = (props: TribeMenuProps) => {
       <div className='TribeMenu-header MainContent-menu-header'>
         {tribeData.name}
       </div>
-      <TribeEvents/>
+      <TribeMenuEvents/>
     </div>
   )
 }
@@ -118,8 +126,7 @@ interface TribeContentProps {}
 
 const TribeContent = (props: TribeContentProps) => {
   const { tribeId } = useParams<TribeRouteParamTypes>()
-
-  // const tribeData = useSelector(TribesSelectors.restTribeDataSelector(tribeId))
+  const { path, url } = useRouteMatch()
 
   return (
     <div className='TribeContent'>
@@ -128,7 +135,14 @@ const TribeContent = (props: TribeContentProps) => {
       </div>
       <div className='TribeContent-main'>
         <div className='TribeContent-content'>
-          content
+          <Switch>
+            <Route path={`${path}/events/:eventId`}>
+              <Event />
+            </Route>
+            <Route path='*'>
+              content
+            </Route>
+        </Switch>
         </div>
         <div className='TribeContent-users'>
           <TribeMemberships />
@@ -288,7 +302,7 @@ const TribeUser = (props: TribeUserProps) => {
 
 /* TRIBE EVENTS */
 
-const TribeEvents = () => {
+const TribeMenuEvents = () => {
 
   const { tribeId } = useParams<TribeRouteParamTypes>()
   const dispatch = useDispatcher()
@@ -318,8 +332,8 @@ const TribeEvents = () => {
     }
     case RequestState.SUCCESS: {
       return (
-        <div className='TribeEvents'>
-         { eventsData.map((eventId: string) => <TribeEvent key={eventId} id={eventId} />) }
+        <div className='TribeMenuEvents'>
+         { eventsData.map((eventId: string) => <TribeMenuEvent key={eventId} id={eventId} />) }
       </div>
       )
     }
@@ -340,11 +354,11 @@ interface TribeEventProps {
   id: string
 }
 
-const TribeEvent = (props: TribeEventProps) => {
+const TribeMenuEvent = (props: TribeEventProps) => {
   const dispatch = useDispatcher()
   const eventData = useSelector(EventsSelectors.restEventDataSelector(props.id))
   const eventStatus = useSelector(EventsSelectors.restEventStatusSelector(props.id))
-
+  const { url } = useRouteMatch()
   useEffect(() => {
     if (eventStatus === RequestState.NEVER) {
       RestService.rest.events.get(dispatch, props.id)
@@ -368,11 +382,13 @@ const TribeEvent = (props: TribeEventProps) => {
     }
     case RequestState.SUCCESS: {
       return (
-        <EventListItem
-          name={eventData.name}
-          startDate={eventData.dateStart}
-          endDate={eventData.dateEnd}
-      />
+        <Link
+          to={`${url}/events/${props.id}`}
+        >
+          <EventListItem
+            name={eventData.name}
+          />
+        </Link>
       )
     }
     case RequestState.FAILURE:
