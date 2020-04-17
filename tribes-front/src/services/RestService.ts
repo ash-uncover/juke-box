@@ -7,7 +7,6 @@ import { Actions as RestThreadsActions } from '../store/rest/threads/threadsActi
 import { Actions as RestTribesActions } from '../store/rest/tribes/tribesActions'
 import { Actions as RestUsersActions } from '../store/rest/users/usersActions'
 
-
 import {
   ErrorData,
   FriendshipData,
@@ -285,7 +284,7 @@ const RestService = {
       put: (dispatch: any, event: EventData) => {},
       patch: (dispatch: any, event: EventPatchData) => {},
       delete: (dispatch: any, id: string) => {},
-    }
+    },
   }
 }
 

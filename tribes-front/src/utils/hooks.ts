@@ -6,6 +6,7 @@ import {
 
 import {
   useParams as useParamsBase,
+  useRouteMatch as useRouteMatchBase,
 } from 'react-router-dom'
 
 import {
@@ -23,6 +24,7 @@ export const useEffect = useEffectBase
 export const useRef = useRefBase
 export const useState = useStateBase
 export const useParams = useParamsBase
+export const useRouteMatch = useRouteMatchBase
 export const useDispatch = useDispatchBase
 export const useSelector = useSelectorBase
 export const useTranslation = useTranslationBase
