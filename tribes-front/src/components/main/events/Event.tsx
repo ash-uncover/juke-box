@@ -28,31 +28,36 @@ interface EventProps {
 const Event = (props: EventProps) => {
   const { eventId } = useParams<EventRouteParamTypes>()
   const eventData = useSelector(EventsSelectors.restEventDataSelector(eventId))
- return (
-    <div
-      className='Event'
-    >
-      <div>
-        <span
-          className='Event-name'
-        >
-          #{eventData.name}
-        </span>
+  const dateStart = dateString(new Date(eventData.dateStart))
+  const dateEnd = dateString(new Date(eventData.dateEnd))
+  return (
+      <div
+        className='Event'
+      >
+        <div>
+          <span
+            className='Event-name'
+          >
+            #{eventData.name}
+          </span>
+        </div>
+        <div>
+          <span
+            className='Event-dateStart'
+          >
+            {dateStart}
+          </span>
+        </div>
+        <div>
+          <span
+            className='Event-dateEnd'
+          >
+            {dateEnd}
+          </span>
+        </div>
       </div>
-      <div>
-        <span
-          className='Event-startdate'
-        >
-          {eventData.startDate}
-        </span>
-        <span
-          className='Event-enddate'
-        >
-          {eventData.endDate}
-        </span>
-      </div>
-    </div>
-  )
+    )
+
 }
 
 export default Event

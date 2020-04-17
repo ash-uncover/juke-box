@@ -244,8 +244,35 @@ db.events.insert({
   "tribeId": "tribebanana",
   "userId": "useralexandra",
   "type": "faHiking",
-  "dateStart": new Date("2020-02-25T10:30:00Z"),
-  "dateEnd": new Date("2020-02-25T17:30:00Z")
+  "dateStart": new Date("2025-02-25T10:30:00Z"),
+  "dateEnd": new Date("2025-02-25T17:30:00Z")
+})
+db.events.insert({
+  "id":"eventbanana",
+  "name":"eventbanana",
+  "tribeId": "tribebanana",
+  "userId": "useralexandra",
+  "type": "faHiking",
+  "dateStart": new Date("2025-04-25T10:30:00Z"),
+  "dateEnd": new Date("2025-04-25T17:30:00Z")
+})
+db.events.insert({
+  "id":"eventbanana",
+  "name":"eventbanana",
+  "tribeId": "tribebanana",
+  "userId": "useralexandra",
+  "type": "faHiking",
+  "dateStart": new Date("2020-07-25T10:30:00Z"),
+  "dateEnd": new Date("2020-07-25T17:30:00Z")
+})
+db.events.insert({
+  "id":"eventbanana",
+  "name":"eventbanana",
+  "tribeId": "tribebanana",
+  "userId": "useralexandra",
+  "type": "faHiking",
+  "dateStart": new Date("2020-06-25T10:30:00Z"),
+  "dateEnd": new Date("2020-06-25T17:30:00Z")
 })
 
 // FRIENDSHIPS //
