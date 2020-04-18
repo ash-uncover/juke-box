@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {
+import hooks, {
   useState,
   useDispatcher,
   useEffect,
@@ -53,18 +53,9 @@ const ProfileThread = (props: ProfileThreadProps) => {
   const { threadId } = useParams<ThreadRouteParamTypes>()
 
   const dispatch = useDispatcher()
-
-  const threadData = useSelector(ThreadsSelectors.restThreadDataSelector(threadId))
-  const threadStatus = useSelector(ThreadsSelectors.restThreadStatusSelector(threadId))
+  const threadStatus = hooks.useThread(threadId)
 
   const messageEdit = useSelector(ProfileSelectors.appProfileMessageEditSelector)
-
-  useEffect(() => {
-    if (threadStatus === RequestState.NEVER || threadStatus === RequestState.OUTDATED) {
-      RestService.rest.threads.get(dispatch, threadId)
-    }
-  })
-
   useEffect(() => {
     if (messageEdit && threadId !== messageEdit.threadId) {
       AppService.profile.messageRelease(dispatch)
@@ -110,18 +101,10 @@ interface ProfileThreadMessagesProps {
 const ProfileThreadMessages = (props: ProfileThreadMessagesProps) => {
   const { threadId } = useParams<ThreadRouteParamTypes>()
 
-  const dispatch = useDispatcher()
-
   const messagesData = useSelector(ThreadsSelectors.restThreadMessagesDataSelector(threadId))
-  const messagesStatus = useSelector(ThreadsSelectors.restThreadMessagesStatusSelector(threadId))
+  const messagesStatus = hooks.useThreadMessages(threadId)
 
   const messageEdit = useSelector(ProfileSelectors.appProfileMessageEditSelector)
-
-  useEffect(() => {
-    if (messagesStatus === RequestState.NEVER || messagesStatus === RequestState.OUTDATED) {
-      RestService.rest.threads.messages.getAll(dispatch, threadId)
-    }
-  })
 
   switch (messagesStatus) {
     case RequestState.NEVER:
@@ -175,7 +158,7 @@ interface ProfileThreadStartProps {
 
 const ProfileThreadStart = (props: ProfileThreadStartProps) => {
   const { threadId } = useParams<ThreadRouteParamTypes>()
-  const {t } = useTranslation()
+  const { t } = useTranslation()
   const messagesData = useSelector(ThreadsSelectors.restThreadMessagesDataSelector(threadId))
 
   return (
@@ -200,21 +183,7 @@ interface ProfileThreadMessageProps {
 }
 
 const ProfileThreadMessage = (props: ProfileThreadMessageProps) => {
-  const dispatch = useDispatcher()
-
-  const currentUserId = useSelector(AuthSelectors.authUserSelector)
-
-  const currentUser = useSelector(UsersSelectors.restUserDataSelector(currentUserId))
-
-  const messageData = useSelector(MessagesSelectors.restMessageDataSelector(props.id))
-  const messageStatus = useSelector(MessagesSelectors.restMessageStatusSelector(props.id))
-
-  useEffect(() => {
-    if (messageStatus === RequestState.NEVER || messageStatus === RequestState.OUTDATED) {
-      RestService.rest.messages.get(dispatch, props.id)
-    }
-  })
-
+  const messageStatus = hooks.useMessage(props.id)
   switch (messageStatus) {
     case RequestState.NEVER:
     case RequestState.FETCHING_FIRST: {
@@ -260,15 +229,12 @@ const ProfileThreadMessageText = (props: ProfileThreadMessageTextProps) => {
   const { threadId } = useParams<ThreadRouteParamTypes>()
 
   const messageData = useSelector(MessagesSelectors.restMessageDataSelector(props.id))
-  const messageStatus = useSelector(MessagesSelectors.restMessageStatusSelector(props.id))
+  const messageStatus = hooks.useMessage(props.id)
 
   const userData = useSelector(UsersSelectors.restUserDataSelector(messageData.userId))
-  const userStatus = useSelector(UsersSelectors.restUserStatusSelector(messageData.userId))
+  const userStatus = hooks.useUser(messageData.userId)
 
   useEffect(() => {
-    if (userStatus === RequestState.NEVER || userStatus === RequestState.OUTDATED) {
-      RestService.rest.users.get(dispatch, messageData.userId)
-    }
     if (messageStatus === RequestState.NEVER || messageStatus === RequestState.OUTDATED) {
       RestService.rest.messages.get(dispatch, props.id)
     }
