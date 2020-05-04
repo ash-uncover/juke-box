@@ -4,7 +4,7 @@ import Image from './Image'
 
 import {
   buildClassName,
-} from '../../utils/ComponentUtils'
+} from '../../../utils/ComponentUtils'
 
 import'./Tile.scss'
 

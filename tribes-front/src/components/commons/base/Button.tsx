@@ -2,7 +2,7 @@ import React from 'react'
 
 import {
   buildClassName,
-} from '../../utils/ComponentUtils'
+} from '../../../utils/ComponentUtils'
 
 import {
   FontAwesomeIcon,
@@ -14,6 +14,7 @@ interface ButtonProps {
   className?: string | Array<string>,
   title: string,
   icon: any,
+  disabled?: boolean,
   type?: 'button' | 'reset' | 'submit',
   color?: string,
   size?: '1x' | '2x' | '3x' | '4x' | '5x' | '6x' | '7x' | '8x' | '9x' | '10x',
@@ -37,6 +38,7 @@ const Button = (props: ButtonProps) => {
       className={buildClassName('Button', className)}
       type={props.type || 'button'}
       title={props.title}
+      disabled={props.disabled}
       onClick={props.onClick}
     >
       <FontAwesomeIcon

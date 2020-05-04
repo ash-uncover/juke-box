@@ -4,15 +4,15 @@ import {
   useState,
   useRef,
   useTranslation,
-} from '../../utils/hooks'
+} from '../../../utils/hooks'
 
 import {
   buildClassName,
-} from '../../utils/ComponentUtils'
+} from '../../../utils/ComponentUtils'
 
 import {
   Button
-} from './'
+} from '..'
 
 import'./Message.scss'
 

@@ -5,21 +5,21 @@ import {
   useEffect,
   useSelector,
   useTranslation,
-} from '../../../utils/hooks'
+} from '../../../../utils/hooks'
 
-import { selectors as AuthSelectors } from '../../../store/auth'
-import { selectors as UsersSelectors } from '../../../store/rest/users'
-import { selectors as FriendshipsSelectors } from '../../../store/rest/friendships'
-import { selectors as ThreadsSelectors } from '../../../store/rest/threads'
+import { selectors as AuthSelectors } from '../../../../store/auth'
+import { selectors as UsersSelectors } from '../../../../store/rest/users'
+import { selectors as FriendshipsSelectors } from '../../../../store/rest/friendships'
 
 import {
   RequestState,
-  UserStatus,
-} from '../../../utils/constants'
+} from '../../../../utils/constants'
 
-import RestService from '../../../services/RestService'
+import RestService from '../../../../services/RestService'
 
-import Tile from '../../commons/Tile'
+import {
+  Tile
+} from '../../../commons'
 
 import './ProfileFriends.scss'
 

@@ -1,8 +1,7 @@
 import React from 'react'
 
-import {
+import hooks, {
   useDispatcher,
-  useEffect,
   useSelector,
   useTranslation,
 } from '../../../utils/hooks'
@@ -14,7 +13,6 @@ import { selectors as ThreadsSelectors } from '../../../store/rest/threads'
 
 import {
   RequestState,
-  UserStatus,
 } from '../../../utils/constants'
 
 import RestService from '../../../services/RestService'
@@ -26,9 +24,9 @@ import {
   Route,
 } from 'react-router-dom'
 
-import ProfileFriends from './ProfileFriends'
-import ProfileThreadContent from './ProfileThread'
-import FriendListItem from '../../commons/FriendListItem'
+import ProfileFriends from './friends/ProfileFriends'
+import ProfileThread from './threads/ProfileThread'
+import FriendListItem from '../../commons/composite/FriendListItem'
 
 import './Profile.scss'
 
@@ -46,7 +44,7 @@ const Profile = (props: ProfileProps) => {
           <ProfileFriends />
         </Route>
         <Route path='/profile/threads/:threadId'>
-          <ProfileThreadContent />
+          <ProfileThread />
         </Route>
         <Route path='/profile'>
           Profile
@@ -85,31 +83,23 @@ const ProfileMenu = (props: ProfileMenuProps) => {
           {t('main.profile.menu.section.conversations')}
         </div>
         <div className='MainContent-menu-section-content'>
-          <ProfileThreads />
+          <ProfileMenuThreads />
         </div>
       </div>
     </div>
   )
 }
 
-/* PROFILE THREADS */
+/* PROFILE MENU THREADS */
 
-interface ProfileThreadsProps {}
-
-const ProfileThreads = (props: ProfileThreadsProps) => {
+const ProfileMenuThreads = () => {
   const { t } = useTranslation()
 
   const dispatch = useDispatcher()
 
   const userId = useSelector(AuthSelectors.authUserSelector)
   const threadsData = useSelector(UsersSelectors.restUserThreadsDataSelector(userId))
-  const threadsStatus = useSelector(UsersSelectors.restUserThreadsStatusSelector(userId))
-
-  useEffect(() => {
-    if (threadsStatus === RequestState.NEVER) {
-      RestService.rest.users.threads.getAll(dispatch, userId)
-    }
-  })
+  const threadsStatus = hooks.useUserThreads(userId)
 
   switch (threadsStatus) {
     case RequestState.NEVER:
@@ -122,7 +112,7 @@ const ProfileThreads = (props: ProfileThreadsProps) => {
     }
     case RequestState.SUCCESS: {
       return threadsData.map(
-        (id: string) => <ProfileThread key={id} id={id} />
+        (id: string) => <ProfileMenuThread key={id} id={id} />
       )
     }
     case RequestState.FAILURE:
@@ -136,26 +126,20 @@ const ProfileThreads = (props: ProfileThreadsProps) => {
   }
 }
 
-/* PROFILE THREAD */
+/* PROFILE MENU THREAD */
 
-interface ProfileThreadProps {
+interface ProfileMenuThreadProps {
   id: string
 }
 
-const ProfileThread = (props: ProfileThreadProps) => {
+const ProfileMenuThread = (props: ProfileMenuThreadProps) => {
   const { t } = useTranslation()
 
   const dispatch = useDispatcher()
 
   const currentUserId = useSelector(AuthSelectors.authUserSelector)
   const threadData = useSelector(ThreadsSelectors.restThreadDataSelector(props.id))
-  const threadStatus = useSelector(ThreadsSelectors.restThreadStatusSelector(props.id))
-
-  useEffect(() => {
-    if (threadStatus === RequestState.NEVER) {
-      RestService.rest.threads.get(dispatch, props.id)
-    }
-  })
+  const threadStatus = hooks.useThread(props.id)
 
   switch (threadStatus) {
     case RequestState.NEVER:
@@ -168,7 +152,7 @@ const ProfileThread = (props: ProfileThreadProps) => {
     }
     case RequestState.SUCCESS: {
       return (
-        <ProfileThreadDirect
+        <ProfileMenuThreadDirect
           id={props.id}
           userId={threadData.userId.find((userId: string) => userId != currentUserId)}
         />
@@ -193,21 +177,13 @@ interface ProfileThreadDirectProps {
   userId: string
 }
 
-const ProfileThreadDirect = (props: ProfileThreadDirectProps) => {
+const ProfileMenuThreadDirect = (props: ProfileThreadDirectProps) => {
   const { t } = useTranslation()
 
   const dispatch = useDispatcher()
 
-  const threadData = useSelector(ThreadsSelectors.restThreadDataSelector(props.id))
-
   const userData = useSelector(UsersSelectors.restUserDataSelector(props.userId))
-  const userStatus = useSelector(UsersSelectors.restUserStatusSelector(props.userId))
-
-  useEffect(() => {
-    if (userStatus === RequestState.NEVER) {
-      RestService.rest.users.get(dispatch, props.userId)
-    }
-  })
+  const userStatus = hooks.useUser(props.userId)
 
   switch (userStatus) {
     case RequestState.NEVER:

@@ -40,7 +40,7 @@ import {
 
 import Profile from './profile/Profile'
 import Tribe from './tribe/Tribe'
-import Image from '../commons/Image'
+import Image from '../commons/base/Image'
 import MainMenuItem from './MainMenuItem'
 
 import './Main.scss'
@@ -235,10 +235,7 @@ export const MainMenuTribe = (props: MainMenuTribeProps) => {
   const tribeStatus = useSelector(TribesSelectors.restTribeStatusSelector(props.id))
 
   const { url, path } = useRouteMatch()
-  console.log(`url: ${url}`)
-  console.log(`path: ${path}`)
   const { tribeId } = useParams<TribeRouteParamTypes>()
-  console.log(`tribeId: ${tribeId}`)
 
   useEffect(() => {
     if (tribeStatus === RequestState.NEVER) {

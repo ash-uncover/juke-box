@@ -20,8 +20,8 @@ import {
   Link,
 } from 'react-router-dom'
 
-import EventListItem from '../../commons/EventListItem'
-import FriendListItem from '../../commons/FriendListItem'
+import EventListItem from '../../commons/composite/EventListItem'
+import FriendListItem from '../../commons/composite/FriendListItem'
 
 import Event from '../events/Event'
 

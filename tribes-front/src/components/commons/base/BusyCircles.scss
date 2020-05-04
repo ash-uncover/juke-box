@@ -1,0 +1,89 @@
+@keyframes busy-circle {
+  50% { background-color:rgba(102,102,102,0.4); }
+  100% { background-color: rgba(0,143,204,1); }
+}
+
+.ap-busy-circles {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  .hidden-container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255,255,255,0.7);
+  }
+
+  .ap-busy-circles-container {
+    position:relative;
+    height:130px;
+    width:130px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    .ap-busy-circle {
+      position:absolute;
+      z-index: 25;
+      height:10%;
+      background:#DADADA;
+      width:10%;
+      border-radius:50%;
+      animation-name: busy-circle;
+      animation-duration: 0.8s;
+      animation-iteration-count: infinite;
+      animation-direction: reverse;
+      animation-timing-function: ease-out;
+
+      &.ap-busy-circle-1 {
+        top:20%;
+        left:45%;
+      }
+
+      &.ap-busy-circle-2 {
+        top:27%;
+        left:63%;
+        animation-delay: 0.1s;
+      }
+
+      &.ap-busy-circle-3 {
+        top:45%;
+        left:70%;
+        animation-delay: 0.2s;
+      }
+
+      &.ap-busy-circle-4 {
+        top:63%;
+        left:63%;
+        animation-delay: 0.3s;
+      }
+
+      &.ap-busy-circle-5 {
+        top:70%;
+        left:45%;
+        animation-delay: 0.4s;
+      }
+
+      &.ap-busy-circle-6 {
+        top:63%;
+        left:27%;
+        animation-delay: 0.5s;
+      }
+
+      &.ap-busy-circle-7 {
+        top:45%;
+        left:20%;
+        animation-delay: 0.6s;
+      }
+
+      &.ap-busy-circle-8 {
+        top:27%;
+        left:27%;
+        animation-delay: 0.7s;
+      }
+    }
+  }
+}

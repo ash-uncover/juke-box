@@ -2,7 +2,7 @@ import React from 'react'
 
 import {
   dateString
-} from '../../utils/date'
+} from '../../../utils/date'
 
 import'./EventListItem.scss'
 

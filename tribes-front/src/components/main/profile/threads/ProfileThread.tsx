@@ -7,17 +7,15 @@ import hooks, {
   useSelector,
   useParams,
   useTranslation,
-} from '../../../utils/hooks'
+} from '../../../../utils/hooks'
 
-import { selectors as ProfileSelectors } from '../../../store/app/profile'
-import { selectors as AuthSelectors } from '../../../store/auth'
-import { selectors as MessagesSelectors } from '../../../store/rest/messages'
-import { selectors as ThreadsSelectors } from '../../../store/rest/threads'
-import { selectors as UsersSelectors } from '../../../store/rest/users'
+import { selectors as ProfileSelectors } from '../../../../store/app/profile'
+import { selectors as AuthSelectors } from '../../../../store/auth'
+import { selectors as MessagesSelectors } from '../../../../store/rest/messages'
+import { selectors as ThreadsSelectors } from '../../../../store/rest/threads'
+import { selectors as UsersSelectors } from '../../../../store/rest/users'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faSignInAlt,
   faBackspace,
   faPaperPlane,
   faTrashAlt,
@@ -26,19 +24,18 @@ import {
 
 import {
   Button,
+  ComponentLoader,
   Message,
-} from '../../commons'
+} from '../../../commons'
 
 import {
   RequestState,
-  UserStatus,
-} from '../../../utils/constants'
+} from '../../../../utils/constants'
 
-import AppService from '../../../services/AppService'
-import RestService from '../../../services/RestService'
+import AppService from '../../../../services/AppService'
+import RestService from '../../../../services/RestService'
 
 import './ProfileThread.scss'
-import ProfileFriendships from './ProfileFriends'
 
 interface ThreadRouteParamTypes {
   threadId: string
@@ -62,35 +59,20 @@ const ProfileThread = (props: ProfileThreadProps) => {
     }
   })
 
-  switch (threadStatus) {
-    case RequestState.NEVER:
-    case RequestState.FETCHING: {
-      return (
-        <div>
-          Loading...
+  return (
+    <ComponentLoader
+      className='ProfileThread'
+      status={threadStatus}
+    >
+      <div className='ProfileThread'>
+        <div className='ProfileThread-header'>
+          Thread trololo
         </div>
-      )
-    }
-    case RequestState.SUCCESS: {
-      return (
-        <div className='ProfileThread'>
-          <div className='ProfileThread-header'>
-            Thread trololo
-          </div>
-          <ProfileThreadMessages />
-          <ProfileThreadInput />
-        </div>
-      )
-    }
-    case RequestState.FAILURE:
-    default: {
-      return (
-        <div>
-          Error
-        </div>
-      )
-    }
-  }
+        <ProfileThreadMessages />
+        <ProfileThreadInput />
+      </div>
+    </ComponentLoader>
+  )
 }
 
 /* PROFILE THREAD MESSAGES */
@@ -106,49 +88,26 @@ const ProfileThreadMessages = (props: ProfileThreadMessagesProps) => {
 
   const messageEdit = useSelector(ProfileSelectors.appProfileMessageEditSelector)
 
-  switch (messagesStatus) {
-    case RequestState.NEVER:
-    case RequestState.FETCHING_FIRST: {
-      return (
-        <div
-          className={`ProfileThreadMessages`}
-        >
-          <ProfileThreadStart />
-          Loading...
-        </div>
-      )
-    }
-    case RequestState.FETCHING:
-    case RequestState.OUTDATED:
-    case RequestState.SUCCESS: {
-      return (
-        <div
-          className={`ProfileThreadMessages`}
-        >
-          <ProfileThreadStart />
-          {messagesData.map((id: string) => (
-            <ProfileThreadMessage
-              key={id}
-              id={id}
-              canEdit={!messageEdit}
-              isEdit={messageEdit && messageEdit.messageId === id}
-            />
-          ))}
-        </div>
-      )
-    }
-    case RequestState.FAILURE:
-    default: {
-      return (
-        <div
-          className={`ProfileThreadMessages`}
-        >
-          <ProfileThreadStart />
-          Error ProfileThreadMessages
-        </div>
-      )
-    }
-  }
+  return (
+    <ComponentLoader
+      className={`ProfileThreadMessages`}
+      status={messagesStatus}
+    >
+      <div
+        className={`ProfileThreadMessages`}
+      >
+        <ProfileThreadStart />
+        {messagesData.map((id: string) => (
+          <ProfileThreadMessage
+            key={id}
+            id={id}
+            canEdit={!messageEdit}
+            isEdit={messageEdit && messageEdit.messageId === id}
+          />
+        ))}
+      </div>
+    </ComponentLoader>
+  )
 }
 
 /* PROFILE THREAD START */
@@ -184,34 +143,18 @@ interface ProfileThreadMessageProps {
 
 const ProfileThreadMessage = (props: ProfileThreadMessageProps) => {
   const messageStatus = hooks.useMessage(props.id)
-  switch (messageStatus) {
-    case RequestState.NEVER:
-    case RequestState.FETCHING_FIRST: {
-      return (
-        <div>
-          Loading...
-        </div>
-      )
-    }
-    case RequestState.FETCHING:
-    case RequestState.SUCCESS: {
-      return (
-        <ProfileThreadMessageText
+  return (
+    <ComponentLoader
+      className={`ProfileThreadMessage`}
+      status={messageStatus}
+    >
+      <ProfileThreadMessageText
           id={props.id}
           canEdit={props.canEdit}
           isEdit={props.isEdit}
         />
-      )
-    }
-    case RequestState.FAILURE:
-    default: {
-      return (
-        <div>
-          Error ProfileThreadMessage
-        </div>
-      )
-    }
-  }
+    </ComponentLoader>
+  )
 }
 
 /* PROFILE THREAD MESSAGE TEXT */
@@ -369,6 +312,7 @@ const ProfileThreadInput = (props: ProfileThreadInputProps) => {
       <Button
         className={`ProfileThreadInput-action`}
         type='reset'
+        disabled={sending}
         title={t('message.clear')}
         onClick={() => setText('')}
         icon={faBackspace}
@@ -378,6 +322,7 @@ const ProfileThreadInput = (props: ProfileThreadInputProps) => {
       <Button
         className={`ProfileThreadInput-action`}
         type='submit'
+        disabled={sending}
         title={t('message.send')}
         onClick={onSendMessage}
         icon={faPaperPlane}

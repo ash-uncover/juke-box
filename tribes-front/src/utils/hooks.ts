@@ -50,6 +50,18 @@ export const useDispatcher = () => {
   }
 }
 
+// Loads a user's thread if needed
+export const useUserThreads = (userId: string) => {
+  const dispatch = useDispatcher()
+  const status = useSelector(UsersSelectors.restUserThreadsStatusSelector(userId))
+  useEffect(() => {
+    if (status === RequestState.NEVER || status === RequestState.OUTDATED) {
+      RestService.rest.users.threads.getAll(dispatch, userId)
+    }
+  })
+  return status
+}
+
 // Loads a thread if needed
 export const useThread = (threadId: string) => {
   const dispatch = useDispatcher()
@@ -104,6 +116,7 @@ const hooks = {
   useThread,
   useThreadMessages,
   useUser,
+  useUserThreads,
 }
 
 export default hooks
