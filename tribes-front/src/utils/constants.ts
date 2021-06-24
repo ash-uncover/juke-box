@@ -44,3 +44,8 @@ export enum UserStatus {
   ONLINE = 'ONLINE',
   OFFLINE = 'OFFLINE',
 }
+
+export enum Keys {
+  ESCAPE = 'Escape',
+  ENTER = 'Enter',
+}

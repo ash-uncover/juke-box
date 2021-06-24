@@ -18,8 +18,8 @@ import { LogConfig } from 'ap-utils-logger'
 LogConfig.debug()
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
+  <Provider store={store}>
+    <App />
   </Provider>,
   document.getElementById('root')
 )

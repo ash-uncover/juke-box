@@ -26,16 +26,16 @@ const Button = (props: ButtonProps) => {
   let className = props.className
   if (className) {
     if (typeof className === 'string') {
-      className = [className, `Button-${size}`]
+      className = [className, `ap-button-${size}`]
     } else {
-      className = className.concat(`Button-${size}`)
+      className = className.concat(`ap-button-${size}`)
     }
   } else {
-    className = `Button-${size}`
+    className = `ap-button-${size}`
   }
   return (
     <button
-      className={buildClassName('Button', className)}
+      className={buildClassName('ap-button', className)}
       type={props.type || 'button'}
       title={props.title}
       disabled={props.disabled}
